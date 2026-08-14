@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Student Timetable</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+<script src="script.js"></script>
+<header>
+    <h1>STUDENT HUB PORTAL</h1>
+</header>
+
+<nav>
+<div class="menu-btn" onclick="openMenu()">
+    <i class="fa-solid fa-bars"></i>
+</div>
+
+<div id="overlay" class="overlay" onclick="closeMenu()"></div>
+<div id="sidebar" class="sidebar">
+    <span class="close-btn" onclick="closeMenu()">&times;</span>
+    <a href="home.html"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="attendance.html"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
+    <a href="assignment.html"><i class="fa-solid fa-book-open"></i> Assignment</a>
+    <a href="courses.html"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
+    <a href="timetable.html"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
+    <a href="faculty.html"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
+    <a href="notice.html"><i class="fa-solid fa-bullhorn"></i> Notice</a>
+    <a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a>
+    <a href="contactus.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+    <a href="admin.html"><i class="fa-solid fa-user-shield"></i> Admin</a>
+    <a href="index.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+</div>
+</nav>
+
+<div class="card">
+<h2>Class Timetable</h2>
+<table>
+
+<tr>
+<th>Day</th>
+<th>9:00-10:00</th>
+<th>10:00-11:00</th>
+<th>11:15-12:15</th>
+<th>12:15-1:15</th>
+<th>2:00-3:00</th>
+<th>3:00-4:00</th>
+</tr>
+
+<tr>
+<td>Monday</td>
+<td>Java</td>
+<td>Data Structures</td>
+<td>Web Technology</td>
+<td>DBMS</td>
+<td>Python Lab</td>
+<td>Python Lab</td>
+</tr>
+
+<tr>
+<td>Tuesday</td>
+<td>DBMS</td>
+<td>Java</td>
+<td>Mathematics</td>
+<td>Web Technology</td>
+<td>DS Lab</td>
+<td>DS Lab</td>
+</tr>
+
+<tr>
+<td>Wednesday</td>
+<td>Data Structures</td>
+<td>DBMS</td>
+<td>Java</td>
+<td>Python</td>
+<td>Web Lab</td>
+<td>Web Lab</td>
+</tr>
+
+<tr>
+<td>Thursday</td>
+<td>Mathematics</td>
+<td>Java</td>
+<td>Web Technology</td>
+<td>Data Structures</td>
+<td>Mini Project</td>
+<td>Mini Project</td>
+</tr>
+
+<tr>
+<td>Friday</td>
+<td>Python</td>
+<td>DBMS</td>
+<td>Java</td>
+<td>Web Technology</td>
+<td>Sports</td>
+<td>Library</td>
+</tr>
+
+<tr>
+<td>Saturday</td>
+<td>Seminar</td>
+<td>Aptitude</td>
+<td>Project</td>
+<td>Project</td>
+<td>Workshop</td>
+<td>Workshop</td>
+</tr>
+
+</table>
+
+</div>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h2>StudentHub Portal</h2>
+            <p>Your digital campus companion for academics, courses, assignments, attendance, and student services.</p>
+        </div>
+    </div>
+    <p class="copyright">
+        © 2026 StudentHub Portal | Developed by Hemangi Korat | All Rights Reserved.
+    </p>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>

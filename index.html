@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Student Hub Portal</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
-
+<script src="script.js"></script>
 <header>
     <h1>STUDENT HUB PORTAL</h1>
-    <hr>
 </header>
 
 <section>
@@ -16,19 +20,32 @@
     <p>Welcome to the Student Hub Portal.</p>
 </section>
 
-<hr>
+<div class="user-options">
 
-<nav>
-    <a href="home.html">Home | </a>
-    <a href="Admin.html">Admin | </a>
-    <a href="Assignment.html">Assignment | </a>
-    <a href="Attendance.html">Attendance | </a>
-    <a href="contactus.html">Contect Us | </a>
-    <a href="courses.html">Courses | </a>
-    <a href="faculty.html">Faculty | </a>
-    <a href="notice.html">Notice | </a>
-    <a href="profile.html">Profile</a>
-</nav>
+    <div class="option-card">
+        <h3>New User?</h3>
+        <p>Create your StudentHub account.</p>
+        <a href="register.html" class="small-btn">Register Now</a>
+    </div>
 
+    <div class="option-card">
+        <h3>Already Registered?</h3>
+        <p>Access your student dashboard.</p>
+        <a href="login.html" class="small-btn">Login Now</a>
+    </div>
+
+</div>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h2>StudentHub Portal</h2>
+            <p>Your digital campus companion for academics, courses, assignments, attendance, and student services.</p>
+        </div>
+    </div>
+    <p class="copyright">
+        © 2026 StudentHub Portal | Developed by Hemangi Korat | All Rights Reserved.
+    </p>
+</footer>
 </body>
 </html>

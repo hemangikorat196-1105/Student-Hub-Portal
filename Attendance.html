@@ -2,39 +2,153 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Attendance</title>
+    <title>Student Hub Portal</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
+<script src="script.js"></script>
+<header>
+    <h1>STUDENT HUB PORTAL</h1>
+</header>
 
-<h1>Attendance Record</h1>
+<nav>
+<div class="menu-btn" onclick="openMenu()">
+    <i class="fa-solid fa-bars"></i>
+</div>
 
-<table border="1" cellpadding="8">
+<div id="overlay" class="overlay" onclick="closeMenu()"></div>
+<div id="sidebar" class="sidebar">
+    <span class="close-btn" onclick="closeMenu()">&times;</span>
+    <a href="home.html"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="attendance.html"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
+    <a href="assignment.html"><i class="fa-solid fa-book-open"></i> Assignment</a>
+    <a href="courses.html"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
+    <a href="timetable.html"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
+    <a href="faculty.html"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
+    <a href="notice.html"><i class="fa-solid fa-bullhorn"></i> Notice</a>
+    <a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a>
+    <a href="contactus.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+    <a href="admin.html"><i class="fa-solid fa-user-shield"></i> Admin</a>
+    <a href="index.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+</div>
+</nav>
 
-<tr>
-<th>Subject</th>
-<th>Total Classes</th>
-<th>Present</th>
-<th>Attendance</th>
-</tr>
+<div class="card">
+<h2>Attendance Record</h2>
 
-<tr>
-<td>Java Programming</td>
-<td>40</td>
-<td>37</td>
-<td>92%</td>
-</tr>
+<table>
+    <tr>
+        <th>Subject Code</th>
+        <th>Subject</th>
+        <th>Total Classes</th>
+        <th>Present</th>
+        <th>Attendance</th>
+    </tr>
+
+    <tr>
+        <td rowspan="2">CEUE203</td>
+        <td>OOP Lecture</td>
+        <td>6</td>
+        <td>6</td>
+        <td>100%</td>
+    </tr>
+
+    <tr>
+        <td>OOP Lab</td>
+        <td>5</td>
+        <td>4</td>
+        <td>80%</td>
+    </tr>
+
+    <tr>
+        <td rowspan="2">CSUC201</td>
+        <td>FDSA Lecture</td>
+        <td>11</td>
+        <td>8</td>
+        <td>72%</td>
+    </tr>
+
+    <tr>
+        <td>FDSA Lab</td>
+        <td>3</td>
+        <td>3</td>
+        <td>100%</td>
+    </tr>
+
+    <tr>
+        <td>HSUV201</td>
+        <td>CPI Lecture</td>
+        <td>10</td>
+        <td>8</td>
+        <td>80%</td>
+    </tr>
+
+    <tr>
+        <td rowspan="2">ITUC201</td>
+        <td>FCN Lecture</td>
+        <td>17</td>
+        <td>14</td>
+        <td>82%</td>
+    </tr>
+
+    <tr>
+        <td>FCN Lab</td>
+        <td>5</td>
+        <td>5</td>
+        <td>100%</td>
+    </tr>
+
+    <tr>
+        <td rowspan="2">ITUE203</td>
+        <td>WDF Lecture</td>
+        <td>9</td>
+        <td>6</td>
+        <td>66%</td>
+    </tr>
+
+    <tr>
+        <td>WDF Lab</td>
+        <td>9</td>
+        <td>8</td>
+        <td>88%</td>
+    </tr>
+
+    <tr>
+        <td>MSUD203</td>
+        <td>Discrete Mathematics</td>
+        <td>10</td>
+        <td>8</td>
+        <td>80%</td>
+    </tr>
 
 </table>
+</div>
 
+<div class="card">
 <h2>Attendance Summary</h2>
+<ul>
+    <li><strong>Total Subjects:</strong> 6</li>
+    <li><strong>Highest Attendance:</strong> 100%</li>
+    <li><strong>Lowest Attendance:</strong> 66% (WDF Lecture)</li>
+    <li><strong>Overall Attendance:</strong> 79%</li>
+    <li><strong>Status:</strong> Eligible for Examination</li>
+</ul>
+</div>
 
-<p>Total Subjects : 5</p>
-
-<p>Average Attendance : 92%</p>
-
-<p>Status : Eligible for Examination</p>
-
-<a href="index.html">Back To Index</a>
-
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h2>StudentHub Portal</h2>
+            <p>Your digital campus companion for academics, courses, assignments, attendance, and student services.</p>
+        </div>
+    </div>
+    <p class="copyright">
+        © 2026 StudentHub Portal | Developed by Hemangi Korat | All Rights Reserved.
+    </p>
+</footer>
 </body>
 </html>

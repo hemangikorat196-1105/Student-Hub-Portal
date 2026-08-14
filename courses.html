@@ -2,14 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Courses</title>
+    <title>Student Hub Portal</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
+    <script src="script.js"></script>
+<header>
+    <h1>STUDENT HUB PORTAL</h1>
+</header>
 
-<h1>My Courses</h1>
+<nav>
+<div class="menu-btn" onclick="openMenu()">
+    <i class="fa-solid fa-bars"></i>
+</div>
 
-<table border="1" cellpadding="8">
+<div id="overlay" class="overlay" onclick="closeMenu()"></div>
+<div id="sidebar" class="sidebar">
+    <span class="close-btn" onclick="closeMenu()">&times;</span>
+    <a href="home.html"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="attendance.html"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
+    <a href="assignment.html"><i class="fa-solid fa-book-open"></i> Assignment</a>
+    <a href="courses.html"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
+    <a href="timetable.html"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
+    <a href="faculty.html"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
+    <a href="notice.html"><i class="fa-solid fa-bullhorn"></i> Notice</a>
+    <a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a>
+    <a href="contactus.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+    <a href="admin.html"><i class="fa-solid fa-user-shield"></i> Admin</a>
+    <a href="index.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+</div>
+</nav>
 
+
+<div class="card">
+<table>
+<h2>My Courses</h2>
 <tr>
 <th>Course Code</th>
 <th>Course Name</th>
@@ -18,14 +49,23 @@
 </tr>
 
 <tr>
-<td>CS201</td>
-<td>Data Structures</td>
-<td>Dr. Amit thakkar</td>
-<td>4</td>
+<td>CSUC201</td>
+<td>Data Structures & Algorithams</td>
+<td>Dr. Amit thakkar & Dr.Vidisha Pradhan</td>
+<td>5</td>
+</tr>
+
+<tr>
+<td>CEUE203</td>
+<td>OOP- Java</td>
+<td>Siddharth Shah &  Brinda Patel</td>
+<td>2</td>
 </tr>
 
 </table>
+</div>
 
+<div class="card">
 <h2>Course Information</h2>
 
 <ul>
@@ -34,13 +74,22 @@
 
 <li>Total Credits : 18</li>
 
-<li>Department : Computer Engineering</li>
+<li>Department : Computer Science & Engineering</li>
 
 <li>Academic Year : 2026-27</li>
+</div>
 
 </ul>
-
-<a href="index.html">Back To Index</a>
-
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h2>StudentHub Portal</h2>
+            <p>Your digital campus companion for academics, courses, assignments, attendance, and student services.</p>
+        </div>
+    </div>
+    <p class="copyright">
+        © 2026 StudentHub Portal | Developed by Hemangi Korat | All Rights Reserved.
+    </p>
+</footer>
 </body>
 </html>

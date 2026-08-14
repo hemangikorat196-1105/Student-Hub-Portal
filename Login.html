@@ -2,26 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Student Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Hub Portal</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
+    <script src="script.js"></script>
+<header>
+    <h1>STUDENT HUB PORTAL</h1>
+</header>
 
-<h1>Student Login</h1>
-
-<form>
-
+<form action="home.html">
+<h2>Student Login</h2>
 <label>Id</label>
-<br>
 <input type="text" placeholder="Enter Student ID ">
 <br><br>
 
 <label>Password</label>
-<br>
 <input type="password" placeholder="Enter Password">
 <br><br>
 
 <label>Role</label>
-<br>
 
 <select>
     <option>Student</option>
@@ -33,12 +38,33 @@
 
 <input type="submit" value="Login">
 
-<input type="reset" value="Clear">
+<input type="reset" value="Clear form">
 
 <p>Forgot Password??</p>
+<br>
+<a href="forgotpassword.html" class="login-btn">Forgot Password</a>
+<br><br>
 
-<a href="home.html">Back To Home</a>
+<p>Forgot Password??</p>
+<br>
+<a href="forgotusername.html" class="login-btn">Forgot Username</a>
+<br><br>
+
+<p>Don't have an account?</p>
+<br>
+<a href="Register.html" class="login-btn">Register Now</a>
 </form>
 
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h2>StudentHub Portal</h2>
+            <p>Your digital campus companion for academics, courses, assignments, attendance, and student services.</p>
+        </div>
+    </div>
+    <p class="copyright">
+        © 2026 StudentHub Portal | Developed by Hemangi Korat | All Rights Reserved.
+    </p>
+</footer>
 </body>
 </html>
