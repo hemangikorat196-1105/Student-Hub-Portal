@@ -3,17 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Hub Portal</title>
-
-    <link rel="stylesheet" href="style.css">
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <title>Student Hub Portal - Assignments</title>
+    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
 <script src="script.js"></script>
-<header>
-    <h1>STUDENT HUB PORTAL</h1>
+<header class="main-header">
+    <div class="header-left">
+        <div class="portal-title">
+            <h1>STUDENT HUB PORTAL</h1>
+            <p>Digital Academic & Campus Management System</p>
+        </div>
+    </div>
+
+    <button id="themeToggle" class="theme-btn" aria-label="Change Theme">
+        <i class="fa-solid fa-sun"></i>
+        <span>Light Mode</span>
+    </button>
 </header>
 
 <form action="home.html">
@@ -48,9 +56,9 @@
 <input type="password" placeholder="Confirm Your Password">
 <br><br>
 
-<label>Role</label>
+<label for="Role">Role</label>
 
-<select>
+<select id="Role">
     <option>Student</option>
     <option>Faculty</option>
     <option>Admin</option>
@@ -74,7 +82,7 @@
         </div>
     </div>
     <p class="copyright">
-        © 2026 StudentHub Portal | Developed by Hemangi Korat | All Rights Reserved.
+        © 2026 StudentHub Portal | Developed By Hemangi Korat | All Rights Reserved.
     </p>
 </footer>
 </body>

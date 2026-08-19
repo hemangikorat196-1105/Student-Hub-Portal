@@ -3,75 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Hub Portal</title>
-
-    <link rel="stylesheet" href="style.css">
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <title>Student Hub Portal - Contact & FAQ</title>
+    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="script.js" defer></script>
 </head>
+
 <body>
-    <script src="script.js"></script>
-<header>
-    <h1>STUDENT HUB PORTAL</h1>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="main-header">
+    <div class="header-left">
+        <button class="menu-btn" onclick="openMenu()" aria-label="Open Menu">
+        <i class="fa-solid fa-bars"></i></button>
+
+        <div class="portal-title">
+            <h1>STUDENT HUB PORTAL</h1>
+            <p>Digital Academic & Campus Management System</p>
+        </div>
+    </div>
+
+    <button id="themeToggle" class="theme-btn" aria-label="Change Theme">
+        <i class="fa-solid fa-sun"></i>
+        <span>Light Mode</span>
+    </button>
 </header>
 
-<nav>
-<div class="menu-btn" onclick="openMenu()">
-    <i class="fa-solid fa-bars"></i>
-</div>
+<div id="overlay" class="overlay"></div>
 
-<div id="overlay" class="overlay" onclick="closeMenu()"></div>
-<div id="sidebar" class="sidebar">
-    <span class="close-btn" onclick="closeMenu()">&times;</span>
+<aside id="sidebar" class="sidebar" aria-label="Sidebar Navigation" aria-hidden="true">
+    <div class="sidebar-header">
+        <h3>StudentHub Menu</h3>
+        <button class="close-btn" aria-label="Close sidebar menu">&times;</button>
+    </div>
     <a href="home.html"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="attendance.html"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
-    <a href="assignment.html"><i class="fa-solid fa-book-open"></i> Assignment</a>
+    <a href="Attendance.html"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
+    <a href="Assignment.html"><i class="fa-solid fa-book-open"></i> Assignment</a>
     <a href="courses.html"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
-    <a href="timetable.html"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
+    <a href="Timetable.html"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
     <a href="faculty.html"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
     <a href="notice.html"><i class="fa-solid fa-bullhorn"></i> Notice</a>
     <a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a>
-    <a href="contactus.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+    <a href="contactus.html" class="active"><i class="fa-solid fa-envelope"></i> Contact</a>
     <a href="admin.html"><i class="fa-solid fa-user-shield"></i> Admin</a>
     <a href="index.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
-</div>
-</nav>
+</aside>
 
-<form>
+<main id="main-content">
+    <form>
+        <h2><i class="fa-solid fa-envelope"></i> Contact Us</h2>
 
-    <h2>Contact Us</h2>
-    <br>
-<label>Full Name</label>
-<br>
-<input type="text" placeholder="Enter Your Name">
-<br><br>
+        <label for="contactFullName">Full Name</label>
+        <input type="text" id="contactFullName" placeholder="Enter Your Name" required>
 
-<label>Email</label>
-<br>
-<input type="email" placeholder="Enter Your Email">
-<br><br>
+        <label for="contactEmail">Email</label>
+        <input type="email" id="contactEmail" placeholder="Enter Your Email" required>
 
-<label>Phone Number</label>
-<br>
-<input type="tel" placeholder="Enter Phone Number">
-<br><br>
+        <label for="contactPhone">Phone Number</label>
+        <input type="tel" id="contactPhone" placeholder="Enter Phone Number">
 
-<label>Subject</label>
-<br>
-<input type="text" placeholder="Enter Subject Problem">
-<br><br>
+        <label for="contactSubject">Subject</label>
+        <input type="text" id="contactSubject" placeholder="Enter Subject / Problem Area" required>
 
-<label>Message</label>
-<br>
-<textarea rows="6" cols="50" placeholder="Enter Message"></textarea>
-<br><br>
+        <label for="contactMessage">Message</label>
+        <textarea id="contactMessage" rows="5" placeholder="Enter your detailed query or message" required></textarea>
 
-<input type="submit" value="Send Message">
+        <div style="display: flex; gap: 10px;">
+            <input type="submit" value="Send Message">
+            <input type="reset" value="Clear Form">
+        </div>
+    </form>
 
-<input type="reset" value="Clear">
+    <section class="faq-container" aria-label="Frequently Asked Questions">
+        <h2 class="faq-title"><i class="fa-solid fa-circle-question"></i> Frequently Asked Questions</h2>
 
-</form>
+        <div class="faq-item">
+            <button class="faq-question" type="button" aria-expanded="false">
+                <span>How can I check my attendance?</span>
+                <i class="fa-solid fa-chevron-down faq-icon"></i>
+            </button>
+            <div class="faq-answer">
+                <p>You can check your detailed lecture and lab attendance records by clicking on the <strong>Attendance</strong> tab in the navigation menu or sidebar drawer. Your percentage and eligibility status are updated daily.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" type="button" aria-expanded="false">
+                <span>Where can I find and submit my course assignments?</span>
+                <i class="fa-solid fa-chevron-down faq-icon"></i>
+            </button>
+            <div class="faq-answer">
+                <p>Navigate to the <strong>Assignments</strong> section. Here you can view pending assignments, due dates, submission status, and directly upload your solution files through the upload form.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" type="button" aria-expanded="false">
+                <span>How do I switch between Light and Dark themes?</span>
+                <i class="fa-solid fa-chevron-down faq-icon"></i>
+            </button>
+            <div class="faq-answer">
+                <p>Click the <strong>Dark Mode / Light Mode</strong> toggle button located in the top-right corner of the header. Your selected theme preference will be automatically saved in your browser (localStorage) and applied across all pages.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" type="button" aria-expanded="false">
+                <span>Who should I contact for timetable or subject clashes?</span>
+                <i class="fa-solid fa-chevron-down faq-icon"></i>
+            </button>
+            <div class="faq-answer">
+                <p>For class schedule conflicts or elective queries, please consult your department academic coordinator or send an inquiry using the Contact Us form above.</p>
+            </div>
+        </div>
+    </section>
+</main>
 
 <footer>
     <div class="footer-container">
@@ -81,8 +127,9 @@
         </div>
     </div>
     <p class="copyright">
-        © 2026 StudentHub Portal | Developed by Hemangi Korat | All Rights Reserved.
+        © 2026 StudentHub Portal | Developed By Hemangi Korat | All Rights Reserved.
     </p>
 </footer>
+
 </body>
 </html>

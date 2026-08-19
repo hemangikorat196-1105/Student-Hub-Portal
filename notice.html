@@ -3,49 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Hub Portal</title>
-
-    <link rel="stylesheet" href="style.css">
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <title>Student Hub Portal - Notices</title>
+    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="script.js" defer></script>
 </head>
+
 <body>
-    <script src="script.js"></script>
-<header>
-    <h1>STUDENT HUB PORTAL</h1>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="main-header">
+    <div class="header-left">
+        <button class="menu-btn" onclick="openMenu()" aria-label="Open Menu">
+        <i class="fa-solid fa-bars"></i></button>
+
+        <div class="portal-title">
+            <h1>STUDENT HUB PORTAL</h1>
+            <p>Digital Academic & Campus Management System</p>
+        </div>
+    </div>
+
+    <button id="themeToggle" class="theme-btn" aria-label="Change Theme">
+        <i class="fa-solid fa-sun"></i>
+        <span>Light Mode</span>
+    </button>
 </header>
 
-<nav>
-<div class="menu-btn" onclick="openMenu()">
-    <i class="fa-solid fa-bars"></i>
-</div>
+<div id="overlay" class="overlay"></div>
 
-<div id="overlay" class="overlay" onclick="closeMenu()"></div>
-<div id="sidebar" class="sidebar">
-    <span class="close-btn" onclick="closeMenu()">&times;</span>
+<aside id="sidebar" class="sidebar" aria-label="Sidebar Navigation" aria-hidden="true">
+    <div class="sidebar-header">
+        <h3>StudentHub Menu</h3>
+        <button class="close-btn" aria-label="Close sidebar menu">&times;</button>
+    </div>
     <a href="home.html"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="attendance.html"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
-    <a href="assignment.html"><i class="fa-solid fa-book-open"></i> Assignment</a>
+    <a href="Attendance.html"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
+    <a href="Assignment.html"><i class="fa-solid fa-book-open"></i> Assignment</a>
     <a href="courses.html"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
-    <a href="timetable.html"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
+    <a href="Timetable.html"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
     <a href="faculty.html"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
-    <a href="notice.html"><i class="fa-solid fa-bullhorn"></i> Notice</a>
+    <a href="notice.html" class="active"><i class="fa-solid fa-bullhorn"></i> Notice</a>
     <a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a>
     <a href="contactus.html"><i class="fa-solid fa-envelope"></i> Contact</a>
     <a href="admin.html"><i class="fa-solid fa-user-shield"></i> Admin</a>
     <a href="index.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
-</div>
-</nav>
+</aside>
 
-<div class="card">
-    
-<h2>College Notices</h2>
-<h3>
-    <ul><li>Notice 1</li></ul>
-</h3>
-<p><b>Date:</b> 20 July 2026</p>
-<p>Semester registration begins from Monday. Students are requested to complete registration before the deadline.</p>
+<main id="main-content">
+    <div class="card">
+        <h2><i class="fa-solid fa-bullhorn"></i> College Notices & Announcements</h2>
+        <p>Stay updated with the latest official announcements, event schedules, and academic circulars.</p>
+
+        <!-- Notice 1 -->
+        <div class="notice-item" style="padding: 18px 0;">
+            <span class="notice-date">20 July 2026</span>
+            <div style="flex: 1;">
+                <h3>Notice 1: Semester Registration</h3>
+                <p>Semester registration begins from Monday. Students are requested to complete registration before the deadline.</p>
+                <button class="small-btn view-notice-btn" style="margin-top: 10px;" type="button"
+                        data-title="Semester Registration (3rd Semester)"
+                        data-date="20 July 2026"
+                        data-content="All students of Semester 3 are hereby instructed to log in to their student portal and confirm subject registrations. Ensure elective courses are selected after consulting academic advisors. Deadline: 30th July.">
+                    <i class="fa-solid fa-eye"></i> View Notice
+                </button>
+            </div>
+        </div>
+
+        <!-- Notice 2 -->
+        <div class="notice-item" style="padding: 18px 0;">
+            <span class="notice-date">18 July 2026</span>
+            <div style="flex: 1;">
+                <h3>Notice 2: Mid-Semester Internal Examination</h3>
+                <p>Internal examination schedule will be published on the department notice board next week.</p>
+                <button class="small-btn view-notice-btn" style="margin-top: 10px;" type="button"
+                        data-title="Mid-Semester Assessment Timeline"
+                        data-date="18 July 2026"
+                        data-content="The mid-semester theoretical assessments and laboratory practicals will commence from the 2nd week of August. Students must carry valid college identity cards in all examination halls.">
+                    <i class="fa-solid fa-eye"></i> View Notice
+                </button>
+            </div>
+        </div>
+
+        <!-- Notice 3 -->
+        <div class="notice-item" style="padding: 18px 0;">
+            <span class="notice-date">15 July 2026</span>
+            <div style="flex: 1;">
+                <h3>Notice 3: Upcoming Campus Holiday</h3>
+                <p>College will remain closed on the upcoming holiday. Classes will resume according to regular timetable.</p>
+                <button class="small-btn view-notice-btn" style="margin-top: 10px;" type="button"
+                        data-title="Official Campus Holiday Notice"
+                        data-date="15 July 2026"
+                        data-content="Campus facilities and instructional classes will remain closed for the upcoming official holiday. Regular classroom sessions and laboratories will resume the subsequent day.">
+                    <i class="fa-solid fa-eye"></i> View Notice
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Modal Popup Component -->
+<div class="modal-overlay" id="noticeModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalNoticeTitle">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3 id="modalNoticeTitle"><i class="fa-solid fa-bullhorn"></i> Notice Details</h3>
+            <button class="modal-close-btn" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-meta" id="modalNoticeDate">Date: 20 July 2026</div>
+            <p id="modalNoticeBody">Detailed notice content goes here.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-action-btn" type="button">Close</button>
+        </div>
+    </div>
 </div>
 
 <footer>
@@ -56,8 +126,9 @@
         </div>
     </div>
     <p class="copyright">
-        © 2026 StudentHub Portal | Developed by Hemangi Korat | All Rights Reserved.
+        © 2026 StudentHub Portal | Developed By Hemangi Korat | All Rights Reserved.
     </p>
 </footer>
+
 </body>
 </html>

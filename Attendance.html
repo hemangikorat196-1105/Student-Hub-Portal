@@ -3,142 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Hub Portal</title>
-
-    <link rel="stylesheet" href="style.css">
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <title>Student Hub Portal - Attendance</title>
+    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-<script src="script.js"></script>
-<header>
-    <h1>STUDENT HUB PORTAL</h1>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="main-header">
+    <div class="header-left">
+        <button class="menu-btn" onclick="openMenu()" aria-label="Open Menu">
+        <i class="fa-solid fa-bars"></i></button>
+
+        <div class="portal-title">
+            <h1>STUDENT HUB PORTAL</h1>
+            <p>Digital Academic & Campus Management System</p>
+        </div>
+    </div>
+
+    <button id="themeToggle" class="theme-btn" aria-label="Change Theme">
+        <i class="fa-solid fa-sun"></i>
+        <span>Light Mode</span>
+    </button>
 </header>
 
-<nav>
-<div class="menu-btn" onclick="openMenu()">
-    <i class="fa-solid fa-bars"></i>
-</div>
+<div id="overlay" class="overlay"></div>
 
-<div id="overlay" class="overlay" onclick="closeMenu()"></div>
-<div id="sidebar" class="sidebar">
-    <span class="close-btn" onclick="closeMenu()">&times;</span>
+<aside id="sidebar" class="sidebar" aria-label="Sidebar Navigation" aria-hidden="true">
+    <div class="sidebar-header">
+        <h3>StudentHub Menu</h3>
+        <button class="close-btn" aria-label="Close sidebar menu">&times;</button>
+    </div>
     <a href="home.html"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="attendance.html"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
-    <a href="assignment.html"><i class="fa-solid fa-book-open"></i> Assignment</a>
+    <a href="Attendance.html" class="active"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
+    <a href="Assignment.html"><i class="fa-solid fa-book-open"></i> Assignment</a>
     <a href="courses.html"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
-    <a href="timetable.html"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
+    <a href="Timetable.html"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
     <a href="faculty.html"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
     <a href="notice.html"><i class="fa-solid fa-bullhorn"></i> Notice</a>
     <a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a>
     <a href="contactus.html"><i class="fa-solid fa-envelope"></i> Contact</a>
     <a href="admin.html"><i class="fa-solid fa-user-shield"></i> Admin</a>
     <a href="index.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
-</div>
-</nav>
+</aside>
 
-<div class="card">
-<h2>Attendance Record</h2>
+<main id="main-content">
+    <div class="card">
+        <h2><i class="fa-solid fa-calendar-check"></i> Attendance Record</h2>
 
-<table>
-    <tr>
-        <th>Subject Code</th>
-        <th>Subject</th>
-        <th>Total Classes</th>
-        <th>Present</th>
-        <th>Attendance</th>
-    </tr>
+        <table>
+            <tr>
+                <th>Subject Code</th>
+                <th>Subject</th>
+                <th>Total Classes</th>
+                <th>Present</th>
+                <th>Attendance</th>
+            </tr>
 
-    <tr>
-        <td rowspan="2">CEUE203</td>
-        <td>OOP Lecture</td>
-        <td>6</td>
-        <td>6</td>
-        <td>100%</td>
-    </tr>
+            <tr>
+                <td rowspan="2">CEUE203</td>
+                <td>OOP Lecture</td>
+                <td>6</td>
+                <td>6</td>
+                <td>100%</td>
+            </tr>
 
-    <tr>
-        <td>OOP Lab</td>
-        <td>5</td>
-        <td>4</td>
-        <td>80%</td>
-    </tr>
+            <tr>
+                <td>OOP Lab</td>
+                <td>5</td>
+                <td>4</td>
+                <td>80%</td>
+            </tr>
 
-    <tr>
-        <td rowspan="2">CSUC201</td>
-        <td>FDSA Lecture</td>
-        <td>11</td>
-        <td>8</td>
-        <td>72%</td>
-    </tr>
+            <tr>
+                <td rowspan="2">CSUC201</td>
+                <td>FDSA Lecture</td>
+                <td>11</td>
+                <td>8</td>
+                <td>72%</td>
+            </tr>
 
-    <tr>
-        <td>FDSA Lab</td>
-        <td>3</td>
-        <td>3</td>
-        <td>100%</td>
-    </tr>
+            <tr>
+                <td>FDSA Lab</td>
+                <td>3</td>
+                <td>3</td>
+                <td>100%</td>
+            </tr>
 
-    <tr>
-        <td>HSUV201</td>
-        <td>CPI Lecture</td>
-        <td>10</td>
-        <td>8</td>
-        <td>80%</td>
-    </tr>
+            <tr>
+                <td>HSUV201</td>
+                <td>CPI Lecture</td>
+                <td>10</td>
+                <td>8</td>
+                <td>80%</td>
+            </tr>
 
-    <tr>
-        <td rowspan="2">ITUC201</td>
-        <td>FCN Lecture</td>
-        <td>17</td>
-        <td>14</td>
-        <td>82%</td>
-    </tr>
+            <tr>
+                <td rowspan="2">ITUC201</td>
+                <td>FCN Lecture</td>
+                <td>17</td>
+                <td>14</td>
+                <td>82%</td>
+            </tr>
 
-    <tr>
-        <td>FCN Lab</td>
-        <td>5</td>
-        <td>5</td>
-        <td>100%</td>
-    </tr>
+            <tr>
+                <td>FCN Lab</td>
+                <td>5</td>
+                <td>5</td>
+                <td>100%</td>
+            </tr>
 
-    <tr>
-        <td rowspan="2">ITUE203</td>
-        <td>WDF Lecture</td>
-        <td>9</td>
-        <td>6</td>
-        <td>66%</td>
-    </tr>
+            <tr>
+                <td rowspan="2">ITUE203</td>
+                <td>WDF Lecture</td>
+                <td>9</td>
+                <td>6</td>
+                <td>66%</td>
+            </tr>
 
-    <tr>
-        <td>WDF Lab</td>
-        <td>9</td>
-        <td>8</td>
-        <td>88%</td>
-    </tr>
+            <tr>
+                <td>WDF Lab</td>
+                <td>9</td>
+                <td>8</td>
+                <td>88%</td>
+            </tr>
 
-    <tr>
-        <td>MSUD203</td>
-        <td>Discrete Mathematics</td>
-        <td>10</td>
-        <td>8</td>
-        <td>80%</td>
-    </tr>
+            <tr>
+                <td>MSUD203</td>
+                <td>Discrete Mathematics</td>
+                <td>10</td>
+                <td>8</td>
+                <td>80%</td>
+            </tr>
+        </table>
+    </div>
 
-</table>
-</div>
-
-<div class="card">
-<h2>Attendance Summary</h2>
-<ul>
-    <li><strong>Total Subjects:</strong> 6</li>
-    <li><strong>Highest Attendance:</strong> 100%</li>
-    <li><strong>Lowest Attendance:</strong> 66% (WDF Lecture)</li>
-    <li><strong>Overall Attendance:</strong> 79%</li>
-    <li><strong>Status:</strong> Eligible for Examination</li>
-</ul>
-</div>
+    <div class="card">
+        <h2><i class="fa-solid fa-chart-pie"></i> Attendance Summary</h2>
+        <ul>
+            <li><strong>Total Subjects:</strong> 6</li>
+            <li><strong>Highest Attendance:</strong> 100% (OOP Lecture, FDSA Lab, FCN Lab)</li>
+            <li><strong>Lowest Attendance:</strong> 66% (WDF Lecture)</li>
+            <li><strong>Overall Attendance:</strong> 79%</li>
+            <li><strong>Status:</strong> Eligible for Examination</li>
+        </ul>
+    </div>
+</main>
 
 <footer>
     <div class="footer-container">
@@ -148,7 +159,7 @@
         </div>
     </div>
     <p class="copyright">
-        © 2026 StudentHub Portal | Developed by Hemangi Korat | All Rights Reserved.
+        © 2026 StudentHub Portal | Developed By Hemangi Korat | All Rights Reserved.
     </p>
 </footer>
 </body>

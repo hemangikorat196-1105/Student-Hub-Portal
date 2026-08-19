@@ -3,39 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Hub Portal</title>
-
-    <link rel="stylesheet" href="style.css">
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <title>Student Hub Portal - Welcome</title>
+    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-<script src="script.js"></script>
-<header>
-    <h1>STUDENT HUB PORTAL</h1>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="main-header">
+    <div class="header-left">
+        <div class="portal-title">
+            <h1>STUDENT HUB PORTAL</h1>
+            <p>Digital Academic & Campus Management System</p>
+        </div>
+    </div>
+
+    <button id="themeToggle" class="theme-btn" aria-label="Change Theme">
+        <i class="fa-solid fa-sun"></i>
+        <span>Light Mode</span>
+    </button>
 </header>
 
-<section>
-    <h2>Welcome</h2>
-    <p>Welcome to the Student Hub Portal.</p>
-</section>
+<main id="main-content">
+    <section>
+        <h2>Welcome to Student Hub Portal</h2>
+        <p>Your one-stop digital companion for managing attendance, academic assignments, class timetables, and college circulars.</p>
+    </section>
 
-<div class="user-options">
+    <div class="user-options">
+        <div class="option-card">
+            <h3><i class="fa-solid fa-user-plus"></i> New User?</h3>
+            <p>Create your verified StudentHub account and access student features.</p>
+            <a href="register.html" class="small-btn">Register Now</a>
+        </div>
 
-    <div class="option-card">
-        <h3>New User?</h3>
-        <p>Create your StudentHub account.</p>
-        <a href="register.html" class="small-btn">Register Now</a>
+        <div class="option-card">
+            <h3><i class="fa-solid fa-right-to-bracket"></i> Already Registered?</h3>
+            <p>Access your personalized student academic dashboard.</p>
+            <a href="login.html" class="small-btn">Login Now</a>
+        </div>
     </div>
-
-    <div class="option-card">
-        <h3>Already Registered?</h3>
-        <p>Access your student dashboard.</p>
-        <a href="login.html" class="small-btn">Login Now</a>
-    </div>
-
-</div>
+</main>
 
 <footer>
     <div class="footer-container">
@@ -45,7 +54,7 @@
         </div>
     </div>
     <p class="copyright">
-        © 2026 StudentHub Portal | Developed by Hemangi Korat | All Rights Reserved.
+        © 2026 StudentHub Portal | Developed By Hemangi Korat | All Rights Reserved.
     </p>
 </footer>
 </body>

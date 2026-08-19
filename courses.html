@@ -3,84 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Hub Portal</title>
-
-    <link rel="stylesheet" href="style.css">
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <title>Student Hub Portal - Courses</title>
+    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-    <script src="script.js"></script>
-<header>
-    <h1>STUDENT HUB PORTAL</h1>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="main-header">
+    <div class="header-left">
+        <button class="menu-btn" onclick="openMenu()" aria-label="Open Menu">
+        <i class="fa-solid fa-bars"></i></button>
+
+        <div class="portal-title">
+            <h1>STUDENT HUB PORTAL</h1>
+            <p>Digital Academic & Campus Management System</p>
+        </div>
+    </div>
+
+    <button id="themeToggle" class="theme-btn" aria-label="Change Theme">
+        <i class="fa-solid fa-sun"></i>
+        <span>Light Mode</span>
+    </button>
 </header>
 
 <nav>
-<div class="menu-btn" onclick="openMenu()">
-    <i class="fa-solid fa-bars"></i>
-</div>
+    <div class="nav-inner">
+        <button class="menu-btn" id="hamburgerBtn" aria-label="Toggle navigation menu" aria-expanded="false" type="button">
+            <i class="fa-solid fa-bars"></i>
+        </button>
 
-<div id="overlay" class="overlay" onclick="closeMenu()"></div>
-<div id="sidebar" class="sidebar">
-    <span class="close-btn" onclick="closeMenu()">&times;</span>
+        <ul class="nav-links">
+            <li><a href="home.html"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li><a href="Attendance.html"><i class="fa-solid fa-calendar-check"></i> Attendance</a></li>
+            <li><a href="Assignment.html"><i class="fa-solid fa-book-open"></i> Assignment</a></li>
+            <li><a href="courses.html" class="active"><i class="fa-solid fa-graduation-cap"></i> Courses</a></li>
+            <li><a href="Timetable.html"><i class="fa-solid fa-calendar-days"></i> Timetable</a></li>
+            <li><a href="notice.html"><i class="fa-solid fa-bullhorn"></i> Notice</a></li>
+            <li><a href="contactus.html"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div id="overlay" class="overlay"></div>
+
+<aside id="sidebar" class="sidebar" aria-label="Sidebar Navigation" aria-hidden="true">
+    <div class="sidebar-header">
+        <h3>StudentHub Menu</h3>
+        <button class="close-btn" aria-label="Close sidebar menu">&times;</button>
+    </div>
     <a href="home.html"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="attendance.html"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
-    <a href="assignment.html"><i class="fa-solid fa-book-open"></i> Assignment</a>
-    <a href="courses.html"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
-    <a href="timetable.html"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
+    <a href="Attendance.html"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
+    <a href="Assignment.html"><i class="fa-solid fa-book-open"></i> Assignment</a>
+    <a href="courses.html" class="active"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
+    <a href="Timetable.html"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
     <a href="faculty.html"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
     <a href="notice.html"><i class="fa-solid fa-bullhorn"></i> Notice</a>
     <a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a>
     <a href="contactus.html"><i class="fa-solid fa-envelope"></i> Contact</a>
     <a href="admin.html"><i class="fa-solid fa-user-shield"></i> Admin</a>
     <a href="index.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
-</div>
-</nav>
+</aside>
 
+<main id="main-content">
+    <div class="card">
+        <h2><i class="fa-solid fa-graduation-cap"></i> Registered Courses</h2>
+        <table>
+            <tr>
+                <th>Course Code</th>
+                <th>Course Name</th>
+                <th>Faculty</th>
+                <th>Credits</th>
+            </tr>
 
-<div class="card">
-<table>
-<h2>My Courses</h2>
-<tr>
-<th>Course Code</th>
-<th>Course Name</th>
-<th>Faculty</th>
-<th>Credits</th>
-</tr>
+            <tr>
+                <td>CSUC201</td>
+                <td>Data Structures & Algorithms</td>
+                <td>Dr. Amit Thakkar & Dr. Vidisha Pradhan</td>
+                <td>5</td>
+            </tr>
 
-<tr>
-<td>CSUC201</td>
-<td>Data Structures & Algorithams</td>
-<td>Dr. Amit thakkar & Dr.Vidisha Pradhan</td>
-<td>5</td>
-</tr>
+            <tr>
+                <td>CEUE203</td>
+                <td>OOP - Java</td>
+                <td>Siddharth Shah & Brinda Patel</td>
+                <td>2</td>
+            </tr>
 
-<tr>
-<td>CEUE203</td>
-<td>OOP- Java</td>
-<td>Siddharth Shah &  Brinda Patel</td>
-<td>2</td>
-</tr>
+            <tr>
+                <td>ITUE203</td>
+                <td>Web Development Frameworks (WDF)</td>
+                <td>Prof. Hitesh Patel</td>
+                <td>4</td>
+            </tr>
 
-</table>
-</div>
+            <tr>
+                <td>ITUC201</td>
+                <td>Foundations of Computer Networks (FCN)</td>
+                <td>Prof. Snehal Patel</td>
+                <td>4</td>
+            </tr>
 
-<div class="card">
-<h2>Course Information</h2>
+            <tr>
+                <td>MSUD203</td>
+                <td>Discrete Mathematics</td>
+                <td>Dr. R. K. Sharma</td>
+                <td>3</td>
+            </tr>
+        </table>
+    </div>
 
-<ul>
+    <div class="card">
+        <h2><i class="fa-solid fa-circle-info"></i> Course Summary & Details</h2>
+        <ul>
+            <li><strong>Semester:</strong> 3rd Semester</li>
+            <li><strong>Total Credits:</strong> 18 Credits</li>
+            <li><strong>Department:</strong> Computer Science & Engineering</li>
+            <li><strong>Academic Year:</strong> 2026-27</li>
+        </ul>
+    </div>
+</main>
 
-<li>Semester : 3</li>
-
-<li>Total Credits : 18</li>
-
-<li>Department : Computer Science & Engineering</li>
-
-<li>Academic Year : 2026-27</li>
-</div>
-
-</ul>
 <footer>
     <div class="footer-container">
         <div class="footer-section">
@@ -89,7 +133,7 @@
         </div>
     </div>
     <p class="copyright">
-        © 2026 StudentHub Portal | Developed by Hemangi Korat | All Rights Reserved.
+        © 2026 StudentHub Portal | Developed By Hemangi Korat | All Rights Reserved.
     </p>
 </footer>
 </body>
