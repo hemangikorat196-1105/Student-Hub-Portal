@@ -1,6 +1,6 @@
 /* ==========================================================================
    STUDENTHUB PORTAL - STYLESHEET (Style.css)
-   Practical 4: DOM Manipulation, Event Handling, and UI Interactivity
+   Practical 4: JavaScript DOM Manipulation, Event Handling, and UI Interactivity
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
@@ -18,6 +18,9 @@
     --navbar-bg: #ffffff;
     --header-bg: #14599d;
     --header-text: #ffffff;
+    --header-btn-bg: rgba(255, 255, 255, 0.2);
+    --header-btn-border: rgba(255, 255, 255, 0.35);
+    --header-btn-text: #ffffff;
     --border-color: #e2e8f0;
     --input-bg: #ffffff;
     --input-text: #2c3e50;
@@ -33,6 +36,12 @@
     --banner-text: #0369a1;
     --faq-answer-bg: #f8fafc;
     --slider-bg: #ffffff;
+    --sidebar-bg: #ffffff;
+    --error-color: #dc2626;
+    --error-bg: #fee2e2;
+    --success-bg: #dcfce7;
+    --success-text: #15803d;
+    --success-border: #86efac;
     --transition-speed: 0.3s;
 }
 
@@ -48,6 +57,9 @@ body.dark-mode {
     --navbar-bg: #131d2e;
     --header-bg: #0b1120;
     --header-text: #f8fafc;
+    --header-btn-bg: #1e293b;
+    --header-btn-border: #475569;
+    --header-btn-text: #f8fafc;
     --border-color: #334155;
     --input-bg: #0f172a;
     --input-text: #f8fafc;
@@ -63,6 +75,12 @@ body.dark-mode {
     --banner-text: #93c5fd;
     --faq-answer-bg: #141d2e;
     --slider-bg: #1e293b;
+    --sidebar-bg: #1e293b;
+    --error-color: #f87171;
+    --error-bg: #450a0a;
+    --success-bg: #064e3b;
+    --success-text: #6ee7b7;
+    --success-border: #047857;
 }
 
 /* --------------------------------------------------------------------------
@@ -103,217 +121,182 @@ main {
 /* Skip link for accessibility */
 .skip-link {
     position: absolute;
-    top: -40px;
+    top: -50px;
     left: 10px;
     background: var(--primary-color);
     color: #ffffff;
-    padding: 8px 12px;
-    z-index: 1000;
+    padding: 8px 14px;
+    z-index: 2500;
     text-decoration: none;
     border-radius: 4px;
+    font-weight: 600;
+    transition: top 0.2s ease;
 }
 .skip-link:focus {
     top: 10px;
 }
 
 /* --------------------------------------------------------------------------
-   HEADER & TOP BAR
+   MAIN HEADER (Assignment.html Reference Style)
    -------------------------------------------------------------------------- */
-header {
+.main-header {
+    width: 100%;
+    min-height: 90px;
     background: var(--header-bg);
     color: var(--header-text);
-    padding: 18px 25px;
-    position: relative;
-    border-bottom: 2px solid var(--border-color);
-}
-
-.header-container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 15px;
+    justify-content: space-between;
+    padding: 16px 5%;
+    box-sizing: border-box;
+    border-bottom: 2px solid var(--border-color);
+    position: relative;
+    z-index: 100;
 }
 
-.header-title-group h1 {
-    font-size: 26px;
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.portal-title h1 {
+    margin: 0;
+    color: var(--header-text);
+    font-size: 24px;
     font-weight: 700;
     letter-spacing: 0.5px;
-    color: var(--header-text);
-    margin: 0;
 }
 
-.header-title-group p {
+.portal-title p {
+    margin: 3px 0 0;
+    color: rgba(255, 255, 255, 0.85);
     font-size: 13px;
-    opacity: 0.85;
-    margin: 2px 0 0;
 }
 
-.header-controls {
+body.dark-mode .portal-title p {
+    color: var(--text-muted);
+}
+
+/* Hamburger Menu Button in Header */
+.menu-btn {
+    width: 46px;
+    height: 46px;
+    border: 1px solid var(--header-btn-border);
+    border-radius: 10px;
+    background: var(--header-btn-bg);
+    color: var(--header-btn-text);
+    font-size: 20px;
+    cursor: pointer;
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 12px;
+    transition: all 0.25s ease;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+.menu-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.05);
+}
+
+body.dark-mode .menu-btn {
+    background: #1e293b;
+    border-color: #475569;
+    color: #38bdf8;
+}
+
+body.dark-mode .menu-btn:hover {
+    background: #334155;
+}
+
+.menu-btn:focus-visible {
+    outline: 2px solid var(--header-text);
+    outline-offset: 2px;
 }
 
 /* Theme Switcher Button */
+.theme-btn,
 .theme-toggle-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(255, 255, 255, 0.15);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 8px 16px;
-    border-radius: 20px;
-    cursor: pointer;
+    padding: 10px 18px;
+    border: 1px solid var(--header-btn-border);
+    border-radius: 25px;
+    background: var(--header-btn-bg);
+    color: var(--header-btn-text);
     font-size: 14px;
     font-weight: 600;
+    cursor: pointer;
     transition: all 0.25s ease;
+    flex-shrink: 0;
+    user-select: none;
 }
 
+.theme-btn:hover,
 .theme-toggle-btn:hover {
-    background: rgba(255, 255, 255, 0.25);
-    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.04);
 }
 
-.theme-toggle-btn:focus-visible {
-    outline: 2px solid #ffffff;
-    outline-offset: 2px;
-}
-
+body.dark-mode .theme-btn,
 body.dark-mode .theme-toggle-btn {
     background: #334155;
-    color: #f8fafc;
     border-color: #475569;
+    color: #f8fafc;
 }
 
+body.dark-mode .theme-btn:hover,
 body.dark-mode .theme-toggle-btn:hover {
     background: #475569;
 }
 
-/* --------------------------------------------------------------------------
-   NAVIGATION & HAMBURGER MENU
-   -------------------------------------------------------------------------- */
-nav {
-    background: var(--navbar-bg);
-    padding: 10px 20px;
-    box-shadow: var(--shadow);
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 900;
-}
-
-.nav-inner {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.nav-links {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    list-style: none;
-    flex-wrap: wrap;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: var(--text-color);
-    padding: 8px 14px;
-    border-radius: 6px;
-    font-weight: 600;
-    font-size: 15px;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.nav-links a:hover {
-    background: var(--primary-light);
-    color: var(--primary-color);
-}
-
-.nav-links a.active {
-    background: var(--primary-color);
-    color: #ffffff;
-}
-
-/* Hamburger Button */
-.menu-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    cursor: pointer;
-    color: var(--primary-color);
-    background: var(--primary-light);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 8px 12px;
-    transition: all 0.2s ease;
-}
-
-.menu-btn:hover {
-    background: var(--primary-color);
-    color: #ffffff;
-}
-
-.menu-btn:focus-visible {
-    outline: 2px solid var(--primary-color);
+.theme-btn:focus-visible,
+.theme-toggle-btn:focus-visible {
+    outline: 2px solid var(--header-text);
     outline-offset: 2px;
 }
 
-/* Sidebar Drawer Overlay */
+/* --------------------------------------------------------------------------
+   SIDEBAR & OVERLAY (DRAWER MENU)
+   -------------------------------------------------------------------------- */
 .overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
     opacity: 0;
     visibility: hidden;
+    z-index: 1500;
     transition: opacity 0.3s ease, visibility 0.3s ease;
-    z-index: 998;
 }
 
-.overlay.active,
-.overlay.show {
+.overlay.active {
     opacity: 1;
     visibility: visible;
-    display: block;
 }
 
-/* Sidebar Navigation Drawer */
 .sidebar {
     position: fixed;
     top: 0;
-    left: -290px;
-    width: 275px;
-    height: 100%;
-    background: var(--card-bg);
-    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.25);
+    left: -300px;
+    width: 280px;
+    height: 100vh;
+    background: var(--sidebar-bg);
+    color: var(--text-color);
+    box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
     transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 999;
+    z-index: 2000;
     overflow-y: auto;
-    padding: 25px 15px 40px;
     border-right: 1px solid var(--border-color);
 }
 
-.sidebar.active,
-.sidebar.show {
+.sidebar.active {
     left: 0;
 }
 
@@ -321,27 +304,28 @@ nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-bottom: 15px;
-    margin-bottom: 15px;
+    padding: 22px 20px;
     border-bottom: 1px solid var(--border-color);
 }
 
-.sidebar-header h3 {
+.sidebar-header h3,
+.sidebar-header h2 {
+    margin: 0;
     color: var(--primary-color);
-    font-size: 18px;
+    font-size: 19px;
     font-weight: 700;
 }
 
 .close-btn {
-    font-size: 26px;
+    border: none;
+    background: transparent;
+    font-size: 28px;
     cursor: pointer;
     color: var(--text-muted);
-    background: none;
-    border: none;
     line-height: 1;
     padding: 4px 8px;
     border-radius: 4px;
-    transition: color 0.2s ease, background 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .close-btn:hover {
@@ -353,31 +337,33 @@ nav {
     display: flex;
     align-items: center;
     gap: 12px;
+    padding: 14px 22px;
     text-decoration: none;
     color: var(--text-color);
     font-size: 15px;
     font-weight: 600;
-    padding: 12px 16px;
-    margin-bottom: 4px;
-    border-radius: 8px;
     transition: all 0.2s ease;
+    border-left: 3px solid transparent;
 }
 
 .sidebar a i {
-    width: 22px;
+    width: 24px;
     text-align: center;
     color: var(--primary-color);
+    font-size: 16px;
 }
 
 .sidebar a:hover {
     background: var(--primary-light);
     color: var(--primary-color);
-    transform: translateX(4px);
+    border-left-color: var(--primary-color);
+    padding-left: 26px;
 }
 
 .sidebar a.active {
     background: var(--primary-color);
     color: #ffffff;
+    border-left-color: var(--primary-hover);
 }
 
 .sidebar a.active i {
@@ -424,13 +410,14 @@ nav {
 
 .banner-icon {
     font-size: 18px;
+    color: var(--banner-text);
 }
 
 .banner-close-btn {
     background: none;
     border: none;
     color: var(--banner-text);
-    font-size: 20px;
+    font-size: 22px;
     cursor: pointer;
     padding: 4px 8px;
     border-radius: 4px;
@@ -440,7 +427,7 @@ nav {
 
 .banner-close-btn:hover {
     background: rgba(0, 0, 0, 0.1);
-    transform: scale(1.1);
+    transform: scale(1.15);
 }
 
 /* --------------------------------------------------------------------------
@@ -683,13 +670,14 @@ nav {
     width: 100%;
     height: 100%;
     background: var(--modal-overlay);
+    backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
-    z-index: 1000;
+    z-index: 2500;
     padding: 20px;
 }
 
@@ -796,7 +784,7 @@ nav {
 }
 
 /* --------------------------------------------------------------------------
-   HOME PAGE & DASHBOARD COMPONENTS
+   HOME PAGE COMPONENTS
    -------------------------------------------------------------------------- */
 .home-container {
     width: 90%;
@@ -1217,14 +1205,16 @@ li {
     color: var(--text-color);
 }
 
-/* Forms */
+/* --------------------------------------------------------------------------
+   FORMS & INPUTS (Registration & Login)
+   -------------------------------------------------------------------------- */
 form {
     background: var(--card-bg);
     color: var(--text-color);
-    width: 440px;
+    width: 520px;
     max-width: 100%;
     margin: 30px auto;
-    padding: 30px;
+    padding: 32px 30px;
     border-radius: 12px;
     box-shadow: var(--shadow);
     border: 1px solid var(--border-color);
@@ -1233,29 +1223,43 @@ form {
 form h2 {
     text-align: center;
     color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.form-group {
     margin-bottom: 18px;
-    font-size: 22px;
+    position: relative;
 }
 
 form label {
     font-weight: 600;
     color: var(--primary-color);
-    display: inline-block;
-    margin-bottom: 5px;
+    display: block;
+    margin-bottom: 6px;
     font-size: 14px;
 }
 
-form input,
+form label .required-star {
+    color: var(--error-color);
+    margin-left: 3px;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="tel"],
+form input[type="file"],
 form select,
 form textarea {
     width: 100%;
-    padding: 11px 14px;
-    margin: 6px 0 16px;
+    padding: 12px 14px;
     border: 1px solid var(--input-border);
     border-radius: 7px;
     background-color: var(--input-bg);
     color: var(--input-text);
     font-size: 14px;
+    box-sizing: border-box;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -1264,14 +1268,136 @@ form select:focus,
 form textarea:focus {
     border-color: var(--primary-color);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    box-shadow: 0 0 0 3px rgba(20, 89, 157, 0.15);
 }
 
-form p {
-    color: var(--text-muted);
+body.dark-mode form input:focus,
+body.dark-mode form select:focus,
+body.dark-mode form textarea:focus {
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+
+/* Radio & Checkbox Groups */
+.radio-group-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 8px 0 10px;
+}
+
+.radio-item,
+.checkbox-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     font-size: 14px;
-    margin: 12px 0 4px;
+    font-weight: 500;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.radio-item input[type="radio"],
+.checkbox-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--primary-color);
+    margin: 0;
+}
+
+.checkbox-group {
+    margin: 15px 0 18px;
+}
+
+.checkbox-item a {
+    color: var(--primary-color);
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+/* Validation Error Styles */
+.error-msg {
+    display: block;
+    color: var(--error-color);
+    font-size: 12.5px;
+    font-weight: 600;
+    margin-top: 4px;
+    min-height: 18px;
+    line-height: 1.3;
+}
+
+input.input-error,
+select.input-error {
+    border-color: var(--error-color) !important;
+    background-color: var(--error-bg);
+}
+
+input.input-error:focus,
+select.input-error:focus {
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2) !important;
+}
+
+/* Registration Success Banner */
+.success-banner {
+    display: none;
+    background: var(--success-bg);
+    color: var(--success-text);
+    border: 1px solid var(--success-border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: 600;
     text-align: center;
+    line-height: 1.5;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Form Action Buttons (Equal size & alignment) */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 15px;
+    margin-bottom: 18px;
+}
+
+.form-actions input[type="submit"],
+.form-actions input[type="reset"],
+.form-actions button {
+    flex: 1;
+    margin: 0;
+    padding: 12px 18px;
+    font-size: 15px;
+    height: 48px;
+}
+
+/* Form Links Area (Login / Register / Forgot links) */
+.form-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    padding-top: 15px;
+}
+
+.form-links a {
+    text-decoration: none;
+    color: var(--primary-color);
+    font-size: 14px;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.form-links a:hover {
+    text-decoration: underline;
+    color: var(--primary-hover);
 }
 
 /* Tables */
@@ -1325,7 +1451,7 @@ input[type="reset"],
 .back-btn {
     background: var(--primary-color);
     color: #ffffff;
-    padding: 10px 20px;
+    padding: 11px 20px;
     border: none;
     border-radius: 6px;
     text-decoration: none;
@@ -1334,12 +1460,12 @@ input[type="reset"],
     font-size: 14px;
     display: inline-block;
     text-align: center;
+    box-sizing: border-box;
     transition: background 0.2s ease, transform 0.15s ease;
 }
 
 button:hover,
 input[type="submit"]:hover,
-input[type="reset"]:hover,
 .home-btn:hover,
 .login-btn:hover,
 .small-btn:hover,
@@ -1348,13 +1474,19 @@ input[type="reset"]:hover,
     transform: translateY(-1px);
 }
 
-input[type="reset"] {
+input[type="reset"],
+.btn-secondary {
     background: #64748b;
-    margin-left: 8px;
 }
 
-input[type="reset"]:hover {
+input[type="reset"]:hover,
+.btn-secondary:hover {
     background: #475569;
+}
+
+.login-btn {
+    width: 100%;
+    margin-top: 6px;
 }
 
 .back-btn {
@@ -1372,7 +1504,7 @@ footer {
     background: var(--header-bg);
     color: var(--header-text);
     margin-top: auto;
-    padding: 30px 20px 20px;
+    padding: 28px 20px 18px;
     text-align: center;
     border-top: 1px solid var(--border-color);
 }
@@ -1381,31 +1513,30 @@ footer {
     width: 90%;
     max-width: 1200px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
     text-align: center;
 }
 
 .footer-section h2 {
     color: var(--header-text);
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     font-size: 20px;
 }
 
 .footer-section p {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.85);
     font-size: 14px;
     line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto;
 }
 
 .copyright {
     text-align: center;
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.7);
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.75);
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 /* --------------------------------------------------------------------------
@@ -1424,9 +1555,30 @@ footer {
 }
 
 @media (max-width: 768px) {
-    .header-container {
-        flex-direction: column;
-        text-align: center;
+    .main-header {
+        padding: 15px 4%;
+    }
+
+    .portal-title h1 {
+        font-size: 20px;
+    }
+
+    .portal-title p {
+        font-size: 12px;
+    }
+
+    .theme-btn span,
+    .theme-toggle-btn span {
+        display: none;
+    }
+
+    .theme-btn,
+    .theme-toggle-btn {
+        padding: 10px 14px;
+        border-radius: 50%;
+        width: 44px;
+        height: 44px;
+        justify-content: center;
     }
 
     .slide {
@@ -1435,10 +1587,6 @@ footer {
 
     .slide h3 {
         font-size: 20px;
-    }
-
-    .nav-links {
-        display: none;
     }
 }
 
@@ -1476,243 +1624,12 @@ footer {
     .slider-btn.next {
         right: 8px;
     }
-}
 
-/* ========================================
-   MAIN HEADER
-======================================== */
+    .form-actions {
+        flex-direction: column;
+    }
 
-.main-header {
-    width: 100%;
-    min-height: 130px;
-
-    background: #1e293b;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 25px 6%;
-
-    box-sizing: border-box;
-
-    border-bottom: 1px solid #334155;
-}
-
-
-/* Left Side */
-
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-}
-
-
-/* ========================================
-   HAMBURGER BUTTON
-======================================== */
-
-.menu-btn {
-    width: 55px;
-    height: 55px;
-    border: 1px solid #475569;
-    border-radius: 12px;
-    background: #263449;
-    color: #38bdf8;
-    font-size: 26px;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: 0.3s;
-}
-
-
-.menu-btn:hover {
-    background: #334155;
-    transform: scale(1.05);
-}
-
-
-/* ========================================
-   PORTAL TITLE
-======================================== */
-
-.portal-title h1 {
-    margin: 0;
-    color: white;
-    font-size: 34px;
-    letter-spacing: 1px;
-}
-
-
-.portal-title p {
-    margin: 8px 0 0;
-    color: #cbd5e1;
-    font-size: 16px;
-}
-
-/* ========================================
-   THEME BUTTON
-======================================== */
-
-.theme-btn {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 22px;
-    border: 1px solid #94a3b8;
-    border-radius: 30px;
-    background: #334155;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.theme-btn:hover {
-    transform: scale(1.05);
-}
-
-
-/* ========================================
-   REMOVE OLD NAVIGATION BAR
-======================================== */
-
-
-nav {
-    display: none;
-}
-
-
-/* ========================================
-   SIDEBAR
-======================================== */
-
-.sidebar {
-    position: fixed;
-
-    top: 0;
-    left: -300px;
-
-    width: 280px;
-    height: 100vh;
-
-    background: white;
-
-    z-index: 2000;
-
-    transition: left 0.35s ease;
-
-    box-shadow: 5px 0 20px rgba(0, 0, 0, 0.2);
-
-    overflow-y: auto;
-}
-
-
-.sidebar.active {
-    left: 0;
-}
-
-
-.sidebar-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 25px 20px;
-
-    border-bottom: 1px solid #ddd;
-}
-
-
-.sidebar-header h2 {
-    margin: 0;
-
-    color: #2f5f91;
-}
-
-
-.sidebar a {
-    display: block;
-
-    padding: 16px 25px;
-
-    text-decoration: none;
-
-    color: #334155;
-
-    font-size: 16px;
-
-    transition: 0.3s;
-}
-
-
-.sidebar a i {
-    width: 30px;
-
-    color: #2f5f91;
-}
-
-
-.sidebar a:hover {
-    background: #eaf4ff;
-
-    color: #2563eb;
-}
-
-
-/* Logout */
-
-.sidebar .logout {
-    color: #dc2626;
-}
-
-
-/* ========================================
-   CLOSE BUTTON
-======================================== */
-
-.close-btn {
-    border: none;
-
-    background: transparent;
-
-    font-size: 32px;
-
-    cursor: pointer;
-
-    color: #334155;
-}
-
-
-/* ========================================
-   OVERLAY
-======================================== */
-
-.overlay {
-    position: fixed;
-
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-
-    background: rgba(0, 0, 0, 0.6);
-
-    opacity: 0;
-    visibility: hidden;
-
-    z-index: 1500;
-
-    transition: 0.3s;
-}
-
-
-.overlay.active {
-    opacity: 1;
-    visibility: visible;
+    form {
+        padding: 24px 18px;
+    }
 }

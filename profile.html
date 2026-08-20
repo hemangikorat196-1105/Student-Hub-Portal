@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Hub Portal - Assignments</title>
+    <title>Student Hub Portal - Profile</title>
     <link rel="stylesheet" href="Style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script src="script.js" defer></script>
 </head>
 
 <body>
-<script src="script.js"></script>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <header class="main-header">
     <div class="header-left">
         <button class="menu-btn" onclick="openMenu()" aria-label="Open Menu">
-        <i class="fa-solid fa-bars"></i></button>
+            <i class="fa-solid fa-bars"></i>
+        </button>
 
         <div class="portal-title">
             <h1>STUDENT HUB PORTAL</h1>
@@ -24,82 +25,73 @@
     </div>
 
     <button id="themeToggle" class="theme-btn" aria-label="Change Theme">
-        <i class="fa-solid fa-sun"></i>
-        <span>Light Mode</span>
+        <i class="fa-solid fa-moon"></i>
+        <span>Dark Mode</span>
     </button>
 </header>
 
-<nav>
-<div class="menu-btn" onclick="openMenu()">
-    <i class="fa-solid fa-bars"></i>
-</div>
+<div id="overlay" class="overlay"></div>
 
-<div id="overlay" class="overlay" onclick="closeMenu()"></div>
-<div id="sidebar" class="sidebar">
-    <span class="close-btn" onclick="closeMenu()">&times;</span>
+<aside id="sidebar" class="sidebar" aria-label="Sidebar Navigation" aria-hidden="true">
+    <div class="sidebar-header">
+        <h3>StudentHub Menu</h3>
+        <button class="close-btn" aria-label="Close sidebar menu">&times;</button>
+    </div>
     <a href="home.html"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="attendance.html"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
-    <a href="assignment.html"><i class="fa-solid fa-book-open"></i> Assignment</a>
+    <a href="Attendance.html"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
+    <a href="Assignment.html"><i class="fa-solid fa-book-open"></i> Assignment</a>
     <a href="courses.html"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
-    <a href="timetable.html"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
+    <a href="Timetable.html"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
     <a href="faculty.html"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
     <a href="notice.html"><i class="fa-solid fa-bullhorn"></i> Notice</a>
-    <a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a>
+    <a href="profile.html" class="active"><i class="fa-solid fa-user"></i> Profile</a>
     <a href="contactus.html"><i class="fa-solid fa-envelope"></i> Contact</a>
     <a href="admin.html"><i class="fa-solid fa-user-shield"></i> Admin</a>
     <a href="index.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
-</div>
-</nav>
+</aside>
 
-<main>
+<main id="main-content">
+    <div class="card">
+        <h2><i class="fa-solid fa-id-card"></i> Student Profile</h2>
+        <table>
+            <tr>
+                <th>Student ID</th>
+                <td>25CS035</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>Hemangi Korat</td>
+            </tr>
+            <tr>
+                <th>Department</th>
+                <td>Computer Science Engineering</td>
+            </tr>
+            <tr>
+                <th>Semester</th>
+                <td>3</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>hemangikorat196@gmail.com</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>9876543210</td>
+            </tr>
+        </table>
+    </div>
 
-<div class="card">
-<h2>Student Profile</h2>
-<table>
-<tr>
-<th>Student ID</th>
-<td>25CS035</td>
-</tr>
-
-<tr>
-<th>Name</th>
-<td>Hemangi Korat</td>
-</tr>
-
-<tr>
-<th>Department</th>
-<td>Computer Science Engineering</td>
-</tr>
-
-<tr>
-<th>Semester</th>
-<td>3</td>
-</tr>
-
-<tr>
-<th>Email</th>
-<td>hemangikorat196@gmail.com</td>
-</tr>
-
-<tr>
-<th>Phone</th>
-<td>9876543210</td>
-</tr>
-
-</table>
-</div>
-
-<div class="card">
-<h2>Academic Details</h2>
-
-<ul>
-<li>CGPA : 8.75</li>
-<li>Total Credits : 120</li>
-<li>Attendance : 79%</li>
-<li>Status : Active Student</li>
-</ul>
-</div>
+    <div class="card">
+        <h2><i class="fa-solid fa-graduation-cap"></i> Academic Details</h2>
+        <ul>
+            <li><strong>CGPA:</strong> 8.75</li>
+            <li><strong>Total Credits:</strong> 120</li>
+            <li><strong>Attendance:</strong> 79%</li>
+            <li><strong>Status:</strong> Active Student</li>
+        </ul>
+    </div>
 </main>
+
 <footer>
     <div class="footer-container">
         <div class="footer-section">
@@ -112,6 +104,5 @@
     </p>
 </footer>
 
-<script src="script.js"></script>
 </body>
 </html>

@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Hub Portal - Assignments</title>
+    <title>Student Hub Portal - Forgot Username</title>
     <link rel="stylesheet" href="Style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script src="script.js" defer></script>
 </head>
 
 <body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
 <header class="main-header">
     <div class="header-left">
         <div class="portal-title">
@@ -19,25 +21,31 @@
     </div>
 
     <button id="themeToggle" class="theme-btn" aria-label="Change Theme">
-        <i class="fa-solid fa-sun"></i>
-        <span>Light Mode</span>
+        <i class="fa-solid fa-moon"></i>
+        <span>Dark Mode</span>
     </button>
 </header>
 
-<form>
-<h2>Forgot Username</h2>
-<br>
-<label>Registered Email</label>
-<input type="email" placeholder="Enter Registered Email">
+<main id="main-content">
+    <form action="Login.html" method="get">
+        <h2><i class="fa-solid fa-user-tag"></i> Forgot Username</h2>
 
-<label>Mobile Number</label>
-<input type="tel" placeholder="Enter Mobile Number">
+        <label for="fuEmail">Registered Email</label>
+        <input type="email" id="fuEmail" placeholder="Enter Registered Email Address" required>
 
-<input type="submit" value="Find Username">
+        <label for="fuPhone">Mobile Number</label>
+        <input type="tel" id="fuPhone" placeholder="Enter Registered Mobile Number" required>
 
-<a href="login.html" class="back-btn">← Back to Login</a>
+        <div class="form-actions">
+            <input type="submit" value="Find Username">
+            <input type="reset" value="Clear Form">
+        </div>
 
-</form>
+        <div class="form-links">
+            <a href="Login.html"><i class="fa-solid fa-arrow-left"></i> Back to Login</a>
+        </div>
+    </form>
+</main>
 
 <footer>
     <div class="footer-container">

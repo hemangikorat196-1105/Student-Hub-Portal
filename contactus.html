@@ -15,7 +15,8 @@
 <header class="main-header">
     <div class="header-left">
         <button class="menu-btn" onclick="openMenu()" aria-label="Open Menu">
-        <i class="fa-solid fa-bars"></i></button>
+            <i class="fa-solid fa-bars"></i>
+        </button>
 
         <div class="portal-title">
             <h1>STUDENT HUB PORTAL</h1>
@@ -24,8 +25,8 @@
     </div>
 
     <button id="themeToggle" class="theme-btn" aria-label="Change Theme">
-        <i class="fa-solid fa-sun"></i>
-        <span>Light Mode</span>
+        <i class="fa-solid fa-moon"></i>
+        <span>Dark Mode</span>
     </button>
 </header>
 
@@ -68,7 +69,7 @@
         <label for="contactMessage">Message</label>
         <textarea id="contactMessage" rows="5" placeholder="Enter your detailed query or message" required></textarea>
 
-        <div style="display: flex; gap: 10px;">
+        <div class="form-actions">
             <input type="submit" value="Send Message">
             <input type="reset" value="Clear Form">
         </div>

@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Hub Portal - Assignments</title>
+    <title>Student Hub Portal - Login</title>
     <link rel="stylesheet" href="Style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script src="script.js" defer></script>
 </head>
 
 <body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
 <header class="main-header">
     <div class="header-left">
         <div class="portal-title">
@@ -19,49 +21,40 @@
     </div>
 
     <button id="themeToggle" class="theme-btn" aria-label="Change Theme">
-        <i class="fa-solid fa-sun"></i>
-        <span>Light Mode</span>
+        <i class="fa-solid fa-moon"></i>
+        <span>Dark Mode</span>
     </button>
 </header>
 
-<form action="home.html">
-<h2>Student Login</h2>
-<label>Id</label>
-<input type="text" placeholder="Enter Student ID ">
-<br><br>
+<main id="main-content">
+    <form action="home.html" method="get">
+        <h2><i class="fa-solid fa-right-to-bracket"></i> Student Login</h2>
 
-<label>Password</label>
-<input type="password" placeholder="Enter Password">
-<br><br>
+        <label for="loginStudentId">Student ID</label>
+        <input type="text" id="loginStudentId" placeholder="Enter Student ID (e.g. 25CS035)" required>
 
-<label for="role">Role</label>
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter Password" required>
 
-<select id="role">
-    <option>Student</option>
-    <option>Faculty</option>
-    <option>Admin</option>
-</select>
+        <label for="loginRole">Role</label>
+        <select id="loginRole" required>
+            <option value="student">Student</option>
+            <option value="faculty">Faculty</option>
+            <option value="admin">Admin</option>
+        </select>
 
-<br><br>
+        <div class="form-actions">
+            <input type="submit" value="Login">
+            <input type="reset" value="Clear Form">
+        </div>
 
-<input type="submit" value="Login">
-
-<input type="reset" value="Clear form">
-
-<p>Forgot Password??</p>
-<br>
-<a href="forgotpassword.html" class="login-btn">Forgot Password</a>
-<br><br>
-
-<p>Forgot Password??</p>
-<br>
-<a href="forgotusername.html" class="login-btn">Forgot Username</a>
-<br><br>
-
-<p>Don't have an account?</p>
-<br>
-<a href="Register.html" class="login-btn">Register Now</a>
-</form>
+        <div class="form-links">
+            <a href="forgotpassword.html"><i class="fa-solid fa-key"></i> Forgot Password?</a>
+            <a href="forgotusername.html"><i class="fa-solid fa-user-tag"></i> Forgot Username?</a>
+            <a href="Register.html"><i class="fa-solid fa-user-plus"></i> Don't have an account? Register Now</a>
+        </div>
+    </form>
+</main>
 
 <footer>
     <div class="footer-container">
@@ -74,5 +67,6 @@
         © 2026 StudentHub Portal | Developed By Hemangi Korat | All Rights Reserved.
     </p>
 </footer>
+
 </body>
 </html>

@@ -11,10 +11,12 @@
 
 <body>
 <a href="#main-content" class="skip-link">Skip to Main Content</a>
+
 <header class="main-header">
     <div class="header-left">
         <button class="menu-btn" onclick="openMenu()" aria-label="Open Menu">
-        <i class="fa-solid fa-bars"></i></button>
+            <i class="fa-solid fa-bars"></i>
+        </button>
 
         <div class="portal-title">
             <h1>STUDENT HUB PORTAL</h1>
@@ -23,8 +25,8 @@
     </div>
 
     <button id="themeToggle" class="theme-btn" aria-label="Change Theme">
-        <i class="fa-solid fa-sun"></i>
-        <span>Light Mode</span>
+        <i class="fa-solid fa-moon"></i>
+        <span>Dark Mode</span>
     </button>
 </header>
 
@@ -43,20 +45,21 @@
     <a href="faculty.html"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
     <a href="notice.html"><i class="fa-solid fa-bullhorn"></i> Notice</a>
     <a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a>
-    <a href="contactus.html" class="active"><i class="fa-solid fa-envelope"></i> Contact</a>
-    <a href="admin.html"><i class="fa-solid fa-user-shield"></i> Admin</a>
+    <a href="contactus.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+    <a href="admin.html" class="active"><i class="fa-solid fa-user-shield"></i> Admin</a>
     <a href="index.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
 </aside>
 
 <!-- Main Content -->
 <main id="main-content">
     <section>
-        <b>Welcome to the StudentHub Admin Panel. </b>
-
+        <h2><i class="fa-solid fa-user-shield"></i> Welcome to Admin Panel</h2>
+        <p>Manage system configurations, user accounts, departmental records, and campus circulars.</p>
     </section>
-    <section>
-        <h2>Administrator Information</h2>
-        <table border="1" cellpadding="8">
+
+    <div class="card">
+        <h2><i class="fa-solid fa-id-badge"></i> Administrator Information</h2>
+        <table>
             <tr>
                 <th>Field</th>
                 <th>Details</th>
@@ -74,56 +77,45 @@
                 <td>Portal Management</td>
             </tr>
         </table>
-    </section>
+    </div>
 
-    <section>
-        <h2>Admin Functions</h2>
+    <div class="card">
+        <h2><i class="fa-solid fa-gears"></i> Admin Functions</h2>
         <ul>
-            <li>Manage Student Accounts</li>
-            <li>Manage Faculty Accounts</li>
-            <li>Add or Remove Events</li>
-            <li>Publish Notices</li>
-            <li>View Student Feedback</li>
-            <li>Manage Student Profiles</li>
-            <li>Monitor Portal Activity</li>
+            <li>Manage Student Accounts & Registrations</li>
+            <li>Manage Faculty Directory & Subject Allocations</li>
+            <li>Add, Modify, or Remove Academic Events</li>
+            <li>Publish & Update Official College Notices</li>
+            <li>Review Student Feedback & Inquiries</li>
+            <li>Monitor Portal Activity & Security Logs</li>
         </ul>
-    </section>
+    </div>
 
-    <section>
-        <h2>Portal Status</h2>
-        <table border="1" cellpadding="8">
+    <div class="card">
+        <h2><i class="fa-solid fa-server"></i> Portal System Status</h2>
+        <table>
             <tr>
                 <th>Module</th>
                 <th>Status</th>
             </tr>
             <tr>
                 <td>Student Registration</td>
-                <td>Active</td>
+                <td><span style="color: #22c55e; font-weight: bold;">Active</span></td>
             </tr>
             <tr>
-                <td>Login System</td>
-                <td>Active</td>
+                <td>Login & Authentication</td>
+                <td><span style="color: #22c55e; font-weight: bold;">Active</span></td>
             </tr>
             <tr>
-                <td>Events</td>
-                <td>Updated</td>
+                <td>Attendance Tracking</td>
+                <td><span style="color: #22c55e; font-weight: bold;">Online</span></td>
             </tr>
             <tr>
-                <td>Feedback</td>
-                <td>Available</td>
+                <td>Notice Board System</td>
+                <td><span style="color: #22c55e; font-weight: bold;">Operational</span></td>
             </tr>
         </table>
-    </section>
-
-    <section>
-        <h2>Quick Actions</h2>
-        <ul>
-            <li>Add New Student</li>
-            <li>Update Notice Board</li>
-            <li>View Reports</li>
-            <li>Manage Events</li>
-        </ul>
-    </section>
+    </div>
 </main>
 
 <footer>

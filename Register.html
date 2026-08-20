@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Hub Portal - Assignments</title>
+    <title>Student Hub Portal - Register</title>
     <link rel="stylesheet" href="Style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script src="script.js" defer></script>
 </head>
+
 <body>
-<script src="script.js"></script>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
 <header class="main-header">
     <div class="header-left">
         <div class="portal-title">
@@ -19,60 +21,53 @@
     </div>
 
     <button id="themeToggle" class="theme-btn" aria-label="Change Theme">
-        <i class="fa-solid fa-sun"></i>
-        <span>Light Mode</span>
+        <i class="fa-solid fa-moon"></i>
+        <span>Dark Mode</span>
     </button>
 </header>
 
-<form action="home.html">
-<h2>Student Registration</h2>
-<br>
+<main id="main-content">
+    <form action="home.html" method="get">
+        <h2><i class="fa-solid fa-user-plus"></i> Student Registration</h2>
 
-<label>First Name</label>
-<input type="text" placeholder="Enter Your First Name">
-<br><br>
+        <label for="regFirstName">First Name</label>
+        <input type="text" id="regFirstName" placeholder="Enter Your First Name" required>
 
-<label>Last Name</label>
-<input type="text" placeholder="Enter Your Last Name">
-<br><br>
+        <label for="regLastName">Last Name</label>
+        <input type="text" id="regLastName" placeholder="Enter Your Last Name" required>
 
-<label>Email</label>
-<input type="text" placeholder="Enter Your Email">
-<br><br>
+        <label for="regEmail">Email Address</label>
+        <input type="email" id="regEmail" placeholder="Enter Your Email" required>
 
-<label>Username</label>
-<input type="text" placeholder="Make Your Username">
-<br><br>
+        <label for="regUsername">Username</label>
+        <input type="text" id="regUsername" placeholder="Choose a Username" required>
 
-<label>Id</label>
-<input type="text" placeholder="Enter Student ID ">
-<br><br>
+        <label for="regStudentId">Student ID</label>
+        <input type="text" id="regStudentId" placeholder="Enter Student ID (e.g. 25CS035)" required>
 
-<label>Password</label>
-<input type="password" placeholder="Enter Password">
-<br><br>
+        <label for="regPassword">Password</label>
+        <input type="password" id="regPassword" placeholder="Enter Password" required>
 
-<label>Confirm Password</label>
-<input type="password" placeholder="Confirm Your Password">
-<br><br>
+        <label for="regConfirmPassword">Confirm Password</label>
+        <input type="password" id="regConfirmPassword" placeholder="Confirm Your Password" required>
 
-<label for="Role">Role</label>
+        <label for="regRole">Role</label>
+        <select id="regRole" required>
+            <option value="student">Student</option>
+            <option value="faculty">Faculty</option>
+            <option value="admin">Admin</option>
+        </select>
 
-<select id="Role">
-    <option>Student</option>
-    <option>Faculty</option>
-    <option>Admin</option>
-</select>
-<br><br>
+        <div class="form-actions">
+            <input type="submit" value="Register">
+            <input type="reset" value="Clear Form">
+        </div>
 
-<input type="submit" value="Register">
-
-<input type="reset" value="Clear form">
-
-<p>Already User??</p>
-<br>
-<a href="Login.html" class="login-btn">Login</a>
-</form>
+        <div class="form-links">
+            <a href="Login.html"><i class="fa-solid fa-right-to-bracket"></i> Already have an account? Login here</a>
+        </div>
+    </form>
+</main>
 
 <footer>
     <div class="footer-container">
@@ -85,5 +80,6 @@
         © 2026 StudentHub Portal | Developed By Hemangi Korat | All Rights Reserved.
     </p>
 </footer>
+
 </body>
 </html>
