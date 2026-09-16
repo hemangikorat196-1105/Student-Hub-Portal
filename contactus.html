@@ -51,23 +51,42 @@
 </aside>
 
 <main id="main-content">
-    <form>
+
+    <!-- Contact Form -->
+    <form id="contactForm" novalidate>
         <h2><i class="fa-solid fa-envelope"></i> Contact Us</h2>
 
-        <label for="contactFullName">Full Name</label>
-        <input type="text" id="contactFullName" placeholder="Enter Your Name" required>
+        <div id="contactStatus" class="success-banner" role="status" aria-live="polite"></div>
 
-        <label for="contactEmail">Email</label>
-        <input type="email" id="contactEmail" placeholder="Enter Your Email" required>
+        <div class="form-group">
+            <label for="contactFullName">Full Name <span class="required-star">*</span></label>
+            <input type="text" id="contactFullName" name="fullName" placeholder="Enter Your Name" required>
+            <span class="error-msg" id="contactNameError" role="alert" aria-live="polite"></span>
+        </div>
 
-        <label for="contactPhone">Phone Number</label>
-        <input type="tel" id="contactPhone" placeholder="Enter Phone Number">
+        <div class="form-group">
+            <label for="contactEmail">Email Address <span class="required-star">*</span></label>
+            <input type="email" id="contactEmail" name="email" placeholder="Enter Your Email" required>
+            <span class="error-msg" id="contactEmailError" role="alert" aria-live="polite"></span>
+        </div>
 
-        <label for="contactSubject">Subject</label>
-        <input type="text" id="contactSubject" placeholder="Enter Subject / Problem Area" required>
+        <div class="form-group">
+            <label for="contactPhone">Phone Number</label>
+            <input type="tel" id="contactPhone" name="phone" placeholder="Enter 10-digit Phone Number">
+            <span class="error-msg" id="contactPhoneError" role="alert" aria-live="polite"></span>
+        </div>
 
-        <label for="contactMessage">Message</label>
-        <textarea id="contactMessage" rows="5" placeholder="Enter your detailed query or message" required></textarea>
+        <div class="form-group">
+            <label for="contactSubject">Subject <span class="required-star">*</span></label>
+            <input type="text" id="contactSubject" name="subject" placeholder="Enter Subject / Problem Area" required>
+            <span class="error-msg" id="contactSubjectError" role="alert" aria-live="polite"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="contactMessage">Message <span class="required-star">*</span></label>
+            <textarea id="contactMessage" name="message" rows="5" placeholder="Enter your detailed query or message" required></textarea>
+            <span class="error-msg" id="contactMessageError" role="alert" aria-live="polite"></span>
+        </div>
 
         <div class="form-actions">
             <input type="submit" value="Send Message">
@@ -75,49 +94,77 @@
         </div>
     </form>
 
-    <section class="faq-container" aria-label="Frequently Asked Questions">
+    <!-- Practical 6: Dynamic FAQ Accordion from faqs.json via Fetch API with Search, Category Filter, and Cache -->
+    <section class="faq-container" id="faqSection" aria-label="Frequently Asked Questions">
         <h2 class="faq-title"><i class="fa-solid fa-circle-question"></i> Frequently Asked Questions</h2>
+        <p style="text-align: center; margin-bottom: 20px; color: var(--text-muted);">
+            Search through common questions or filter by category. Data fetched dynamically from external JSON.
+        </p>
 
-        <div class="faq-item">
-            <button class="faq-question" type="button" aria-expanded="false">
-                <span>How can I check my attendance?</span>
-                <i class="fa-solid fa-chevron-down faq-icon"></i>
-            </button>
-            <div class="faq-answer">
-                <p>You can check your detailed lecture and lab attendance records by clicking on the <strong>Attendance</strong> tab in the navigation menu or sidebar drawer. Your percentage and eligibility status are updated daily.</p>
+        <!-- Controls: Search, Filter, Sort -->
+        <div class="controls-bar">
+            <!-- Search -->
+            <div class="search-input-wrapper">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="faqSearchInput" placeholder="Search FAQs by question or answer keyword..." aria-label="Search FAQs">
+            </div>
+
+            <!-- Filter & Sort Group -->
+            <div class="filter-group">
+                <select id="faqCategoryFilter" aria-label="Filter FAQ Category">
+                    <option value="">All Categories</option>
+                    <option value="General">General</option>
+                    <option value="Attendance">Attendance</option>
+                    <option value="Assignments">Assignments</option>
+                    <option value="Examination">Examination</option>
+                    <option value="Portal">Portal</option>
+                    <option value="Library">Library</option>
+                </select>
+
+                <select id="faqSortSelect" aria-label="Sort FAQs">
+                    <option value="default">Default Order</option>
+                    <option value="question-asc">Question (A - Z)</option>
+                    <option value="question-desc">Question (Z - A)</option>
+                </select>
+
+                <button type="button" id="faqResetBtn" class="btn-secondary" style="padding: 10px 14px; font-size: 13.5px;" title="Reset FAQ Filters">
+                    <i class="fa-solid fa-rotate-left"></i> Reset
+                </button>
             </div>
         </div>
 
-        <div class="faq-item">
-            <button class="faq-question" type="button" aria-expanded="false">
-                <span>Where can I find and submit my course assignments?</span>
-                <i class="fa-solid fa-chevron-down faq-icon"></i>
-            </button>
-            <div class="faq-answer">
-                <p>Navigate to the <strong>Assignments</strong> section. Here you can view pending assignments, due dates, submission status, and directly upload your solution files through the upload form.</p>
-            </div>
+        <!-- Meta status badge row -->
+        <div class="data-badge-row">
+            <span id="faqResultsCount">Loading FAQs...</span>
+            <span id="faqCacheBadge" class="cache-badge"><i class="fa-solid fa-bolt"></i> Live Feed</span>
         </div>
 
-        <div class="faq-item">
-            <button class="faq-question" type="button" aria-expanded="false">
-                <span>How do I switch between Light and Dark themes?</span>
-                <i class="fa-solid fa-chevron-down faq-icon"></i>
-            </button>
-            <div class="faq-answer">
-                <p>Click the <strong>Dark Mode / Light Mode</strong> toggle button located in the top-right corner of the header. Your selected theme preference will be automatically saved in your browser (localStorage) and applied across all pages.</p>
-            </div>
+        <!-- Loading State Spinner -->
+        <div id="faqLoading" class="loading-state">
+            <div class="spinner"></div>
+            <p><strong>Loading FAQs from knowledgebase...</strong></p>
         </div>
 
-        <div class="faq-item">
-            <button class="faq-question" type="button" aria-expanded="false">
-                <span>Who should I contact for timetable or subject clashes?</span>
-                <i class="fa-solid fa-chevron-down faq-icon"></i>
-            </button>
-            <div class="faq-answer">
-                <p>For class schedule conflicts or elective queries, please consult your department academic coordinator or send an inquiry using the Contact Us form above.</p>
-            </div>
+        <!-- Error State Message -->
+        <div id="faqError" class="error-state" style="display: none;">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <h3>Unable to load FAQs</h3>
+            <p id="faqErrorMessage">Please check if faqs.json is accessible.</p>
+            <button type="button" id="faqRetryBtn" class="retry-btn"><i class="fa-solid fa-arrow-rotate-right"></i> Retry Loading</button>
         </div>
+
+        <!-- Empty State Message -->
+        <div id="faqEmpty" class="empty-state" style="display: none;">
+            <i class="fa-solid fa-circle-question" style="font-size: 32px; color: var(--text-muted); margin-bottom: 8px;"></i>
+            <h3>No matching questions found</h3>
+            <p>Try searching for different keywords or clear the category filter.</p>
+        </div>
+
+        <!-- Dynamic FAQ Accordion Container -->
+        <div id="dynamicFaqContainer"></div>
+
     </section>
+
 </main>
 
 <footer>

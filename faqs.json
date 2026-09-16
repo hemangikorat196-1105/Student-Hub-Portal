@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "question": "How can I view my real-time lecture and laboratory attendance?",
+    "answer": "You can access your complete subject-wise attendance by navigating to the 'Attendance' page from the top header or sidebar navigation drawer. The dashboard calculates overall attendance percentage and shows exam eligibility status.",
+    "category": "Attendance"
+  },
+  {
+    "id": 2,
+    "question": "Where can I view pending assignments and upload solutions?",
+    "answer": "Go to the 'Assignments' section to view subject-wise homework, practical lab questions, deadlines, and submission statuses. You can upload PDF or ZIP files directly using the assignment submission form.",
+    "category": "Assignments"
+  },
+  {
+    "id": 3,
+    "question": "How do I switch between Light and Dark mode?",
+    "answer": "Click the theme toggle button (with Moon/Sun icon) located at the top-right corner of the header. Your preference is automatically stored in localStorage so it remains consistent across all pages and future visits.",
+    "category": "Portal"
+  },
+  {
+    "id": 4,
+    "question": "What should I do if I forget my login password?",
+    "answer": "Click the 'Forgot Password?' link on the Login page. Enter your registered Student ID and email address, and a secure password reset link will be sent to your registered college email.",
+    "category": "General"
+  },
+  {
+    "id": 5,
+    "question": "How do I retrieve my forgotten student username or ID?",
+    "answer": "Visit the 'Forgot Username?' page accessible from the login form. Submit your registered email address and mobile number to receive your Student ID details.",
+    "category": "General"
+  },
+  {
+    "id": 6,
+    "question": "What is the minimum attendance required to appear in semester exams?",
+    "answer": "According to university academic regulations, students are required to maintain a minimum of 75% overall attendance across theoretical lectures and 80% attendance in laboratory practical sessions to be eligible for end-semester exams.",
+    "category": "Attendance"
+  },
+  {
+    "id": 7,
+    "question": "Where can I check the weekly class schedule and room numbers?",
+    "answer": "Navigate to the 'Timetable' page to view the interactive schedule covering lecture hours, lab slots, library sessions, and classroom numbers for each weekday.",
+    "category": "Portal"
+  },
+  {
+    "id": 8,
+    "question": "How can I contact faculty members regarding course queries?",
+    "answer": "Open the 'Faculty' directory page to view faculty profiles, subject specializations, department rooms, and official email addresses for academic guidance and office appointments.",
+    "category": "General"
+  },
+  {
+    "id": 9,
+    "question": "Where are official circulars, exam notices, and event announcements posted?",
+    "answer": "All verified university updates, holiday circulars, and event announcements are published under the 'Notice' section and featured on the home page slider and notification banner.",
+    "category": "Portal"
+  },
+  {
+    "id": 10,
+    "question": "How do I register for upcoming campus hackathons and workshops?",
+    "answer": "You can explore all technical summits, coding marathons, and cultural events under the Events Directory on the Notice page and register through the interactive event registration links.",
+    "category": "Portal"
+  },
+  {
+    "id": 11,
+    "question": "Can I access central library books and digital resources online?",
+    "answer": "Yes, enrolled students can search for catalog books, check return deadlines, and access IEEE Xplore, ScienceDirect, and digital e-journals using their Student ID credentials.",
+    "category": "Library"
+  },
+  {
+    "id": 12,
+    "question": "How can I update my contact details or residential address?",
+    "answer": "Submit a profile update request from your 'Profile' page or contact the college registrar office with valid address proof documents.",
+    "category": "General"
+  },
+  {
+    "id": 13,
+    "question": "What is the mid-semester and internal assessment grading scheme?",
+    "answer": "Internal evaluation typically consists of Mid-Semester exams (30%), Continuous lab assessments (20%), Assignment submissions (10%), and Attendance/Viva (10%), contributing to 70% internal coursework.",
+    "category": "Examination"
+  },
+  {
+    "id": 14,
+    "question": "How do I lodge an academic or technical grievance?",
+    "answer": "Use the Contact Us form on the 'Contact' page, select the appropriate problem area, and describe your query. The student grievance committee responds within 24-48 business hours.",
+    "category": "General"
+  },
+  {
+    "id": 15,
+    "question": "Is the StudentHub Portal accessible on mobile devices and screen readers?",
+    "answer": "Yes, StudentHub Portal is built with responsive CSS, semantic HTML5, ARIA landmark roles, and high-contrast color schemes for full accessibility on mobile, tablet, and desktop screens.",
+    "category": "Portal"
+  },
+  {
+    "id": 16,
+    "question": "How does offline mode and data caching work in the portal?",
+    "answer": "StudentHub automatically caches frequently requested datasets (such as FAQs and Events) in your browser's localStorage. If network connectivity drops, the portal displays cached data seamlessly.",
+    "category": "Portal"
+  }
+]

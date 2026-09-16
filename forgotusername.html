@@ -27,18 +27,35 @@
 </header>
 
 <main id="main-content">
-    <form action="Login.html" method="get">
+    <form id="forgotUsernameForm" novalidate>
         <h2><i class="fa-solid fa-user-tag"></i> Forgot Username</h2>
 
-        <label for="fuEmail">Registered Email</label>
-        <input type="email" id="fuEmail" placeholder="Enter Registered Email Address" required>
+        <!-- In-Page Status Message Banner -->
+        <div id="forgotUsernameStatus" class="success-banner" role="status" aria-live="polite"></div>
 
-        <label for="fuPhone">Mobile Number</label>
-        <input type="tel" id="fuPhone" placeholder="Enter Registered Mobile Number" required>
+        <div class="form-group">
+            <label for="fuEmail">
+                Registered Email <span class="required-star">*</span>
+            </label>
+            <input type="email" id="fuEmail" name="email" placeholder="Enter Registered Email Address"
+                   required autocomplete="email"
+                   aria-describedby="fuEmailError" aria-invalid="false">
+            <span class="error-msg" id="fuEmailError" role="alert" aria-live="polite"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="fuPhone">
+                Mobile Number <span class="required-star">*</span>
+            </label>
+            <input type="tel" id="fuPhone" name="phone" placeholder="10-digit registered number (e.g. 9876543210)"
+                   required maxlength="10" autocomplete="tel"
+                   aria-describedby="fuPhoneError" aria-invalid="false">
+            <span class="error-msg" id="fuPhoneError" role="alert" aria-live="polite"></span>
+        </div>
 
         <div class="form-actions">
-            <input type="submit" value="Find Username">
-            <input type="reset" value="Clear Form">
+            <input type="submit" value="Find Username" id="fuSubmitBtn">
+            <input type="reset" value="Clear Form" id="fuResetBtn">
         </div>
 
         <div class="form-links">

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Hub Portal - Notices</title>
+    <title>Student Hub Portal - Notices & Events</title>
     <link rel="stylesheet" href="Style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script src="script.js" defer></script>
@@ -51,9 +51,11 @@
 </aside>
 
 <main id="main-content">
+
+    <!-- Section 1: Official Announcements (Practical 4 Modal Trigger) -->
     <div class="card">
-        <h2><i class="fa-solid fa-bullhorn"></i> College Notices & Announcements</h2>
-        <p>Stay updated with the latest official announcements, event schedules, and academic circulars.</p>
+        <h2><i class="fa-solid fa-bullhorn"></i> Official Announcements & Circulars</h2>
+        <p>Stay updated with the latest administrative circulars, fee notifications, and examination notices.</p>
 
         <!-- Notice 1 -->
         <div class="notice-item" style="padding: 18px 0;">
@@ -100,6 +102,83 @@
             </div>
         </div>
     </div>
+
+    <!-- Section 2: Practical 6 - Rendering External JSON Events with Fetch API, Search, Filter, Sort, Pagination -->
+    <div class="card data-manager-box" id="eventsSection">
+        <h2><i class="fa-solid fa-calendar-check"></i> Campus Events & Workshops Directory</h2>
+        <p>Explore upcoming summits, technical bootcamps, cultural fests, and guest lectures rendered dynamically via Fetch API.</p>
+
+        <!-- Controls Bar: Search, Filter, Sort -->
+        <div class="controls-bar">
+            <!-- Search -->
+            <div class="search-input-wrapper">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="eventSearchInput" placeholder="Search events by title, topic, or speaker..." aria-label="Search Events">
+            </div>
+
+            <!-- Filters & Sort Group -->
+            <div class="filter-group">
+                <!-- Category Filter -->
+                <select id="eventCategoryFilter" aria-label="Filter by Category">
+                    <option value="">All Categories</option>
+                    <option value="Technical">Technical</option>
+                    <option value="Workshop">Workshop</option>
+                    <option value="Cultural">Cultural</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Academic">Academic</option>
+                </select>
+
+                <!-- Sort -->
+                <select id="eventSortSelect" aria-label="Sort Events">
+                    <option value="date-asc">Date (Upcoming First)</option>
+                    <option value="date-desc">Date (Latest First)</option>
+                    <option value="title-asc">Title (A - Z)</option>
+                    <option value="title-desc">Title (Z - A)</option>
+                </select>
+
+                <button type="button" id="eventResetFilterBtn" class="btn-secondary" style="padding: 10px 14px; font-size: 13.5px;" title="Reset Search & Filters">
+                    <i class="fa-solid fa-rotate-left"></i> Reset
+                </button>
+            </div>
+        </div>
+
+        <!-- Meta status badge row -->
+        <div class="data-badge-row">
+            <span id="eventResultsCount">Loading events...</span>
+            <span id="eventCacheBadge" class="cache-badge"><i class="fa-solid fa-bolt"></i> Live Feed</span>
+        </div>
+
+        <!-- Loading State Spinner -->
+        <div id="eventsLoading" class="loading-state">
+            <div class="spinner"></div>
+            <p><strong>Loading campus events...</strong></p>
+        </div>
+
+        <!-- Error State Message -->
+        <div id="eventsError" class="error-state" style="display: none;">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <h3>Unable to load events data</h3>
+            <p id="eventsErrorMessage">Please verify your internet connection or check if events.json is available.</p>
+            <button type="button" id="eventsRetryBtn" class="retry-btn"><i class="fa-solid fa-arrow-rotate-right"></i> Retry Loading</button>
+        </div>
+
+        <!-- Empty State Message -->
+        <div id="eventsEmpty" class="empty-state" style="display: none;">
+            <i class="fa-solid fa-folder-open" style="font-size: 32px; color: var(--text-muted); margin-bottom: 8px;"></i>
+            <h3>No matching events found</h3>
+            <p>Try adjusting your search keyword or category filter.</p>
+        </div>
+
+        <!-- Dynamic Events Cards Grid Container -->
+        <div id="eventsGrid" class="events-grid"></div>
+
+        <!-- Pagination Controls -->
+        <div id="eventsPagination" class="pagination-container" style="display: none;">
+            <span class="pagination-summary" id="eventsPaginationSummary">Page 1 of 3</span>
+            <div class="pagination-controls" id="eventsPaginationControls"></div>
+        </div>
+    </div>
+
 </main>
 
 <!-- Modal Popup Component -->

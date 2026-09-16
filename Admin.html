@@ -54,8 +54,128 @@
 <main id="main-content">
     <section>
         <h2><i class="fa-solid fa-user-shield"></i> Welcome to Admin Panel</h2>
-        <p>Manage system configurations, user accounts, departmental records, and campus circulars.</p>
+        <p>Manage system configurations, student directory records, departmental data, and campus circulars.</p>
     </section>
+
+    <!-- Practical 6: Student Records Directory with Fetch API, Dependent Dropdowns (Country -> State -> City), Search, Filter, Sort, Pagination -->
+    <div class="card data-manager-box" id="studentsSection">
+        <h2><i class="fa-solid fa-users-gear"></i> Student Directory & Database (Practical 6)</h2>
+        <p>Real-time records fetched from external JSON dataset with multi-level Country &rarr; State &rarr; City dependent filtering.</p>
+
+        <!-- Controls Bar -->
+        <div class="controls-bar">
+            <!-- Search -->
+            <div class="search-input-wrapper">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="studentSearchInput" placeholder="Search by name, student ID, email, or city..." aria-label="Search Students">
+            </div>
+
+            <!-- Filters Group -->
+            <div class="filter-group">
+                <!-- Course Filter -->
+                <select id="studentCourseFilter" aria-label="Filter by Course">
+                    <option value="">All Courses</option>
+                    <option value="B.Tech Computer Science">B.Tech Computer Science</option>
+                    <option value="B.Tech Information Technology">B.Tech Information Technology</option>
+                    <option value="B.Tech Artificial Intelligence">B.Tech Artificial Intelligence</option>
+                    <option value="BCA">BCA</option>
+                    <option value="MCA">MCA</option>
+                </select>
+
+                <!-- Year Filter -->
+                <select id="studentYearFilter" aria-label="Filter by Year">
+                    <option value="">All Years</option>
+                    <option value="First Year">First Year</option>
+                    <option value="Second Year">Second Year</option>
+                    <option value="Third Year">Third Year</option>
+                    <option value="Fourth Year">Fourth Year</option>
+                </select>
+
+                <!-- Dependent Dropdown 1: Country -->
+                <select id="studentCountryFilter" aria-label="Filter by Country">
+                    <option value="">All Countries</option>
+                    <option value="India">India</option>
+                    <option value="USA">USA</option>
+                    <option value="Canada">Canada</option>
+                </select>
+
+                <!-- Dependent Dropdown 2: State -->
+                <select id="studentStateFilter" aria-label="Filter by State" disabled>
+                    <option value="">-- All States --</option>
+                </select>
+
+                <!-- Dependent Dropdown 3: City -->
+                <select id="studentCityFilter" aria-label="Filter by City" disabled>
+                    <option value="">-- All Cities --</option>
+                </select>
+
+                <!-- Sort Filter -->
+                <select id="studentSortSelect" aria-label="Sort Students">
+                    <option value="name-asc">Name (A - Z)</option>
+                    <option value="name-desc">Name (Z - A)</option>
+                    <option value="cgpa-desc">CGPA (High - Low)</option>
+                    <option value="cgpa-asc">CGPA (Low - High)</option>
+                    <option value="id-asc">Student ID</option>
+                </select>
+
+                <button type="button" id="studentResetBtn" class="btn-secondary" style="padding: 10px 14px; font-size: 13.5px;" title="Reset Filters">
+                    <i class="fa-solid fa-rotate-left"></i> Reset
+                </button>
+            </div>
+        </div>
+
+        <!-- Meta status badge row -->
+        <div class="data-badge-row">
+            <span id="studentResultsCount">Loading students...</span>
+            <span id="studentCacheBadge" class="cache-badge"><i class="fa-solid fa-bolt"></i> Live Feed</span>
+        </div>
+
+        <!-- Loading State Spinner -->
+        <div id="studentsLoading" class="loading-state">
+            <div class="spinner"></div>
+            <p><strong>Fetching student directory records...</strong></p>
+        </div>
+
+        <!-- Error State Message -->
+        <div id="studentsError" class="error-state" style="display: none;">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <h3>Unable to load student directory</h3>
+            <p id="studentsErrorMessage">Please verify if students.json is available on the server.</p>
+            <button type="button" id="studentsRetryBtn" class="retry-btn"><i class="fa-solid fa-arrow-rotate-right"></i> Retry Loading</button>
+        </div>
+
+        <!-- Empty State Message -->
+        <div id="studentsEmpty" class="empty-state" style="display: none;">
+            <i class="fa-solid fa-user-slash" style="font-size: 32px; color: var(--text-muted); margin-bottom: 8px;"></i>
+            <h3>No matching student records found</h3>
+            <p>Try searching for different keywords or clear location filters.</p>
+        </div>
+
+        <!-- Dynamic Students Table Container -->
+        <div style="overflow-x: auto;">
+            <table id="studentsTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Student Name</th>
+                        <th>Student ID</th>
+                        <th>Course & Year</th>
+                        <th>Department</th>
+                        <th>Location (City, State)</th>
+                        <th>CGPA</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="studentsTableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div id="studentsPagination" class="pagination-container" style="display: none;">
+            <span class="pagination-summary" id="studentsPaginationSummary">Page 1 of 3</span>
+            <div class="pagination-controls" id="studentsPaginationControls"></div>
+        </div>
+    </div>
 
     <div class="card">
         <h2><i class="fa-solid fa-id-badge"></i> Administrator Information</h2>
@@ -99,12 +219,12 @@
                 <th>Status</th>
             </tr>
             <tr>
-                <td>Student Registration</td>
-                <td><span style="color: #22c55e; font-weight: bold;">Active</span></td>
+                <td>Student Registration (Practical 5)</td>
+                <td><span style="color: #22c55e; font-weight: bold;">Active & Validated</span></td>
             </tr>
             <tr>
-                <td>Login & Authentication</td>
-                <td><span style="color: #22c55e; font-weight: bold;">Active</span></td>
+                <td>Fetch API & JSON Services (Practical 6)</td>
+                <td><span style="color: #22c55e; font-weight: bold;">Operational</span></td>
             </tr>
             <tr>
                 <td>Attendance Tracking</td>
