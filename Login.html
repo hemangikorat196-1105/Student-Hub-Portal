@@ -27,7 +27,7 @@
 </header>
 
 <main id="main-content">
-    <form id="loginForm" novalidate>
+    <form action="php/auth/login.php" method="POST" id="loginForm" novalidate>
         <h2><i class="fa-solid fa-right-to-bracket"></i> Student Login</h2>
 
         <!-- In-Page Success / Status Message Banner -->
@@ -37,7 +37,7 @@
             <label for="loginStudentId">
                 Student ID / Username <span class="required-star">*</span>
             </label>
-            <input type="text" id="loginStudentId" name="studentId" placeholder="Enter Student ID (e.g. 25CS035)"
+            <input type="text" id="loginStudentId" name="studentId" placeholder="Enter Student ID (e.g. 25CS035 or admin)"
                    required autocomplete="username"
                    aria-describedby="loginIdError" aria-invalid="false">
             <span class="error-msg" id="loginIdError" role="alert" aria-live="polite"></span>
@@ -57,10 +57,17 @@
             <label for="loginRole">Role <span class="required-star">*</span></label>
             <select id="loginRole" name="role" required aria-describedby="loginRoleError" aria-invalid="false">
                 <option value="student">Student</option>
-                <option value="faculty">Faculty</option>
                 <option value="admin">Administrator</option>
+                <option value="faculty">Faculty</option>
             </select>
             <span class="error-msg" id="loginRoleError" role="alert" aria-live="polite"></span>
+        </div>
+
+        <div class="form-group checkbox-group" style="margin: 12px 0;">
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; cursor: pointer;">
+                <input type="checkbox" id="loginRemember" name="remember" value="1">
+                <span>Remember me on this browser (30 days token)</span>
+            </label>
         </div>
 
         <div class="form-actions">

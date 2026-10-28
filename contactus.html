@@ -37,16 +37,19 @@
         <h3>StudentHub Menu</h3>
         <button class="close-btn" aria-label="Close sidebar menu">&times;</button>
     </div>
-    <a href="home.html"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="home.html"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="aboutus.html"><i class="fa-solid fa-circle-info"></i> About Us</a>
+    <a href="courses.html"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
+    <a href="events.html"><i class="fa-solid fa-calendar-days"></i> Events</a>
     <a href="Attendance.html"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
     <a href="Assignment.html"><i class="fa-solid fa-book-open"></i> Assignment</a>
-    <a href="courses.html"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
     <a href="Timetable.html"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
     <a href="faculty.html"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
     <a href="notice.html"><i class="fa-solid fa-bullhorn"></i> Notice</a>
+    <a href="json-data.html"><i class="fa-solid fa-database"></i> JSON Data</a>
     <a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a>
     <a href="contactus.html" class="active"><i class="fa-solid fa-envelope"></i> Contact</a>
-    <a href="admin.html"><i class="fa-solid fa-user-shield"></i> Admin</a>
+    <a href="Admin.html"><i class="fa-solid fa-user-shield"></i> Admin</a>
     <a href="index.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
 </aside>
 
@@ -94,76 +97,176 @@
         </div>
     </form>
 
-    <!-- Practical 6: Dynamic FAQ Accordion from faqs.json via Fetch API with Search, Category Filter, and Cache -->
-    <section class="faq-container" id="faqSection" aria-label="Frequently Asked Questions">
-        <h2 class="faq-title"><i class="fa-solid fa-circle-question"></i> Frequently Asked Questions</h2>
-        <p style="text-align: center; margin-bottom: 20px; color: var(--text-muted);">
-            Search through common questions or filter by category. Data fetched dynamically from external JSON.
+    <!-- FAQ SECTION -->
+<section class="faq-container" id="faqSection" aria-label="Frequently Asked Questions">
+
+    <h2 class="faq-title">
+        <i class="fa-solid fa-circle-question"></i>
+        Frequently Asked Questions
+    </h2>
+
+    <p class="faq-description">
+        Search through common questions or filter by category.
+        Click a question to view its answer.
+    </p>
+
+
+    <!-- FAQ Controls -->
+    <div class="controls-bar">
+
+        <!-- Search -->
+        <div class="search-input-wrapper">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                type="text"
+                id="faqSearchInput"
+                placeholder="Search FAQs by question or answer..."
+                aria-label="Search FAQs"
+            >
+
+        </div>
+
+
+        <!-- Filters -->
+        <div class="filter-group">
+
+            <select id="faqCategoryFilter" aria-label="Filter FAQ Category">
+
+                <option value="">All Categories</option>
+
+                <option value="General">General</option>
+
+                <option value="Attendance">Attendance</option>
+
+                <option value="Assignments">Assignments</option>
+
+                <option value="Examination">Examination</option>
+
+                <option value="Portal">Portal</option>
+
+                <option value="Library">Library</option>
+
+            </select>
+
+
+            <select id="faqSortSelect" aria-label="Sort FAQs">
+
+                <option value="default">Default Order</option>
+
+                <option value="question-asc">
+                    Question (A - Z)
+                </option>
+
+                <option value="question-desc">
+                    Question (Z - A)
+                </option>
+
+            </select>
+
+
+            <button
+                type="button"
+                id="faqResetBtn"
+                class="btn-secondary faq-reset-btn"
+            >
+
+                <i class="fa-solid fa-rotate-left"></i>
+
+                Reset
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- FAQ Result Information -->
+    <div class="data-badge-row">
+
+        <span id="faqResultsCount">
+            Loading FAQs...
+        </span>
+
+        <span id="faqCacheBadge" class="cache-badge">
+
+            <i class="fa-solid fa-bolt"></i>
+
+            Live Feed
+
+        </span>
+
+    </div>
+
+
+    <!-- Loading -->
+    <div id="faqLoading" class="loading-state">
+
+        <div class="spinner"></div>
+
+        <p>
+            <strong>
+                Loading FAQs from knowledgebase...
+            </strong>
         </p>
 
-        <!-- Controls: Search, Filter, Sort -->
-        <div class="controls-bar">
-            <!-- Search -->
-            <div class="search-input-wrapper">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="faqSearchInput" placeholder="Search FAQs by question or answer keyword..." aria-label="Search FAQs">
-            </div>
+    </div>
 
-            <!-- Filter & Sort Group -->
-            <div class="filter-group">
-                <select id="faqCategoryFilter" aria-label="Filter FAQ Category">
-                    <option value="">All Categories</option>
-                    <option value="General">General</option>
-                    <option value="Attendance">Attendance</option>
-                    <option value="Assignments">Assignments</option>
-                    <option value="Examination">Examination</option>
-                    <option value="Portal">Portal</option>
-                    <option value="Library">Library</option>
-                </select>
 
-                <select id="faqSortSelect" aria-label="Sort FAQs">
-                    <option value="default">Default Order</option>
-                    <option value="question-asc">Question (A - Z)</option>
-                    <option value="question-desc">Question (Z - A)</option>
-                </select>
+    <!-- Error -->
+    <div id="faqError" class="error-state">
 
-                <button type="button" id="faqResetBtn" class="btn-secondary" style="padding: 10px 14px; font-size: 13.5px;" title="Reset FAQ Filters">
-                    <i class="fa-solid fa-rotate-left"></i> Reset
-                </button>
-            </div>
-        </div>
+        <i class="fa-solid fa-triangle-exclamation"></i>
 
-        <!-- Meta status badge row -->
-        <div class="data-badge-row">
-            <span id="faqResultsCount">Loading FAQs...</span>
-            <span id="faqCacheBadge" class="cache-badge"><i class="fa-solid fa-bolt"></i> Live Feed</span>
-        </div>
+        <h3>
+            Unable to load FAQs
+        </h3>
 
-        <!-- Loading State Spinner -->
-        <div id="faqLoading" class="loading-state">
-            <div class="spinner"></div>
-            <p><strong>Loading FAQs from knowledgebase...</strong></p>
-        </div>
+        <p id="faqErrorMessage">
+            Please check if faqs.json is accessible.
+        </p>
 
-        <!-- Error State Message -->
-        <div id="faqError" class="error-state" style="display: none;">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <h3>Unable to load FAQs</h3>
-            <p id="faqErrorMessage">Please check if faqs.json is accessible.</p>
-            <button type="button" id="faqRetryBtn" class="retry-btn"><i class="fa-solid fa-arrow-rotate-right"></i> Retry Loading</button>
-        </div>
+        <button
+            type="button"
+            id="faqRetryBtn"
+            class="retry-btn"
+        >
 
-        <!-- Empty State Message -->
-        <div id="faqEmpty" class="empty-state" style="display: none;">
-            <i class="fa-solid fa-circle-question" style="font-size: 32px; color: var(--text-muted); margin-bottom: 8px;"></i>
-            <h3>No matching questions found</h3>
-            <p>Try searching for different keywords or clear the category filter.</p>
-        </div>
+            <i class="fa-solid fa-arrow-rotate-right"></i>
 
-        <!-- Dynamic FAQ Accordion Container -->
-        <div id="dynamicFaqContainer"></div>
+            Retry Loading
 
-    </section>
+        </button>
+
+    </div>
+
+
+    <!-- Empty -->
+    <div id="faqEmpty" class="empty-state">
+
+        <i class="fa-solid fa-circle-question"></i>
+
+        <h3>
+            No matching questions found
+        </h3>
+
+        <p>
+            Try searching for different keywords or clear the category filter.
+        </p>
+
+    </div>
+
+
+    <!-- Dynamic FAQ Accordion -->
+    <div id="dynamicFaqContainer" class="dynamic-faq-container">
+
+        <!-- FAQs will be inserted here using JavaScript -->
+
+    </div>
+
+</section>
 
 </main>
 

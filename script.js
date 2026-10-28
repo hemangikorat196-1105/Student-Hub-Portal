@@ -1,29 +1,3 @@
-/**
- * ==========================================================================
- * STUDENTHUB PORTAL - CORE JAVASCRIPT (script.js)
- * Comprehensive Integrated Suite for Practical 4, Practical 5 & Practical 6
- * ==========================================================================
- * Features Included:
- * 1. Global Light/Dark Theme Switcher with localStorage persistence
- * 2. Responsive Hamburger Menu & Sidebar Drawer (Zero Double-Trigger Race)
- * 3. PRACTICAL 5: Student Registration Form Regex Validation & Error Handling
- *    - Real-Time keyup/input/change Validation
- *    - Password Strength Meter (Weak / Medium / Strong)
- *    - HTML5 Canvas CAPTCHA with Visual Noise & Refresh
- *    - Screen-Reader & Keyboard Accessibility (ARIA attributes)
- *    - Balanced Form Actions & Clear Form Handler
- * 4. PRACTICAL 5: Enhanced Validation on Login, Forgot Password & Forgot Username
- * 5. PRACTICAL 6: External JSON Data Handling with Fetch API (async/await)
- *    - events.json: Dynamic Event Cards, Search, Category Filter, Sort, Pagination
- *    - faqs.json: Dynamic Accordion, Search, Category Filter, Sort
- *    - students.json: Dynamic Table, Dependent Dropdowns (Country -> State -> City),
- *      Multi-field Search, Course/Year Filter, CGPA Sort, Pagination
- * 6. PRACTICAL 6: Advanced localStorage Data Caching with Expiry & Offline Fallback
- * 7. Practical 4: Notice Modal, Content Slider, Notification Banner
- * 8. Zero Console Errors with Conditional Element Existence Checks
- * ==========================================================================
- */
-
 /* --------------------------------------------------------------------------
    IMMEDIATE THEME INITIALIZATION (Prevents Flash of Unstyled Theme - FOUC)
    -------------------------------------------------------------------------- */
@@ -42,7 +16,7 @@
 })();
 
 /* --------------------------------------------------------------------------
-   GLOBAL SIDEBAR / HAMBURGER FUNCTIONS (Practical 4)
+   GLOBAL SIDEBAR / HAMBURGER FUNCTIONS (Module 4)
    -------------------------------------------------------------------------- */
 function openMenu() {
     const sidebar = document.getElementById("sidebar");
@@ -94,8 +68,14 @@ window.closeMenu = closeMenu;
 window.toggleMenu = toggleMenu;
 
 /* --------------------------------------------------------------------------
-   PRACTICAL 6 UTILITY: LOCALSTORAGE DATA CACHE HELPER
+   DATA UTILITY: LOCALSTORAGE DATA CACHE HELPER
    -------------------------------------------------------------------------- */
+function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>'"]/g, ch => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;"
+    }[ch]));
+}
+
 async function fetchWithCache(url, cacheKey, expiryMinutes = 30) {
     const now = Date.now();
     const expiryMs = expiryMinutes * 60 * 1000;
@@ -150,10 +130,65 @@ async function fetchWithCache(url, cacheKey, expiryMinutes = 30) {
     }
 }
 
+
+/* --------------------------------------------------------------------------
+   HOME PAGE: UPCOMING EVENTS FROM events.json
+   -------------------------------------------------------------------------- */
+function initHomeEvents() {
+    const grid = document.getElementById("homeEventsGrid");
+    const loading = document.getElementById("homeEventsLoading");
+    const error = document.getElementById("homeEventsError");
+    if (!grid) return;
+
+    const escape = value => String(value ?? "").replace(/[&<>'"]/g, ch => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;"
+    }[ch]));
+
+    fetchWithCache("events.json", "studenthub_home_events_cache", 30)
+        .then(({ data }) => {
+            const events = Array.isArray(data) ? data : [];
+            if (loading) loading.hidden = true;
+            if (!events.length) {
+                if (error) { error.hidden = false; error.textContent = "No upcoming events are available."; }
+                return;
+            }
+
+            const upcoming = [...events]
+                .sort((a, b) => new Date(a.date) - new Date(b.date))
+                .slice(0, 3);
+
+            grid.innerHTML = upcoming.map(event => `
+                <article class="home-event-card">
+                    <div class="home-event-top">
+                        <span class="home-event-category">${escape(event.category)}</span>
+                        <span class="home-event-status">${escape(event.status)}</span>
+                    </div>
+                    <h3>${escape(event.title)}</h3>
+                    <p>${escape(event.description)}</p>
+                    <div class="home-event-meta">
+                        <span><i class="fa-solid fa-calendar-days"></i> ${escape(event.date)}</span>
+                        <span><i class="fa-solid fa-clock"></i> ${escape(event.time)}</span>
+                        <span><i class="fa-solid fa-location-dot"></i> ${escape(event.location)}</span>
+                    </div>
+                </article>
+            `).join("");
+        })
+        .catch(err => {
+            console.error("Error loading events.json on home page:", err);
+            if (loading) loading.hidden = true;
+            if (error) {
+                error.hidden = false;
+                error.textContent = "Unable to load events. Please run the project using VS Code Live Server.";
+            }
+        });
+}
+
 /* ==========================================================================
    MAIN DOMCONTENTLOADED EVENT HANDLER
    ========================================================================== */
 document.addEventListener("DOMContentLoaded", function () {
+
+    initHomeEvents();
 
     /* ----------------------------------------------------------------------
        1. LIGHT / DARK THEME SWITCHER
@@ -252,7 +287,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* ----------------------------------------------------------------------
-       3. PRACTICAL 5: STUDENT REGISTRATION FORM VALIDATION & CANVAS CAPTCHA
+       3. STUDENT REGISTRATION FORM VALIDATION & CANVAS CAPTCHA
        ---------------------------------------------------------------------- */
     const regForm = document.getElementById("registrationForm");
 
@@ -265,6 +300,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const courseSelect = document.getElementById("regCourse");
         const yearSelect = document.getElementById("regYear");
         const termsCheckbox = document.getElementById("regTerms");
+        const termsLink = document.getElementById("termsLink");
+
         const captchaInput = document.getElementById("regCaptcha");
         const captchaCanvas = document.getElementById("captchaCanvas");
         const refreshCaptchaBtn = document.getElementById("refreshCaptchaBtn");
@@ -477,6 +514,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         strengthBar.className = "strength-bar-fill " + strength.class;
                         strengthText.className = "strength-text " + strength.class;
                         strengthText.textContent = "Strength: " + strength.label;
+                        const strengthTrack = strengthBar.parentElement;
+                        if (strengthTrack) {
+                            strengthTrack.setAttribute("aria-valuenow", String(strength.score));
+                        }
                     } else {
                         passwordStrengthBox.style.display = "none";
                     }
@@ -679,19 +720,25 @@ document.addEventListener("DOMContentLoaded", function () {
             // Successful Submission Handling
             if (isValid) {
                 if (successBanner) {
-                    successBanner.innerHTML = `<i class="fa-solid fa-circle-check"></i> Registration successful for <strong>${nameVal}</strong>! Redirecting to login...`;
+                    successBanner.textContent = `Client validation passed for ${nameVal}! Processing registration...`;
                     successBanner.style.display = "block";
                     successBanner.scrollIntoView({ behavior: "smooth", block: "center" });
                 }
 
-                regForm.reset();
-                clearAllErrors();
-                generateCaptcha();
-                if (successBanner) successBanner.style.display = "block";
+                if (window.location.protocol.startsWith("http")) {
+                    setTimeout(() => {
+                        regForm.submit();
+                    }, 900);
+                } else {
+                    regForm.reset();
+                    clearAllErrors();
+                    generateCaptcha();
+                    if (successBanner) successBanner.style.display = "block";
 
-                setTimeout(() => {
-                    window.location.href = "Login.html";
-                }, 2200);
+                    setTimeout(() => {
+                        window.location.href = "Login.html";
+                    }, 2200);
+                }
             }
         });
 
@@ -705,7 +752,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* ----------------------------------------------------------------------
-       4. PRACTICAL 5: LOGIN, FORGOT PASSWORD & FORGOT USERNAME VALIDATION
+       4. MODULE 5: LOGIN, FORGOT PASSWORD & FORGOT USERNAME VALIDATION
        ---------------------------------------------------------------------- */
     // --- Login Form ---
     const loginForm = document.getElementById("loginForm");
@@ -750,12 +797,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (valid) {
                 if (loginStatus) {
-                    loginStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Login verified! Redirecting to dashboard...';
+                    loginStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Credentials verified! Authenticating with server...';
                     loginStatus.style.display = "block";
                 }
-                setTimeout(() => {
-                    window.location.href = "home.html";
-                }, 1200);
+                if (window.location.protocol.startsWith("http")) {
+                    setTimeout(() => {
+                        loginForm.submit();
+                    }, 800);
+                } else {
+                    setTimeout(() => {
+                        window.location.href = "home.html";
+                    }, 1200);
+                }
             }
         });
     }
@@ -849,7 +902,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* ----------------------------------------------------------------------
-       5. PRACTICAL 6: EVENTS DIRECTORY (events.json on notice.html)
+       5. EVENTS DIRECTORY (events.json on notice.html)
        ---------------------------------------------------------------------- */
     const eventsSection = document.getElementById("eventsSection");
 
@@ -901,6 +954,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (loadingBox) loadingBox.style.display = "none";
                 if (errorBox) errorBox.style.display = "block";
                 if (resultsCount) resultsCount.textContent = "Error loading events.";
+                const errorMessage = document.getElementById("eventsErrorMessage");
+                if (errorMessage) errorMessage.textContent = "Unable to load events.json. Run the project through VS Code Live Server and make sure events.json is in the same folder as notice.html.";
             }
         }
 
@@ -1090,7 +1145,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* ----------------------------------------------------------------------
-       6. PRACTICAL 6: FAQS DIRECTORY (faqs.json on contactus.html)
+       6. MODULE 6: FAQS DIRECTORY (faqs.json on contactus.html)
        ---------------------------------------------------------------------- */
     const faqSection = document.getElementById("faqSection");
 
@@ -1226,7 +1281,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* ----------------------------------------------------------------------
-       7. PRACTICAL 6: STUDENT DIRECTORY & DEPENDENT DROPDOWNS (Admin.html)
+       7. STUDENT DIRECTORY & DEPENDENT DROPDOWNS (Admin.html)
        ---------------------------------------------------------------------- */
     const studentsSection = document.getElementById("studentsSection");
 
@@ -1355,6 +1410,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 const { data, fromCache, stale } = await fetchWithCache("students.json", "studenthub_students_cache", 30);
                 allStudents = Array.isArray(data) ? data : [];
 
+                // Build filter options directly from the JSON dataset so the UI always matches the data.
+                if (courseFilter) {
+                    const courses = [...new Set(allStudents.map(st => st.course).filter(Boolean))].sort();
+                    courseFilter.innerHTML = '<option value="">All Courses</option>' + courses.map(course => `<option value="${escapeHtml(course)}">${escapeHtml(course)}</option>`).join("");
+                }
+                if (yearFilter) {
+                    const years = [...new Set(allStudents.map(st => st.year).filter(Boolean))];
+                    yearFilter.innerHTML = '<option value="">All Years</option>' + years.map(year => `<option value="${escapeHtml(year)}">${escapeHtml(year)}</option>`).join("");
+                }
+                if (countryFilter) {
+                    const countries = [...new Set(allStudents.map(st => st.country).filter(Boolean))].sort();
+                    countryFilter.innerHTML = '<option value="">All Countries</option>' + countries.map(country => `<option value="${escapeHtml(country)}">${escapeHtml(country)}</option>`).join("");
+                }
+                handleCountryChange();
+
                 if (loadingBox) loadingBox.style.display = "none";
                 if (cacheBadge) {
                     if (stale) {
@@ -1372,6 +1442,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (loadingBox) loadingBox.style.display = "none";
                 if (errorBox) errorBox.style.display = "block";
                 if (resultsCount) resultsCount.textContent = "Error loading students.";
+                const errorMessage = document.getElementById("studentsErrorMessage");
+                if (errorMessage) errorMessage.textContent = "Unable to load students.json. Run the project through VS Code Live Server and make sure students.json is in the same folder as Admin.html.";
             }
         }
 
@@ -1559,7 +1631,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* ----------------------------------------------------------------------
-       8. PRACTICAL 4: NOTICE MODAL POPUP
+       8. MODULE 4: NOTICE MODAL POPUP
        ---------------------------------------------------------------------- */
     const noticeModal = document.getElementById("noticeModal");
     const modalTriggers = document.querySelectorAll(".view-notice-btn");
@@ -1622,7 +1694,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     /* ----------------------------------------------------------------------
-       9. PRACTICAL 4: CONTENT SLIDER (home.html)
+       9. MODULE 4: CONTENT SLIDER (home.html)
        ---------------------------------------------------------------------- */
     const sliderContainer = document.querySelector(".slider-container");
 
@@ -1708,7 +1780,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* ----------------------------------------------------------------------
-       10. PRACTICAL 4: NOTIFICATION BANNER DISMISSAL
+       10. MODULE 4: NOTIFICATION BANNER DISMISSAL
        ---------------------------------------------------------------------- */
     const bannerCloseButtons = document.querySelectorAll(".banner-close-btn");
 
@@ -1727,3 +1799,5 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
+
+

@@ -1,6 +1,6 @@
 /* ==========================================================================
    STUDENTHUB PORTAL - COMPLETE STYLESHEET (Style.css)
-   Practical 4, Practical 5 & Practical 6 Integrated Styles
+   Module 4, Module 5 & Module 6 Integrated Styles
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
@@ -584,7 +584,7 @@ body.dark-mode .theme-toggle-btn:hover {
 }
 
 /* --------------------------------------------------------------------------
-   COLLAPSIBLE FAQ ACCORDION (Practical 4 & 6)
+   COLLAPSIBLE FAQ ACCORDION (Module 4 & 6)
    -------------------------------------------------------------------------- */
 .faq-container {
     width: 100%;
@@ -869,7 +869,7 @@ li {
 }
 
 /* --------------------------------------------------------------------------
-   PRACTICAL 5: FORMS, VALIDATION, PASSWORD STRENGTH, CANVAS CAPTCHA
+   MODULE 5: FORMS, VALIDATION, PASSWORD STRENGTH, CANVAS CAPTCHA
    -------------------------------------------------------------------------- */
 form {
     background: var(--card-bg);
@@ -1159,7 +1159,7 @@ select.input-error:focus {
 }
 
 /* --------------------------------------------------------------------------
-   PRACTICAL 6: FETCH API, SEARCH, FILTER, SORT & PAGINATION CONTROLS
+   MODULE 6: FETCH API, SEARCH, FILTER, SORT & PAGINATION CONTROLS
    -------------------------------------------------------------------------- */
 .data-manager-box {
     margin: 20px 0;
@@ -1648,4 +1648,346 @@ footer {
     form {
         padding: 24px 18px;
     }
+}
+
+
+
+/* ==========================================================================
+   STUDENT REGISTRATION MODULE - ENHANCED UI
+   ========================================================================== */
+.registration-intro {
+    width: 92%;
+    max-width: 980px;
+    margin: 30px auto 18px;
+    padding: 24px 28px;
+    background: linear-gradient(135deg, var(--card-bg), var(--primary-light));
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
+
+.registration-intro h2 {
+    color: var(--primary-color);
+    margin: 8px 0 5px;
+    font-size: 28px;
+}
+
+.registration-intro p {
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.exercise-badge {
+    display: inline-block;
+    padding: 5px 11px;
+    border-radius: 20px;
+    background: var(--primary-color);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+}
+
+.validation-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.validation-features span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    background: var(--card-bg);
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.validation-features i {
+    color: #16a34a;
+}
+
+.registration-form {
+    width: 92%;
+    max-width: 980px;
+    margin: 20px auto 35px;
+    padding: 28px;
+}
+
+.form-section {
+    margin: 0 0 20px;
+    padding: 22px;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    background: var(--card-bg);
+}
+
+.form-section > legend {
+    padding: 0 10px;
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 20px;
+}
+
+.field-hint {
+    display: block;
+    margin-top: 4px;
+    color: var(--text-muted);
+    font-size: 11.5px;
+}
+
+.gender-fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0 0 18px;
+}
+
+.gender-fieldset > legend {
+    display: block;
+    margin-bottom: 6px;
+    padding: 0;
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.gender-fieldset .radio-group-container {
+    margin-top: 0;
+}
+
+.password-strength-container {
+    padding: 10px 12px;
+    background: var(--table-stripe);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.strength-label-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 6px;
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+.strength-label-row strong {
+    color: var(--text-color);
+}
+
+.captcha-box-wrapper {
+    max-width: 520px;
+}
+
+.terms-item {
+    align-items: flex-start;
+    line-height: 1.5;
+}
+
+.terms-item input {
+    flex-shrink: 0;
+    margin-top: 3px !important;
+}
+
+.keyboard-note {
+    margin: 10px 0 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.keyboard-note i {
+    color: var(--primary-color);
+    margin-right: 4px;
+}
+
+.form-actions button {
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 700;
+    background: var(--primary-color);
+    color: #fff;
+    transition: transform .2s ease, background-color .2s ease;
+}
+
+.form-actions button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.form-actions .secondary-action {
+    background: var(--border-color);
+    color: var(--text-color);
+}
+
+.form-actions .secondary-action:hover {
+    background: var(--table-hover);
+}
+
+@media (max-width: 700px) {
+    .registration-intro,
+    .registration-form {
+        width: 94%;
+        padding: 18px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-section {
+        padding: 17px;
+    }
+
+    .registration-intro h2 {
+        font-size: 23px;
+    }
+
+    .validation-features {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .validation-features {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+}
+
+/* Home page event data */
+.home-events-section {
+    margin: 10px 0 32px;
+}
+
+.home-events-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 16px;
+}
+
+.home-events-heading p {
+    margin: 0;
+    color: var(--text-muted);
+}
+
+.home-events-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.home-event-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.home-event-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary-color);
+}
+
+.home-event-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.home-event-category,
+.home-event-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.home-event-category {
+    background: var(--primary-light);
+    color: var(--primary-color);
+}
+
+.home-event-status {
+    background: var(--success-bg);
+    color: var(--success-text);
+}
+
+.home-event-card h3 {
+    margin: 0 0 9px;
+    color: var(--text-color);
+    font-size: 18px;
+}
+
+.home-event-card p {
+    margin: 0 0 16px;
+    color: var(--text-muted);
+    line-height: 1.55;
+    min-height: 74px;
+}
+
+.home-event-meta {
+    display: grid;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.home-event-meta span {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.home-event-meta i {
+    width: 16px;
+    color: var(--primary-color);
+}
+
+.home-events-message {
+    padding: 18px;
+    border: 1px dashed var(--border-color);
+    border-radius: 12px;
+    color: var(--text-muted);
+    background: var(--table-stripe);
+    margin-bottom: 16px;
+}
+
+.home-events-message.error {
+    color: var(--danger-color, #b91c1c);
+}
+
+@media (max-width: 900px) {
+    .home-events-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 600px) {
+    .home-events-heading { align-items: flex-start; flex-direction: column; }
+    .home-events-grid { grid-template-columns: 1fr; }
 }

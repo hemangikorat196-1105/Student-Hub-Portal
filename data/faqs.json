@@ -1,0 +1,17 @@
+[
+{"id":1,"question":"How can I view my attendance?","answer":"Open the Attendance page to view subject-wise attendance, overall percentage and eligibility information.","category":"Attendance"},
+{"id":2,"question":"Where can I view assignments?","answer":"Open the Assignments page to see subjects, deadlines, submission status and assignment details.","category":"Assignments"},
+{"id":3,"question":"How do I switch between Light and Dark mode?","answer":"Use the theme toggle button in the header. Your preference is saved in localStorage.","category":"Portal"},
+{"id":4,"question":"What should I do if I forget my password?","answer":"Use the Forgot Password page and submit your registered student details to begin the reset process.","category":"Account"},
+{"id":5,"question":"How can I recover my username?","answer":"Open Forgot Username and provide your registered email and mobile number.","category":"Account"},
+{"id":6,"question":"Where can I see upcoming events?","answer":"Open the Notice page to view events loaded dynamically from events.json.","category":"Events"},
+{"id":7,"question":"Can I search student records?","answer":"Yes. The student directory provides a search box for names, student IDs, email addresses and cities.","category":"Students"},
+{"id":8,"question":"Can I filter students by course and year?","answer":"Yes. Use the Course and Year dropdown filters in the student directory.","category":"Students"},
+{"id":9,"question":"How are JSON records loaded?","answer":"JavaScript uses the Fetch API to request the JSON files and converts the response into JavaScript objects.","category":"JSON"},
+{"id":10,"question":"What happens while JSON data is loading?","answer":"A loading message and spinner are displayed until the Fetch request completes.","category":"JSON"},
+{"id":11,"question":"What happens if a JSON file cannot be loaded?","answer":"The page displays an error message and provides a Retry button so the request can be attempted again.","category":"JSON"},
+{"id":12,"question":"Can event records be sorted?","answer":"Yes. Events can be sorted by date or title using the sorting dropdown.","category":"Events"},
+{"id":13,"question":"Does the portal support pagination?","answer":"Yes. Long datasets are divided into pages so that only a limited number of records are shown at a time.","category":"Portal"},
+{"id":14,"question":"How can I contact the college?","answer":"Use the Contact page to view contact information and submit an enquiry.","category":"General"},
+{"id":15,"question":"Is the portal responsive on mobile devices?","answer":"Yes. The interface uses responsive CSS layouts so forms, cards, tables and navigation adapt to smaller screens.","category":"Portal"}
+]

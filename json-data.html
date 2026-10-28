@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Data Explorer - Student Hub Portal</title>
+    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="json-data.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="home.html" class="logo"><i class="fa-solid fa-graduation-cap"></i> StudentHub</a>
+            <nav class="header-nav">
+                <a href="home.html">Home</a>
+                <a href="notice.html">Events</a>
+                <a href="Admin.html">Students</a>
+                <a href="contactus.html">FAQs</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="json-page">
+        <section class="json-hero">
+            <h1><i class="fa-solid fa-database"></i> Student Data Explorer</h1>
+            <p>Fetch API • Dynamic Rendering • Search • Filter • Sorting • Pagination • Loading & Error Handling</p>
+        </section>
+
+        <div class="json-tabs" role="tablist" aria-label="Data collections">
+            <button class="json-tab active" data-type="events">Events</button>
+            <button class="json-tab" data-type="students">Students</button>
+            <button class="json-tab" data-type="faqs">FAQs</button>
+        </div>
+
+        <section class="json-panel">
+            <div class="json-controls">
+                <input id="jsonSearch" type="search" placeholder="Search events..." aria-label="Search JSON records">
+                <select id="jsonFilter" aria-label="Filter JSON records"><option value="">All Categories</option></select>
+                <select id="jsonSort" aria-label="Sort JSON records"><option value="default">Default Order</option></select>
+                <button id="jsonReset" type="button"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+            </div>
+
+            <div class="json-meta">
+                <span id="jsonCount">Loading records...</span>
+                <span class="json-badge" id="jsonSource">Fetch API</span>
+            </div>
+
+            <div id="jsonLoading" class="json-loading">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                <strong> Loading JSON data...</strong>
+            </div>
+
+            <div id="jsonError" class="json-error" hidden>
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <h3>Unable to load JSON data</h3>
+                <p id="jsonErrorMessage">Please check the JSON file and run the project through Live Server.</p>
+                <button id="jsonRetry" type="button">Retry</button>
+            </div>
+
+            <div id="jsonOutput"></div>
+            <div id="jsonPagination" class="json-pagination"></div>
+            <p class="json-note"><strong>Note:</strong> Because the Fetch API is used, open this project with VS Code Live Server or another local web server instead of directly opening the HTML file with <code>file://</code>.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p class="copyright">© 2026 StudentHub Portal | Student Data Services</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script type="module" src="jsonData.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<?php
+// ============================================================================
+// Student Hub Portal - Session Health & Identity Check Endpoint
+// Practicals 10, 14, 15
+// ============================================================================
+
+require_once __DIR__ . '/../includes/session.php';
+require_once __DIR__ . '/../includes/response.php';
+
+init_session();
+
+if (!is_logged_in()) {
+    json_response(200, false, "Not logged in", [
+        'loggedIn' => false
+    ]);
+}
+
+$user = current_user();
+$remainingSeconds = max(0, SESSION_TIMEOUT_SECONDS - (time() - ($_SESSION['last_activity'] ?? time())));
+
+json_response(200, true, "Active session", [
+    'loggedIn'         => true,
+    'user'             => $user,
+    'remainingSeconds' => $remainingSeconds,
+    'sessionId'        => session_id()
+]);

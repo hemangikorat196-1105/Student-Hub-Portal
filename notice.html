@@ -37,22 +37,25 @@
         <h3>StudentHub Menu</h3>
         <button class="close-btn" aria-label="Close sidebar menu">&times;</button>
     </div>
-    <a href="home.html"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="home.html"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="aboutus.html"><i class="fa-solid fa-circle-info"></i> About Us</a>
+    <a href="courses.html"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
+    <a href="events.html"><i class="fa-solid fa-calendar-days"></i> Events</a>
     <a href="Attendance.html"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
     <a href="Assignment.html"><i class="fa-solid fa-book-open"></i> Assignment</a>
-    <a href="courses.html"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
     <a href="Timetable.html"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
     <a href="faculty.html"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
     <a href="notice.html" class="active"><i class="fa-solid fa-bullhorn"></i> Notice</a>
+    <a href="json-data.html"><i class="fa-solid fa-database"></i> JSON Data</a>
     <a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a>
     <a href="contactus.html"><i class="fa-solid fa-envelope"></i> Contact</a>
-    <a href="admin.html"><i class="fa-solid fa-user-shield"></i> Admin</a>
+    <a href="Admin.html"><i class="fa-solid fa-user-shield"></i> Admin</a>
     <a href="index.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
 </aside>
 
 <main id="main-content">
 
-    <!-- Section 1: Official Announcements (Practical 4 Modal Trigger) -->
+    <!-- Official Announcements -->
     <div class="card">
         <h2><i class="fa-solid fa-bullhorn"></i> Official Announcements & Circulars</h2>
         <p>Stay updated with the latest administrative circulars, fee notifications, and examination notices.</p>
@@ -81,7 +84,7 @@
                 <button class="small-btn view-notice-btn" style="margin-top: 10px;" type="button"
                         data-title="Mid-Semester Assessment Timeline"
                         data-date="18 July 2026"
-                        data-content="The mid-semester theoretical assessments and laboratory practicals will commence from the 2nd week of August. Students must carry valid college identity cards in all examination halls.">
+                        data-content="The mid-semester theoretical assessments and laboratory assessments will commence from the 2nd week of August. Students must carry valid college identity cards in all examination halls.">
                     <i class="fa-solid fa-eye"></i> View Notice
                 </button>
             </div>
@@ -103,7 +106,7 @@
         </div>
     </div>
 
-    <!-- Section 2: Practical 6 - Rendering External JSON Events with Fetch API, Search, Filter, Sort, Pagination -->
+    <!-- Campus Events loaded from events.json -->
     <div class="card data-manager-box" id="eventsSection">
         <h2><i class="fa-solid fa-calendar-check"></i> Campus Events & Workshops Directory</h2>
         <p>Explore upcoming summits, technical bootcamps, cultural fests, and guest lectures rendered dynamically via Fetch API.</p>
@@ -125,7 +128,8 @@
                     <option value="Workshop">Workshop</option>
                     <option value="Cultural">Cultural</option>
                     <option value="Sports">Sports</option>
-                    <option value="Academic">Academic</option>
+                    <option value="Seminar">Seminar</option>
+                    <option value="Career">Career</option>
                 </select>
 
                 <!-- Sort -->
