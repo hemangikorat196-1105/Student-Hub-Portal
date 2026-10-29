@@ -1,4 +1,4 @@
-# Student Hub Portal — ITUE203 WDF
+# Student Hub Portal 
 
 The project contains the public Student Hub site, secure PHP/MySQL student and administrator portals, REST-style JSON endpoints, JSON datasets, SQL schema/seed files, and complete practical documentation.
 
