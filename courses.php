@@ -43,7 +43,6 @@ require_student();
         <button class="close-btn" aria-label="Close sidebar menu">&times;</button>
     </div>
         <a href="home.php"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="aboutus.php"><i class="fa-solid fa-circle-info"></i> About Us</a>
     <a href="courses.php" class="active"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
     <a href="events.php"><i class="fa-solid fa-calendar-days"></i> Events</a>
     <a href="Attendance.php"><i class="fa-solid fa-calendar-check"></i> Attendance</a>

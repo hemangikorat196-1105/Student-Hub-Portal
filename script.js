@@ -987,6 +987,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const adminTermsError = document.getElementById("adminTermsError");
         const adminRegSuccess = document.getElementById("adminRegistrationSuccess");
 
+        // Admin Password Strength Elements
+        const adminPassStrengthBox = document.getElementById("adminPasswordStrengthBox");
+        const adminStrengthBar = document.getElementById("adminStrengthBar");
+        const adminStrengthText = document.getElementById("adminStrengthText");
+
         const nameRegex = /^[A-Za-z .]{2,50}$/;
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         const mobileRegex = /^[6-9]\d{9}$/;
@@ -1027,9 +1032,35 @@ document.addEventListener("DOMContentLoaded", function () {
         if (adminPasscode) adminPasscode.addEventListener("input", () => {
             if (adminPasscode.value.trim() !== "") clrAdminErr(adminPasscode, adminPasscodeError);
         });
-        if (adminPassword) adminPassword.addEventListener("input", () => {
-            if (passRegex.test(adminPassword.value)) clrAdminErr(adminPassword, adminPasswordError);
-        });
+
+        // Live Password Strength & Regex Evaluation
+        if (adminPassword) {
+            adminPassword.addEventListener("input", () => {
+                const val = adminPassword.value;
+                if (passRegex.test(val)) {
+                    clrAdminErr(adminPassword, adminPasswordError);
+                }
+
+                if (adminPassStrengthBox && adminStrengthBar && adminStrengthText) {
+                    if (val.length === 0) {
+                        adminPassStrengthBox.style.display = "none";
+                        adminStrengthBar.style.width = "0%";
+                        adminStrengthBar.className = "strength-bar-fill";
+                        adminStrengthText.textContent = "Strength: None";
+                    } else {
+                        adminPassStrengthBox.style.display = "block";
+                        const result = evaluatePasswordStrength(val);
+                        adminStrengthBar.className = `strength-bar-fill ${result.class}`;
+                        adminStrengthText.textContent = `Strength: ${result.label}`;
+                        adminStrengthBar.parentElement.setAttribute("aria-valuenow", result.score);
+                        if (result.score === 1) adminStrengthBar.style.width = "33%";
+                        else if (result.score === 2) adminStrengthBar.style.width = "66%";
+                        else if (result.score === 3) adminStrengthBar.style.width = "100%";
+                    }
+                }
+            });
+        }
+
         if (adminConfirmPassword) adminConfirmPassword.addEventListener("input", () => {
             if (adminConfirmPassword.value === adminPassword.value) clrAdminErr(adminConfirmPassword, adminConfirmPasswordError);
         });
@@ -1045,6 +1076,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 i.classList.remove("input-error");
                 i.setAttribute("aria-invalid", "false");
             });
+            if (adminPassStrengthBox) {
+                adminPassStrengthBox.style.display = "none";
+            }
             if (adminRegSuccess) {
                 adminRegSuccess.textContent = "";
                 adminRegSuccess.style.display = "none";

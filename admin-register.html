@@ -147,6 +147,17 @@
                            aria-describedby="adminPasswordHint adminPasswordError"
                            aria-invalid="false">
                     <small id="adminPasswordHint" class="field-hint">Use uppercase, lowercase, number and special character.</small>
+
+                    <div class="password-strength-container" id="adminPasswordStrengthBox" style="display:none;">
+                        <div class="strength-label-row">
+                            <span>Password strength</span>
+                            <strong id="adminStrengthText">Strength: None</strong>
+                        </div>
+                        <div class="strength-bar-track" role="progressbar" aria-label="Password strength" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0">
+                            <div class="strength-bar-fill" id="adminStrengthBar"></div>
+                        </div>
+                    </div>
+
                     <span class="error-msg" id="adminPasswordError" role="alert" aria-live="polite"></span>
                 </div>
 

@@ -16,15 +16,30 @@ require_student();
     <script src="script.js" defer></script>
     <style>
         .events-hero {
-            background: linear-gradient(135deg, #1e3a8a 0%, #0284c7 100%);
+            background: #14599d; /* Image 4 target for light mode */
             color: #ffffff;
             padding: 40px 20px;
             text-align: center;
             border-radius: 12px;
             margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(20, 89, 157, 0.25);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-        .events-hero h2 { font-size: 2.2rem; color: #fff; margin-bottom: 10px; }
-        .events-hero p { max-width: 680px; margin: 0 auto; opacity: 0.95; font-size: 1.05rem; }
+        .events-hero h2 { font-size: 2.2rem; color: #ffffff; margin-bottom: 10px; }
+        .events-hero p { max-width: 680px; margin: 0 auto; opacity: 0.95; font-size: 1.05rem; color: #ffffff; }
+
+        body.dark-mode .events-hero {
+            background: #38bdf8 !important; /* Image 3 target for dark mode */
+            color: #0f172a !important;
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.35);
+        }
+        body.dark-mode .events-hero h2 {
+            color: #0f172a !important;
+        }
+        body.dark-mode .events-hero p {
+            color: #0f172a !important;
+            font-weight: 500;
+        }
         
         /* Filter & Controls Toolbar */
         .events-controls {
@@ -247,8 +262,7 @@ require_student();
         <h3>StudentHub Menu</h3>
         <button class="close-btn" aria-label="Close sidebar menu">&times;</button>
     </div>
-        <a href="home.php"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="aboutus.php"><i class="fa-solid fa-circle-info"></i> About Us</a>
+    <a href="home.php"><i class="fa-solid fa-house"></i> Home</a>
     <a href="courses.php"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
     <a href="events.php" class="active"><i class="fa-solid fa-calendar-days"></i> Events</a>
     <a href="Attendance.php"><i class="fa-solid fa-calendar-check"></i> Attendance</a>

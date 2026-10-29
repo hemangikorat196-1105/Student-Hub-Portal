@@ -58,8 +58,7 @@ if (!$studentProfile) {
         <h3>StudentHub Menu</h3>
         <button class="close-btn" aria-label="Close sidebar menu">&times;</button>
     </div>
-        <a href="home.php" class="active"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="aboutus.html"><i class="fa-solid fa-circle-info"></i> About Us</a>
+    <a href="home.php" class="active"><i class="fa-solid fa-house"></i> Home</a>
     <a href="courses.html"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
     <a href="events.html"><i class="fa-solid fa-calendar-days"></i> Events</a>
     <a href="Attendance.php"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
