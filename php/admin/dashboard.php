@@ -15,11 +15,17 @@ require_admin(); // Restrict to admin users only (Practical 10 & 14)
 $db = get_db_connection();
 $currentUser = current_user();
 
-// 1. Dynamic Metric Aggregation
-$totalUsers = (int)$db->query("SELECT COUNT(*) AS c FROM users")->fetch_assoc()['c'];
+// 1. Dynamic Metric Aggregation for Required Statistics
 $totalStudents = (int)$db->query("SELECT COUNT(*) AS c FROM students")->fetch_assoc()['c'];
 $activeStudents = (int)$db->query("SELECT COUNT(*) AS c FROM students WHERE status = 'active'")->fetch_assoc()['c'];
+$inactiveStudents = (int)$db->query("SELECT COUNT(*) AS c FROM students WHERE status = 'inactive'")->fetch_assoc()['c'];
+$totalFaculty = (int)$db->query("SELECT COUNT(*) AS c FROM faculty")->fetch_assoc()['c'];
+$totalCourses = (int)$db->query("SELECT COUNT(*) AS c FROM courses")->fetch_assoc()['c'];
+$totalNotices = (int)$db->query("SELECT COUNT(*) AS c FROM notices")->fetch_assoc()['c'];
 $totalEvents = (int)$db->query("SELECT COUNT(*) AS c FROM events")->fetch_assoc()['c'];
+$totalNoticesAndEvents = $totalNotices + $totalEvents;
+
+$totalUsers = (int)$db->query("SELECT COUNT(*) AS c FROM users")->fetch_assoc()['c'];
 $openEvents = (int)$db->query("SELECT COUNT(*) AS c FROM events WHERE status = 'open'")->fetch_assoc()['c'];
 $totalRegistrations = (int)$db->query("SELECT COUNT(*) AS c FROM registrations")->fetch_assoc()['c'];
 $totalAuditLogs = (int)$db->query("SELECT COUNT(*) AS c FROM audit_logs")->fetch_assoc()['c'];
@@ -120,10 +126,15 @@ $courseDist = $db->query($courseDistSql)->fetch_all(MYSQLI_ASSOC);
             <button class="close-btn" type="button" aria-label="Close sidebar menu">&times;</button>
         </div>
         <a href="dashboard.php" class="active"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
-        <a href="../students/list.php"><i class="fa-solid fa-user-graduate"></i> Students</a>
-        <a href="../events/list.php"><i class="fa-solid fa-calendar-days"></i> Events</a>
-        <a href="users.php"><i class="fa-solid fa-users-gear"></i> User Management</a>
+        <a href="../students/list.php"><i class="fa-solid fa-user-graduate"></i> Students Management</a>
+        <a href="../students/create.php"><i class="fa-solid fa-user-plus"></i> Add Student</a>
+        <a href="faculty.php"><i class="fa-solid fa-chalkboard-user"></i> Faculty Management</a>
+        <a href="courses.php"><i class="fa-solid fa-book"></i> Course Management</a>
+        <a href="notices.php"><i class="fa-solid fa-bullhorn"></i> Notice Management</a>
+        <a href="../events/list.php"><i class="fa-solid fa-calendar-days"></i> Events Management</a>
+        <a href="backup.php"><i class="fa-solid fa-database"></i> Database Backup</a>
         <a href="audit_logs.php"><i class="fa-solid fa-clock-rotate-left"></i> Audit Logs</a>
+        <a href="users.php"><i class="fa-solid fa-users-gear"></i> User Management</a>
         <form class="sidebar-logout" method="post" action="../auth/admin_logout.php">
             <?= csrf_field() ?>
             <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Admin Logout</button>
@@ -147,23 +158,39 @@ $courseDist = $db->query($courseDistSql)->fetch_all(MYSQLI_ASSOC);
         <div class="quick-nav admin-quick-nav" aria-label="Administrator actions">
             <a href="../students/list.php" class="quick-link">
                 <i class="fa-solid fa-user-graduate" style="color: #2563eb;"></i>
-                <strong>Students</strong><span>List, search, add, edit and manage records</span>
+                <strong>Students</strong><span>Search, filter, view and manage records</span>
+            </a>
+            <a href="../students/create.php" class="quick-link">
+                <i class="fa-solid fa-user-plus" style="color: #0284c7;"></i>
+                <strong>Add Student</strong><span>Provision student with temporary password</span>
+            </a>
+            <a href="faculty.php" class="quick-link">
+                <i class="fa-solid fa-chalkboard-user" style="color: #8b5cf6;"></i>
+                <strong>Faculty</strong><span>Manage faculty profiles & status</span>
+            </a>
+            <a href="courses.php" class="quick-link">
+                <i class="fa-solid fa-book" style="color: #ec4899;"></i>
+                <strong>Courses</strong><span>Academic programs and curricula</span>
+            </a>
+            <a href="notices.php" class="quick-link">
+                <i class="fa-solid fa-bullhorn" style="color: #f59e0b;"></i>
+                <strong>Notices</strong><span>Publish and archive circulars</span>
             </a>
             <a href="../events/list.php" class="quick-link">
                 <i class="fa-solid fa-calendar-days" style="color: #16a34a;"></i>
-                <strong>Events</strong><span>Create, update, delete and upload posters</span>
+                <strong>Events</strong><span>Manage workshops, seminars and hackathons</span>
             </a>
-            <a href="#statistics" class="quick-link">
-                <i class="fa-solid fa-chart-column" style="color: #0284c7;"></i>
-                <strong>Statistics</strong><span>Live counts from the database</span>
+            <a href="backup.php" class="quick-link">
+                <i class="fa-solid fa-database" style="color: #0d9488;"></i>
+                <strong>Database Backup</strong><span>Export full SQL disaster recovery dump</span>
             </a>
             <a href="audit_logs.php" class="quick-link">
                 <i class="fa-solid fa-clock-rotate-left" style="color: #d97706;"></i>
-                <strong>Audit Logs</strong><span>Track administrative actions</span>
+                <strong>Audit Logs</strong><span>Security trace & administrative actions</span>
             </a>
             <a href="users.php" class="quick-link">
                 <i class="fa-solid fa-users-gear" style="color: #9333ea;"></i>
-                <strong>User Management</strong><span>Manage permitted account operations</span>
+                <strong>Users</strong><span>Administrative login account controls</span>
             </a>
             <form method="post" action="../auth/admin_logout.php">
                 <?= csrf_field() ?>
@@ -174,51 +201,60 @@ $courseDist = $db->query($courseDistSql)->fetch_all(MYSQLI_ASSOC);
             </form>
         </div>
 
-        <!-- Metric Summary Cards -->
+        <!-- Required Dashboard Statistics Grid -->
         <div class="stats-grid" id="statistics">
             <div class="stat-card">
                 <div>
-                    <div class="stat-lbl">Registered Students</div>
+                    <div class="stat-lbl">Total Students</div>
                     <div class="stat-val"><?= $totalStudents ?></div>
-                    <small style="color: #16a34a; font-weight: 600;"><?= $activeStudents ?> Active Records</small>
+                    <small style="color: #2563eb; font-weight: 600;">Registered in Database</small>
                 </div>
                 <i class="fa-solid fa-user-graduate stat-icon"></i>
             </div>
 
             <div class="stat-card green">
                 <div>
-                    <div class="stat-lbl">Campus Events</div>
-                    <div class="stat-val"><?= $totalEvents ?></div>
-                    <small style="color: #0369a1; font-weight: 600;"><?= $openEvents ?> Open for Registration</small>
+                    <div class="stat-lbl">Active Students</div>
+                    <div class="stat-val"><?= $activeStudents ?></div>
+                    <small style="color: #16a34a; font-weight: 600;">Permitted Academic Access</small>
                 </div>
-                <i class="fa-solid fa-calendar-check stat-icon"></i>
-            </div>
-
-            <div class="stat-card purple">
-                <div>
-                    <div class="stat-lbl">Event Registrations</div>
-                    <div class="stat-val"><?= $totalRegistrations ?></div>
-                    <small style="color: #64748b;">Confirmed Bookings</small>
-                </div>
-                <i class="fa-solid fa-ticket stat-icon"></i>
+                <i class="fa-solid fa-user-check stat-icon"></i>
             </div>
 
             <div class="stat-card amber">
                 <div>
-                    <div class="stat-lbl">User Accounts</div>
-                    <div class="stat-val"><?= $totalUsers ?></div>
-                    <small style="color: #d97706;">Admin & Student Logins</small>
+                    <div class="stat-lbl">Inactive Students</div>
+                    <div class="stat-val"><?= $inactiveStudents ?></div>
+                    <small style="color: #d97706; font-weight: 600;">Deactivated / Suspended</small>
                 </div>
-                <i class="fa-solid fa-users stat-icon"></i>
+                <i class="fa-solid fa-user-slash stat-icon"></i>
+            </div>
+
+            <div class="stat-card purple">
+                <div>
+                    <div class="stat-lbl">Total Faculty Members</div>
+                    <div class="stat-val"><?= $totalFaculty ?></div>
+                    <small style="color: #9333ea; font-weight: 600;">Professors & Mentors</small>
+                </div>
+                <i class="fa-solid fa-chalkboard-user stat-icon"></i>
+            </div>
+
+            <div class="stat-card" style="border-left-color: #ec4899;">
+                <div>
+                    <div class="stat-lbl">Total Courses</div>
+                    <div class="stat-val"><?= $totalCourses ?></div>
+                    <small style="color: #ec4899; font-weight: 600;">Degree & Diploma Programs</small>
+                </div>
+                <i class="fa-solid fa-book-open stat-icon"></i>
             </div>
 
             <div class="stat-card slate">
                 <div>
-                    <div class="stat-lbl">Audit Log Entries</div>
-                    <div class="stat-val"><?= $totalAuditLogs ?></div>
-                    <small style="color: #475569;">Recorded Actions</small>
+                    <div class="stat-lbl">Total Notices & Events</div>
+                    <div class="stat-val"><?= $totalNoticesAndEvents ?></div>
+                    <small style="color: #475569; font-weight: 600;"><?= $totalNotices ?> Notices · <?= $totalEvents ?> Events</small>
                 </div>
-                <i class="fa-solid fa-shield-halved stat-icon"></i>
+                <i class="fa-solid fa-bullhorn stat-icon"></i>
             </div>
         </div>
 

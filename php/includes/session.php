@@ -115,9 +115,10 @@ function login_user($user) {
     $_SESSION['email']         = $user['email'] ?? '';
     $_SESSION['role']          = $user['role'] ?? 'student';
     $_SESSION['student_id']    = $user['student_id'] ?? $user['username'];
-    $_SESSION['auth_role']     = $user['role'] ?? '';
-    $_SESSION['last_activity'] = time();
-    $_SESSION['login_time']    = time();
+    $_SESSION['auth_role']            = $user['role'] ?? '';
+    $_SESSION['must_change_password'] = (int)($user['must_change_password'] ?? 0);
+    $_SESSION['last_activity']        = time();
+    $_SESSION['login_time']           = time();
 }
 
 /**

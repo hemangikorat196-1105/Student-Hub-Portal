@@ -1,7 +1,7 @@
 <?php
 // ============================================================================
-// Student Hub Portal - Update Student Record
-// Practical 11, 14, 15
+// Student Hub Portal - Update Student Administrative Details (Admin Only)
+// Synchronizes status & email with users table, validates inputs, logs audit trail.
 // ============================================================================
 
 require_once __DIR__ . '/../config/db.php';
@@ -49,14 +49,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['general'] = "The form expired or could not be verified. Reload and try again.";
     }
 
-    $name   = trim($_POST['name'] ?? '');
-    $email  = trim($_POST['email'] ?? '');
-    $mobile = trim($_POST['mobile'] ?? '');
-    $course = trim($_POST['course'] ?? '');
-    $year   = (int)($_POST['year'] ?? 1);
-    $gender = trim($_POST['gender'] ?? 'Other');
-    $cgpa   = (float)($_POST['cgpa'] ?? 8.0);
-    $status = in_array($_POST['status'] ?? '', ['active', 'inactive']) ? $_POST['status'] : 'active';
+    $name          = trim($_POST['name'] ?? '');
+    $email         = strtolower(trim($_POST['email'] ?? ''));
+    $mobile        = trim($_POST['mobile'] ?? '');
+    $course        = trim($_POST['course'] ?? '');
+    $department    = trim($_POST['department'] ?? 'Computer Science & Engineering');
+    $semester      = max(1, min(8, (int)($_POST['semester'] ?? 1)));
+    $year          = max(1, min(4, (int)($_POST['year'] ?? 1)));
+    $admissionDate = trim($_POST['admission_date'] ?? ($student['admission_date'] ?? date('Y-m-d')));
+    $gender        = in_array($_POST['gender'] ?? '', ['Male', 'Female', 'Other']) ? $_POST['gender'] : 'Other';
+    $cgpa          = max(0.0, min(10.0, (float)($_POST['cgpa'] ?? 8.0)));
+    $status        = in_array($_POST['status'] ?? '', ['active', 'inactive']) ? $_POST['status'] : 'active';
 
     if (!validate_full_name($name)) {
         $errors['name'] = "Name must be 2 to 50 characters (letters and spaces only).";
@@ -66,6 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     if (!validate_indian_mobile($mobile)) {
         $errors['mobile'] = "Valid 10-digit mobile number required.";
+    }
+    if (empty($course)) {
+        $errors['course'] = "Please select an academic course.";
     }
 
     if (empty($errors)) {
@@ -80,16 +86,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmtChk->close();
 
             if (empty($errors)) {
+                $db->begin_transaction();
+
                 $stmtUp = $db->prepare("
                     UPDATE students
-                    SET name = ?, email = ?, mobile = ?, course = ?, year = ?, gender = ?, cgpa = ?, status = ?
+                    SET name = ?, email = ?, mobile = ?, course = ?, semester = ?, year = ?,
+                        department = ?, admission_date = ?, gender = ?, cgpa = ?, status = ?, updated_at = NOW()
                     WHERE id = ?
                 ");
-                $stmtUp->bind_param("ssssisdsi", $name, $email, $mobile, $course, $year, $gender, $cgpa, $status, $id);
+                $stmtUp->bind_param(
+                    "ssssiisssdsi",
+                    $name, $email, $mobile, $course, $semester, $year,
+                    $department, $admissionDate, $gender, $cgpa, $status, $id
+                );
                 $stmtUp->execute();
                 $stmtUp->close();
 
-                log_audit_event("UPDATE_STUDENT", "Updated student ID $id ({$student['student_id']})");
+                // Synchronize users table if user_id linked
+                $userId = (int)($student['user_id'] ?? 0);
+                if ($userId > 0) {
+                    $stmtUserSync = $db->prepare("UPDATE users SET email = ?, status = ?, updated_at = NOW() WHERE id = ?");
+                    $stmtUserSync->bind_param("ssi", $email, $status, $userId);
+                    $stmtUserSync->execute();
+                    $stmtUserSync->close();
+                }
+
+                $db->commit();
+
+                log_audit_event("UPDATE_STUDENT", "Admin #{$_SESSION['user_id']} updated student ID $id ({$student['student_id']})");
                 $_SESSION['flash_success'] = "Student {$student['student_id']} updated successfully!";
 
                 if (is_api_request()) {
@@ -100,8 +124,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
             }
         } catch (Exception $e) {
+            $db->rollback();
             error_log("Update Student Error: " . $e->getMessage());
-            $errors['general'] = "Database error while updating student.";
+            $errors['general'] = "Database error while updating student: " . $e->getMessage();
         }
     }
 
@@ -115,35 +140,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Student - <?= htmlspecialchars($student['student_id']) ?></title>
+    <title>Edit Student: <?= htmlspecialchars($student['student_id']) ?> - Student Hub Portal</title>
     <link rel="stylesheet" href="../../Style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="../../script.js" defer></script>
     <style>
-        .form-card { max-width: 700px; margin: 40px auto; padding: 30px; background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); font-family: 'Segoe UI', Tahoma, sans-serif; }
-        .form-title { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; color: #0f172a; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .form-card { max-width: 820px; margin: 35px auto 60px; padding: 35px; background: var(--card-bg, #fff); border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border: 1px solid var(--border-color, #e2e8f0); font-family: 'Segoe UI', Tahoma, sans-serif; }
+        .form-title { display: flex; align-items: center; gap: 12px; margin: 0 0 20px; color: var(--text-color, #0f172a); font-size: 1.35rem; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 680px) { .form-grid { grid-template-columns: 1fr; } }
         .form-group { display: flex; flex-direction: column; }
-        .form-group.full-width { grid-column: span 2; }
-        .form-group label { font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 6px; }
-        .form-group input, .form-group select { padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; }
-        .error-hint { color: #dc2626; font-size: 0.8rem; margin-top: 4px; }
-        .btn-row { display: flex; gap: 12px; margin-top: 25px; }
-        .btn { padding: 10px 20px; border-radius: 6px; font-weight: 600; text-decoration: none; border: none; cursor: pointer; }
-        .btn-primary { background: #2563eb; color: #fff; }
+        .form-group.full-width { grid-column: 1 / -1; }
+        .form-group label { font-size: 0.88rem; font-weight: 600; color: var(--text-color, #475569); margin-bottom: 6px; }
+        .form-group input, .form-group select { padding: 10px 14px; border: 1px solid var(--border-color, #cbd5e1); border-radius: 8px; font-size: 0.95rem; background: var(--input-bg, #fff); color: var(--text-color, #0f172a); }
+        .error-hint { color: #dc2626; font-size: 0.8rem; margin-top: 4px; font-weight: 500; }
+        .alert-error { background: #fee2e2; color: #991b1b; padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #dc2626; }
+        .btn-row { display: flex; gap: 12px; margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border-color, #e2e8f0); }
+        .btn { padding: 10px 22px; border-radius: 8px; font-weight: 600; text-decoration: none; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary { background: var(--primary-color, #2563eb); color: #fff; }
         .btn-secondary { background: #f1f5f9; color: #334155; }
     </style>
 </head>
 <body>
-    <main class="form-card">
-        <div class="form-title">
-            <i class="fa-solid fa-pen-to-square" style="font-size: 1.5rem; color: #0284c7;"></i>
-            <h2>Edit Student: <?= htmlspecialchars($student['student_id']) ?></h2>
+    <header class="main-header">
+        <div class="header-left">
+            <div class="portal-title">
+                <h1>STUDENT HUB PORTAL</h1>
+                <p>Digital Academic & Campus Management System</p>
+            </div>
+        </div>
+        <button id="themeToggle" class="theme-btn" type="button" aria-label="Change Theme">
+            <i class="fa-solid fa-moon"></i><span>Dark Mode</span>
+        </button>
+    </header>
+
+    <main class="form-card" id="main-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid var(--border-color); padding-bottom:15px;">
+            <div class="form-title">
+                <i class="fa-solid fa-user-pen" style="color: var(--primary-color, #2563eb);"></i>
+                <h2>Edit Student: <?= htmlspecialchars($student['student_id']) ?></h2>
+            </div>
+            <a href="list.php" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back to List</a>
         </div>
 
         <?php if (!empty($errors['general'])): ?>
-            <div style="background: #fee2e2; color: #991b1b; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
-                <?= htmlspecialchars($errors['general']) ?>
-            </div>
+            <div class="alert-error" role="alert"><i class="fa-solid fa-triangle-exclamation"></i> <?= htmlspecialchars($errors['general']) ?></div>
         <?php endif; ?>
 
         <form action="update.php" method="POST">
@@ -152,8 +193,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label>Student ID (Read-only)</label>
-                    <input type="text" value="<?= htmlspecialchars($student['student_id']) ?>" disabled style="background: #f1f5f9; cursor: not-allowed;">
+                    <label>Student ID / Enrollment Number (Fixed)</label>
+                    <input type="text" value="<?= htmlspecialchars($student['student_id']) ?>" disabled style="background: var(--primary-light, #f1f5f9); cursor: not-allowed;">
                 </div>
 
                 <div class="form-group">
@@ -170,12 +211,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-group">
                     <label for="mobile">Mobile Number *</label>
-                    <input type="tel" id="mobile" name="mobile" required value="<?= htmlspecialchars($_POST['mobile'] ?? $student['mobile']) ?>">
+                    <input type="tel" id="mobile" name="mobile" required maxlength="10" value="<?= htmlspecialchars($_POST['mobile'] ?? $student['mobile']) ?>">
                     <?php if (!empty($errors['mobile'])): ?><span class="error-hint"><?= $errors['mobile'] ?></span><?php endif; ?>
                 </div>
 
                 <div class="form-group">
-                    <label for="course">Course *</label>
+                    <label for="course">Course / Degree Program *</label>
                     <select id="course" name="course" required>
                         <?php
                         $courses = [
@@ -192,7 +233,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="form-group">
-                    <label for="year">Year of Study *</label>
+                    <label for="department">Department *</label>
+                    <select id="department" name="department" required>
+                        <?php
+                        $depts = [
+                            'Computer Science & Engineering', 'Information Technology',
+                            'Artificial Intelligence & Data Science', 'Electronics & Communication',
+                            'Mechanical Engineering', 'Civil Engineering'
+                        ];
+                        $selDept = $_POST['department'] ?? ($student['department'] ?? 'Computer Science & Engineering');
+                        foreach ($depts as $d):
+                        ?>
+                            <option value="<?= htmlspecialchars($d) ?>" <?= ($selDept === $d) ? 'selected' : '' ?>><?= htmlspecialchars($d) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="semester">Semester (1 to 8) *</label>
+                    <select id="semester" name="semester" required>
+                        <?php
+                        $selSem = (int)($_POST['semester'] ?? ($student['semester'] ?? 1));
+                        for ($s = 1; $s <= 8; $s++):
+                        ?>
+                            <option value="<?= $s ?>" <?= ($selSem === $s) ? 'selected' : '' ?>>Semester <?= $s ?></option>
+                        <?php endfor; ?>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="year">Academic Year *</label>
                     <select id="year" name="year" required>
                         <?php
                         $selYear = (int)($_POST['year'] ?? $student['year']);
@@ -200,6 +270,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         ?>
                             <option value="<?= $y ?>" <?= ($selYear === $y) ? 'selected' : '' ?>>Year <?= $y ?></option>
                         <?php endfor; ?>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="admission_date">Admission Date *</label>
+                    <input type="date" id="admission_date" name="admission_date" required value="<?= htmlspecialchars($_POST['admission_date'] ?? ($student['admission_date'] ?? date('Y-m-d'))) ?>">
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Account Status *</label>
+                    <select id="status" name="status" required>
+                        <?php $curStatus = $_POST['status'] ?? $student['status']; ?>
+                        <option value="active" <?= ($curStatus === 'active') ? 'selected' : '' ?>>Active (Can Sign In)</option>
+                        <option value="inactive" <?= ($curStatus === 'inactive') ? 'selected' : '' ?>>Inactive (Deactivated / Blocked)</option>
                     </select>
                 </div>
 
@@ -213,24 +297,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="form-group">
-                    <label for="cgpa">CGPA</label>
+                    <label for="cgpa">Cumulative CGPA</label>
                     <input type="number" id="cgpa" name="cgpa" step="0.01" min="0" max="10" value="<?= htmlspecialchars($_POST['cgpa'] ?? $student['cgpa']) ?>">
-                </div>
-
-                <div class="form-group full-width">
-                    <label for="status">Account Status</label>
-                    <select id="status" name="status">
-                        <option value="active" <?= ($student['status'] === 'active') ? 'selected' : '' ?>>Active</option>
-                        <option value="inactive" <?= ($student['status'] === 'inactive') ? 'selected' : '' ?>>Inactive (Soft-Deleted)</option>
-                    </select>
                 </div>
             </div>
 
             <div class="btn-row">
-                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Update Changes</button>
-                <a href="list.php" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+                <a href="list.php" class="btn btn-secondary"><i class="fa-solid fa-xmark"></i> Cancel</a>
             </div>
         </form>
     </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h2>StudentHub Portal</h2>
+                <p>Your digital campus companion for academics, courses, assignments, attendance, and student services.</p>
+            </div>
+        </div>
+        <p class="copyright">
+            © 2026 StudentHub Portal | Developed By Hemangi Korat | All Rights Reserved.
+        </p>
+    </footer>
 </body>
 </html>

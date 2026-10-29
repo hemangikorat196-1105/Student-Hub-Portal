@@ -1,7 +1,7 @@
 <?php
 // Compatibility route; all account creation uses the single secure handler.
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ../../Register.html');
+    header('Location: ../../Login.html');
     exit;
 }
 

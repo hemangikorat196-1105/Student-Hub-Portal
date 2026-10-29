@@ -1,7 +1,7 @@
 <?php
 // ============================================================================
 // Student Hub Portal - Export Student Records to CSV
-// Practical 11 (Intermediate Extension Requirement)
+// Supports search by ID, name, email, mobile; filters by course, sem, year, status.
 // ============================================================================
 
 require_once __DIR__ . '/../config/db.php';
@@ -11,9 +11,11 @@ require_once __DIR__ . '/../includes/auth_guard.php';
 init_session();
 require_admin();
 
-$course = trim($_GET['course'] ?? '');
-$status = trim($_GET['status'] ?? 'all');
-$search = trim($_GET['search'] ?? '');
+$course   = trim($_GET['course'] ?? '');
+$semester = isset($_GET['semester']) && $_GET['semester'] !== '' ? (int)$_GET['semester'] : null;
+$year     = isset($_GET['year']) && $_GET['year'] !== '' ? (int)$_GET['year'] : null;
+$status   = trim($_GET['status'] ?? 'all');
+$search   = trim($_GET['search'] ?? '');
 
 $db = get_db_connection();
 
@@ -22,16 +24,28 @@ $params = [];
 $types = "";
 
 if ($search !== '') {
-    $whereClauses[] = "(name LIKE ? OR student_id LIKE ? OR email LIKE ?)";
+    $whereClauses[] = "(name LIKE ? OR student_id LIKE ? OR email LIKE ? OR mobile LIKE ?)";
     $like = "%$search%";
-    $params[] = $like; $params[] = $like; $params[] = $like;
-    $types .= "sss";
+    $params[] = $like; $params[] = $like; $params[] = $like; $params[] = $like;
+    $types .= "ssss";
 }
 
 if ($course !== '') {
     $whereClauses[] = "course = ?";
     $params[] = $course;
     $types .= "s";
+}
+
+if ($semester !== null && $semester > 0) {
+    $whereClauses[] = "semester = ?";
+    $params[] = $semester;
+    $types .= "i";
+}
+
+if ($year !== null && $year > 0) {
+    $whereClauses[] = "year = ?";
+    $params[] = $year;
+    $types .= "i";
 }
 
 if ($status !== 'all' && in_array($status, ['active', 'inactive'])) {
@@ -41,7 +55,7 @@ if ($status !== 'all' && in_array($status, ['active', 'inactive'])) {
 }
 
 $whereSql = implode(" AND ", $whereClauses);
-$sql = "SELECT id, student_id, name, email, mobile, course, year, department, gender, cgpa, status, created_at
+$sql = "SELECT id, student_id, name, email, mobile, course, semester, year, department, admission_date, gender, cgpa, status, created_at
         FROM students
         WHERE $whereSql
         ORDER BY id ASC";
@@ -73,25 +87,34 @@ fputcsv($output, [
     'Email Address',
     'Mobile Number',
     'Course',
-    'Year of Study',
     'Department',
+    'Semester',
+    'Academic Year',
+    'Admission Date',
     'Gender',
     'CGPA',
     'Status',
     'Registration Date'
 ]);
 
-// Write Rows
+// Write Rows (with formula injection sanitization)
 while ($row = $result->fetch_assoc()) {
+    $cleanName = $row['name'];
+    if (preg_match('/^[=\+\-@]/', $cleanName)) {
+        $cleanName = "'" . $cleanName;
+    }
+
     fputcsv($output, [
         $row['id'],
         $row['student_id'],
-        $row['name'],
+        $cleanName,
         $row['email'],
         $row['mobile'],
         $row['course'],
-        'Year ' . $row['year'],
         $row['department'],
+        'Semester ' . ($row['semester'] ?? 1),
+        'Year ' . $row['year'],
+        $row['admission_date'] ?? 'N/A',
         $row['gender'],
         number_format((float)$row['cgpa'], 2),
         ucfirst($row['status']),

@@ -56,6 +56,23 @@ function require_student() {
         header("HTTP/1.1 403 Forbidden");
         exit("Access restricted to an active student account.");
     }
+
+    // Intercept if temporary password must be changed
+    if (!empty($_SESSION['must_change_password'])) {
+        $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
+        if ($currentScript !== 'change_password.php' && $currentScript !== 'logout.php') {
+            if (is_api_request()) {
+                json_response(403, false, "Password change required before accessing portal modules.", ['must_change_password' => true]);
+            }
+            $target = (strpos($_SERVER['PHP_SELF'] ?? '', '/php/students/') !== false)
+                ? 'change_password.php'
+                : ((strpos($_SERVER['PHP_SELF'] ?? '', '/php/') !== false)
+                    ? '../students/change_password.php'
+                    : 'php/students/change_password.php');
+            header("Location: " . $target);
+            exit;
+        }
+    }
 }
 
 function verified_database_role($role) {

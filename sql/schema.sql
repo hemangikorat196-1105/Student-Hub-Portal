@@ -14,6 +14,9 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `audit_logs`;
 DROP TABLE IF EXISTS `registrations`;
 DROP TABLE IF EXISTS `events`;
+DROP TABLE IF EXISTS `notices`;
+DROP TABLE IF EXISTS `courses`;
+DROP TABLE IF EXISTS `faculty`;
 DROP TABLE IF EXISTS `students`;
 DROP TABLE IF EXISTS `users`;
 SET FOREIGN_KEY_CHECKS = 1;
@@ -28,7 +31,9 @@ CREATE TABLE `users` (
   `password` VARCHAR(255) NOT NULL,
   `role` ENUM('admin', 'student') NOT NULL DEFAULT 'student',
   `status` ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
+  `must_change_password` TINYINT(1) NOT NULL DEFAULT 0,
   `remember_token` VARCHAR(255) NULL,
+  `created_by` INT NULL,
   `last_login` DATETIME NULL,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -48,7 +53,9 @@ CREATE TABLE `students` (
   `mobile` VARCHAR(15) NOT NULL,
   `course` VARCHAR(100) NOT NULL,
   `year` INT NOT NULL,
+  `semester` INT NOT NULL DEFAULT 3,
   `department` VARCHAR(100) NOT NULL DEFAULT 'Computer Science & Engineering',
+  `admission_date` DATE NULL,
   `gender` ENUM('Male', 'Female', 'Other') NOT NULL DEFAULT 'Other',
   `cgpa` DECIMAL(3,2) NOT NULL DEFAULT 8.00,
   `country` VARCHAR(50) NOT NULL DEFAULT 'India',
@@ -61,11 +68,67 @@ CREATE TABLE `students` (
     REFERENCES `users`(`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   INDEX `idx_students_course` (`course`),
   INDEX `idx_students_year` (`year`),
+  INDEX `idx_students_semester` (`semester`),
   INDEX `idx_students_status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------------------------------------------------------
--- 3. EVENTS TABLE (Campus Events with Poster Uploads)
+-- 3. FACULTY TABLE (Teaching Staff and Department Mentors)
+-- ----------------------------------------------------------------------------
+CREATE TABLE `faculty` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `faculty_id` VARCHAR(20) NOT NULL UNIQUE,
+  `name` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(120) NOT NULL UNIQUE,
+  `mobile` VARCHAR(15) NOT NULL,
+  `department` VARCHAR(100) NOT NULL,
+  `designation` VARCHAR(100) NOT NULL,
+  `qualification` VARCHAR(100) NOT NULL,
+  `status` ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX `idx_faculty_dept` (`department`),
+  INDEX `idx_faculty_status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------------------------------------------------------
+-- 4. COURSES TABLE (Academic Degrees and Programs)
+-- ----------------------------------------------------------------------------
+CREATE TABLE `courses` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `course_code` VARCHAR(20) NOT NULL UNIQUE,
+  `course_name` VARCHAR(120) NOT NULL,
+  `department` VARCHAR(100) NOT NULL,
+  `duration_years` INT NOT NULL DEFAULT 4,
+  `semesters` INT NOT NULL DEFAULT 8,
+  `credits` INT NOT NULL DEFAULT 160,
+  `status` ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX `idx_courses_code` (`course_code`),
+  INDEX `idx_courses_dept` (`department`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------------------------------------------------------
+-- 5. NOTICES TABLE (Campus Announcements and Circulars)
+-- ----------------------------------------------------------------------------
+CREATE TABLE `notices` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `title` VARCHAR(255) NOT NULL,
+  `content` TEXT NOT NULL,
+  `category` VARCHAR(50) NOT NULL DEFAULT 'Academic',
+  `publish_date` DATE NOT NULL,
+  `importance` ENUM('normal', 'urgent', 'high') NOT NULL DEFAULT 'normal',
+  `status` ENUM('published', 'archived', 'draft') NOT NULL DEFAULT 'published',
+  `created_by` INT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT `fk_notices_user` FOREIGN KEY (`created_by`)
+    REFERENCES `users`(`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  INDEX `idx_notices_date` (`publish_date`),
+  INDEX `idx_notices_category` (`category`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------------------------------------------------------
+-- 6. EVENTS TABLE (Campus Events with Poster Uploads)
 -- ----------------------------------------------------------------------------
 CREATE TABLE `events` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -90,7 +153,7 @@ CREATE TABLE `events` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------------------------------------------------------
--- 4. REGISTRATIONS TABLE (Student-Event Many-to-Many Relationship)
+-- 7. REGISTRATIONS TABLE (Student-Event Many-to-Many Relationship)
 -- ----------------------------------------------------------------------------
 CREATE TABLE `registrations` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -109,7 +172,7 @@ CREATE TABLE `registrations` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------------------------------------------------------
--- 5. AUDIT_LOGS TABLE (Security Traceability & Admin Audit Trail)
+-- 8. AUDIT_LOGS TABLE (Security Traceability & Admin Audit Trail)
 -- ----------------------------------------------------------------------------
 CREATE TABLE `audit_logs` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,

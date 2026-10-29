@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Student Hub Portal student registration form with HTML5 and JavaScript validation.">
-    <title>Student Hub Portal - Student Registration</title>
+    <meta http-equiv="refresh" content="4; url=Login.html">
+    <title>Student Registration - Student Hub Portal</title>
     <link rel="stylesheet" href="Style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script src="script.js" defer></script>
@@ -21,217 +21,35 @@
         </div>
     </div>
 
-    <button id="themeToggle" class="theme-btn" type="button" aria-label="Switch to dark mode">
+    <button id="themeToggle" class="theme-btn" type="button" aria-label="Change Theme">
         <i class="fa-solid fa-moon" aria-hidden="true"></i>
         <span>Dark Mode</span>
     </button>
 </header>
 
-<main id="main-content">
-    <section class="registration-intro" aria-labelledby="registration-title">
-        <div>
-            <span class="exercise-badge">Form Validation</span>
-            <h2 id="registration-title">
-                <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
-                Student Registration
-            </h2>
-            <p>Create your Student Hub Portal account. All fields marked <span class="required-star">*</span> are required.</p>
+<main id="main-content" style="display:flex; justify-content:center; align-items:center; min-height:60vh; padding:20px;">
+    <div class="card" style="max-width:540px; width:100%; padding:35px; text-align:center; background:var(--card-bg, #ffffff); border-radius:14px; box-shadow:var(--shadow); border:1px solid var(--border-color);">
+        <div style="width:72px; height:72px; border-radius:50%; background:var(--primary-light, #eff6ff); color:var(--primary-color, #2563eb); display:grid; place-items:center; font-size:2rem; margin:0 auto 20px;">
+            <i class="fa-solid fa-user-lock"></i>
         </div>
-
-        <div class="validation-features" aria-label="Form features">
-            <span><i class="fa-solid fa-check" aria-hidden="true"></i> HTML5 Input Types</span>
-            <span><i class="fa-solid fa-check" aria-hidden="true"></i> Regex Validation</span>
-            <span><i class="fa-solid fa-check" aria-hidden="true"></i> Password Strength</span>
-            <span><i class="fa-solid fa-universal-access" aria-hidden="true"></i> Accessible</span>
-        </div>
-    </section>
-
-    <form action="php/auth/register.php" method="post" id="registrationForm" class="registration-form" novalidate>
-        <input type="hidden" name="csrf_token" value="">
-        <div id="registrationSuccess" class="success-banner" role="status" aria-live="polite"></div>
-
-        <fieldset class="form-section">
-            <legend><i class="fa-solid fa-id-card" aria-hidden="true"></i> Personal Information</legend>
-
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="regFullName">Full Name <span class="required-star">*</span></label>
-                    <input type="text" id="regFullName" name="fullName"
-                           placeholder="e.g. Hemangi Korat"
-                           required minlength="2" maxlength="50"
-                           autocomplete="name" inputmode="text"
-                           pattern="[A-Za-z ]{2,50}"
-                           aria-describedby="nameHint nameError" aria-invalid="false">
-                    <small id="nameHint" class="field-hint">2–50 letters and spaces only.</small>
-                    <span class="error-msg" id="nameError" role="alert" aria-live="polite"></span>
-                </div>
-
-                <div class="form-group">
-                    <label for="regEmail">Email Address <span class="required-star">*</span></label>
-                    <input type="email" id="regEmail" name="email"
-                           placeholder="e.g. student@example.com"
-                           required maxlength="100"
-                           autocomplete="email" inputmode="email"
-                           aria-describedby="emailError" aria-invalid="false">
-                    <small class="field-hint">Use a valid email address.</small>
-                    <span class="error-msg" id="emailError" role="alert" aria-live="polite"></span>
-                </div>
-
-                <div class="form-group">
-                    <label for="regMobile">Mobile Number <span class="required-star">*</span></label>
-                    <input type="tel" id="regMobile" name="mobile"
-                           placeholder="e.g. 9876543210"
-                           required minlength="10" maxlength="10"
-                           autocomplete="tel" inputmode="numeric"
-                           pattern="[6-9][0-9]{9}"
-                           aria-describedby="mobileHint mobileError" aria-invalid="false">
-                    <small id="mobileHint" class="field-hint">10 digits, starting with 6, 7, 8 or 9.</small>
-                    <span class="error-msg" id="mobileError" role="alert" aria-live="polite"></span>
-                </div>
-
-                <fieldset class="form-group gender-fieldset" aria-describedby="genderError">
-                    <legend>Gender <span class="required-star">*</span></legend>
-                    <div class="radio-group-container" role="radiogroup" aria-label="Gender">
-                        <label class="radio-item">
-                            <input type="radio" name="gender" value="Male" id="genderMale">
-                            <span>Male</span>
-                        </label>
-                        <label class="radio-item">
-                            <input type="radio" name="gender" value="Female" id="genderFemale">
-                            <span>Female</span>
-                        </label>
-                        <label class="radio-item">
-                            <input type="radio" name="gender" value="Other" id="genderOther">
-                            <span>Other</span>
-                        </label>
-                    </div>
-                    <span class="error-msg" id="genderError" role="alert" aria-live="polite"></span>
-                </fieldset>
-            </div>
-        </fieldset>
-
-        <fieldset class="form-section">
-            <legend><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Academic Information</legend>
-
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="regCourse">Course / Program <span class="required-star">*</span></label>
-                    <select id="regCourse" name="course" required aria-describedby="courseError" aria-invalid="false">
-                        <option value="">-- Select Course --</option>
-                        <option value="B.Tech Computer Science">B.Tech Computer Science</option>
-                        <option value="B.Tech Information Technology">B.Tech Information Technology</option>
-                        <option value="B.Tech Artificial Intelligence">B.Tech Artificial Intelligence</option>
-                        <option value="BCA">BCA (Bachelor of Computer Applications)</option>
-                        <option value="MCA">MCA (Master of Computer Applications)</option>
-                    </select>
-                    <span class="error-msg" id="courseError" role="alert" aria-live="polite"></span>
-                </div>
-
-                <div class="form-group">
-                    <label for="regYear">Year of Study <span class="required-star">*</span></label>
-                    <select id="regYear" name="year" required aria-describedby="yearError" aria-invalid="false">
-                        <option value="">-- Select Year --</option>
-                        <option value="First Year">First Year (Semester 1 & 2)</option>
-                        <option value="Second Year">Second Year (Semester 3 & 4)</option>
-                        <option value="Third Year">Third Year (Semester 5 & 6)</option>
-                        <option value="Fourth Year">Fourth Year (Semester 7 & 8)</option>
-                    </select>
-                    <span class="error-msg" id="yearError" role="alert" aria-live="polite"></span>
-                </div>
-            </div>
-        </fieldset>
-
-        <fieldset class="form-section">
-            <legend><i class="fa-solid fa-lock" aria-hidden="true"></i> Account Security</legend>
-
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="regPassword">Password <span class="required-star">*</span></label>
-                    <input type="password" id="regPassword" name="password"
-                           placeholder="Minimum 8 characters"
-                           required minlength="8" maxlength="64"
-                           autocomplete="new-password"
-                           pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&#^_-~]).{8,64}"
-                           aria-describedby="passwordHint passwordStrengthBox passwordError"
-                           aria-invalid="false">
-                    <small id="passwordHint" class="field-hint">Use uppercase, lowercase, number and special character.</small>
-
-                    <div class="password-strength-container" id="passwordStrengthBox" style="display:none;">
-                        <div class="strength-label-row">
-                            <span>Password strength</span>
-                            <strong id="strengthText">Strength: None</strong>
-                        </div>
-                        <div class="strength-bar-track" role="progressbar" aria-label="Password strength" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0">
-                            <div class="strength-bar-fill" id="strengthBar"></div>
-                        </div>
-                    </div>
-
-                    <span class="error-msg" id="passwordError" role="alert" aria-live="polite"></span>
-                </div>
-
-                <div class="form-group">
-                    <label for="regConfirmPassword">Confirm Password <span class="required-star">*</span></label>
-                    <input type="password" id="regConfirmPassword" name="confirmPassword"
-                           placeholder="Re-enter your password"
-                           required minlength="8" maxlength="64"
-                           autocomplete="new-password"
-                           aria-describedby="confirmPasswordError" aria-invalid="false">
-                    <small class="field-hint">Must exactly match your password.</small>
-                    <span class="error-msg" id="confirmPasswordError" role="alert" aria-live="polite"></span>
-                </div>
-            </div>
-        </fieldset>
-
-        <fieldset class="form-section verification-section">
-            <legend><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Verification & Terms</legend>
-
-            <div class="form-group">
-                <label for="regCaptcha">Security Verification (CAPTCHA) <span class="required-star">*</span></label>
-                <div class="captcha-box-wrapper">
-                    <div class="captcha-header-row">
-                        <canvas id="captchaCanvas" width="160" height="42" title="Click to refresh CAPTCHA" aria-label="CAPTCHA image"></canvas>
-                        <button type="button" id="refreshCaptchaBtn" class="captcha-refresh-btn" aria-label="Regenerate CAPTCHA Code" title="Refresh CAPTCHA">
-                            <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                    <input type="text" id="regCaptcha" name="captcha"
-                           placeholder="Enter characters from the image"
-                           required maxlength="6" autocomplete="off"
-                           inputmode="text" spellcheck="false"
-                           aria-describedby="captchaError" aria-invalid="false">
-                </div>
-                <span class="error-msg" id="captchaError" role="alert" aria-live="polite"></span>
-            </div>
-
-            <div class="form-group checkbox-group">
-                <label class="checkbox-item terms-item">
-                    <input type="checkbox" id="regTerms" name="terms" required
-                           aria-describedby="termsError" aria-invalid="false">
-                    <span>I agree to the <a href="#terms" id="termsLink">Terms and Conditions</a> & Campus Policies. <span class="required-star">*</span></span>
-                </label>
-                <span class="error-msg" id="termsError" role="alert" aria-live="polite"></span>
-            </div>
-        </fieldset>
-
-        <div class="form-actions">
-            <button type="submit" id="regSubmitBtn">
-                <i class="fa-solid fa-user-plus" aria-hidden="true"></i> Register Now
-            </button>
-            <button type="reset" id="regResetBtn" class="secondary-action">
-                <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Clear Form
-            </button>
-        </div>
-
-        <p class="keyboard-note">
-            <i class="fa-solid fa-keyboard" aria-hidden="true"></i>
-            Keyboard friendly: use Tab to move between fields and Enter to submit.
+        <h2 style="font-size:1.5rem; color:var(--text-color); margin-bottom:12px;">Public Student Registration Closed</h2>
+        <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.6; margin-bottom:24px;">
+            In accordance with campus security and academic policy, student accounts are created and provisioned exclusively by the <strong>Academic Administration office</strong> upon admission.
         </p>
-
-        <div class="form-links">
-            <a href="Login.html"><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i> Already have an account? Login here</a>
+        <div style="background:var(--primary-light, #eff6ff); border:1px solid var(--border-color); border-radius:8px; padding:14px; margin-bottom:24px; font-size:0.88rem; color:var(--text-color); text-align:left;">
+            <div style="font-weight:600; margin-bottom:6px;"><i class="fa-solid fa-circle-info" style="color:var(--primary-color);"></i> Already enrolled?</div>
+            <div>Use your Student ID (e.g. <code>25CS035</code>) and the temporary password issued by your department to sign in. You will be prompted to set a permanent password upon first login.</div>
         </div>
-    </form>
-    
+        <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+            <a href="Login.html" class="small-btn" style="text-decoration:none; padding:10px 22px; font-size:0.95rem;">
+                <i class="fa-solid fa-right-to-bracket"></i> Go to Student Login
+            </a>
+            <a href="admin-login.html" class="small-btn secondary-action" style="text-decoration:none; padding:10px 20px; font-size:0.95rem; background:transparent; border:1px solid var(--border-color); color:var(--text-color);">
+                <i class="fa-solid fa-user-shield"></i> Admin Login
+            </a>
+        </div>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-top:20px;">Redirecting to Student Login in 4 seconds...</p>
+    </div>
 </main>
 
 <footer>
@@ -245,5 +63,6 @@
         © 2026 StudentHub Portal | Developed By Hemangi Korat | All Rights Reserved.
     </p>
 </footer>
+
 </body>
 </html>

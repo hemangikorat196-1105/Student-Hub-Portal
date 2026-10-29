@@ -11,7 +11,7 @@ require_student();
 $db = get_db_connection();
 $user = current_user();
 $stmt = $db->prepare(
-    "SELECT id, student_id, name, email, mobile, course, year, department, cgpa, city, status
+    "SELECT id, student_id, name, email, mobile, course, semester, year, department, admission_date, cgpa, city, status
      FROM students WHERE user_id = ? AND status = 'active' LIMIT 1"
 );
 $stmt->bind_param("i", $user['id']);
@@ -438,6 +438,7 @@ $stmt->close();
         <article class="dashboard-card">
             <div class="card-header-bar">
                 <h2><i class="fa-solid fa-id-card"></i> Student Profile Information</h2>
+                <a href="../../profile.php" class="btn-register-mini"><i class="fa-solid fa-user-pen"></i> Edit Profile</a>
             </div>
             <table class="profile-table">
                 <tbody>
@@ -463,7 +464,15 @@ $stmt->close();
                     </tr>
                     <tr>
                         <th><i class="fa-solid fa-building-columns"></i> Department</th>
-                        <td><?= htmlspecialchars($student['department'], ENT_QUOTES, 'UTF-8') ?> (Year <?= (int)$student['year'] ?>)</td>
+                        <td><?= htmlspecialchars($student['department'], ENT_QUOTES, 'UTF-8') ?></td>
+                    </tr>
+                    <tr>
+                        <th><i class="fa-solid fa-calendar-check"></i> Semester / Year</th>
+                        <td>Semester <?= (int)($student['semester'] ?? 1) ?> (Year <?= (int)$student['year'] ?>)</td>
+                    </tr>
+                    <tr>
+                        <th><i class="fa-solid fa-calendar-days"></i> Admission Date</th>
+                        <td><?= htmlspecialchars($student['admission_date'] ?? 'N/A', ENT_QUOTES, 'UTF-8') ?></td>
                     </tr>
                     <tr>
                         <th><i class="fa-solid fa-chart-line"></i> Cumulative CGPA</th>

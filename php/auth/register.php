@@ -13,6 +13,16 @@ require_once __DIR__ . '/../includes/response.php';
 
 init_session();
 
+// Enforce admin privilege check - Public self-registration is completely disabled
+if (!is_admin()) {
+    http_response_code(403);
+    if (is_api_request()) {
+        json_response(403, false, "Public student registration is disabled. Student accounts can only be provisioned by an authenticated administrator.");
+    }
+    render_registration_result(false, "Public student self-registration has been disabled by institutional policy. Student accounts can only be provisioned by an authenticated administrator.");
+    exit;
+}
+
 // Only accept POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     if (is_api_request()) {
@@ -23,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         http_response_code(403);
         render_registration_result(false, "The form expired or could not be verified. Reload the page and try again.");
     }
-    header("Location: ../../Register.html");
+    header("Location: ../students/create.php");
     exit;
 }
 
@@ -289,7 +299,7 @@ function render_registration_result($success, $message, $details = []) {
                     <a href="../../Login.html" class="btn btn-primary"><i class="fa-solid fa-right-to-bracket"></i> Proceed to Login</a>
                     <a href="../../home.html" class="btn btn-secondary">Student Home</a>
                 <?php else: ?>
-                    <a href="../../Register.html" class="btn btn-primary"><i class="fa-solid fa-arrow-left"></i> Return to Registration Form</a>
+                    <a href="../../Login.html" class="btn btn-primary"><i class="fa-solid fa-arrow-left"></i> Return to Login</a>
                 <?php endif; ?>
             </div>
         </main>

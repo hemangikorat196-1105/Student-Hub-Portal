@@ -46,7 +46,7 @@ try {
 
     // Query user by username or email
     $stmt = $db->prepare("
-        SELECT u.id, u.username, u.email, u.password, u.role, u.status, s.student_id, s.name
+        SELECT u.id, u.username, u.email, u.password, u.role, u.status, u.must_change_password, s.student_id, s.name
         FROM users u
         LEFT JOIN students s ON s.user_id = u.id
         WHERE u.username = ? OR u.email = ? OR s.student_id = ?
@@ -89,12 +89,18 @@ try {
 
     // Login successful: Regenerate session ID and store user session data
     login_user([
-        'id'         => $user['id'],
-        'username'   => $user['username'],
-        'email'      => $user['email'],
-        'role'       => $user['role'],
-        'student_id' => $user['student_id'] ?? $user['username']
+        'id'                   => $user['id'],
+        'username'             => $user['username'],
+        'email'                => $user['email'],
+        'role'                 => $user['role'],
+        'student_id'           => $user['student_id'] ?? $user['username'],
+        'must_change_password' => (int)($user['must_change_password'] ?? 0)
     ]);
+
+    // If student has temporary password, force change on first login
+    if ($user['role'] === 'student' && !empty($user['must_change_password'])) {
+        $redirectUrl = '../students/change_password.php';
+    }
 
     // Update last_login timestamp
     $stmtUpdate = $db->prepare("UPDATE users SET last_login = NOW() WHERE id = ?");
@@ -109,10 +115,11 @@ try {
     if (is_api_request()) {
         json_response(200, true, "Login successful", [
             'user'     => [
-                'id'       => $user['id'],
-                'username' => $user['username'],
-                'name'     => $user['name'] ?? $user['username'],
-                'role'     => $user['role']
+                'id'                   => $user['id'],
+                'username'             => $user['username'],
+                'name'                 => $user['name'] ?? $user['username'],
+                'role'                 => $user['role'],
+                'must_change_password' => (int)($user['must_change_password'] ?? 0)
             ],
             'redirect' => $redirectUrl
         ]);

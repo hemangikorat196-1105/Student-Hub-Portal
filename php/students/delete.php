@@ -37,7 +37,7 @@ try {
     $db = get_db_connection();
 
     // Verify record exists
-    $stmtChk = $db->prepare("SELECT id, student_id, name, status FROM students WHERE id = ? LIMIT 1");
+    $stmtChk = $db->prepare("SELECT id, user_id, student_id, name, status FROM students WHERE id = ? LIMIT 1");
     $stmtChk->bind_param("i", $id);
     $stmtChk->execute();
     $student = $stmtChk->get_result()->fetch_assoc();
@@ -59,6 +59,13 @@ try {
         $stmt->execute();
         $stmt->close();
 
+        if (!empty($student['user_id'])) {
+            $stmtU = $db->prepare("UPDATE users SET status = 'active' WHERE id = ?");
+            $stmtU->bind_param("i", $student['user_id']);
+            $stmtU->execute();
+            $stmtU->close();
+        }
+
         log_audit_event("RESTORE_STUDENT", "Restored student {$student['student_id']} ({$student['name']}) to active");
         $_SESSION['flash_success'] = "Student {$student['student_id']} restored to Active status.";
     } elseif ($action === 'hard') {
@@ -67,6 +74,13 @@ try {
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $stmt->close();
+
+        if (!empty($student['user_id'])) {
+            $stmtU = $db->prepare("DELETE FROM users WHERE id = ?");
+            $stmtU->bind_param("i", $student['user_id']);
+            $stmtU->execute();
+            $stmtU->close();
+        }
 
         log_audit_event("HARD_DELETE_STUDENT", "Permanently removed student {$student['student_id']}");
         $_SESSION['flash_success'] = "Student {$student['student_id']} permanently deleted.";
@@ -77,8 +91,15 @@ try {
         $stmt->execute();
         $stmt->close();
 
+        if (!empty($student['user_id'])) {
+            $stmtU = $db->prepare("UPDATE users SET status = 'inactive' WHERE id = ?");
+            $stmtU->bind_param("i", $student['user_id']);
+            $stmtU->execute();
+            $stmtU->close();
+        }
+
         log_audit_event("SOFT_DELETE_STUDENT", "Soft-deleted student {$student['student_id']} ({$student['name']})");
-        $_SESSION['flash_success'] = "Student {$student['student_id']} has been soft-deleted (status set to Inactive).";
+        $_SESSION['flash_success'] = "Student {$student['student_id']} has been deactivated (status set to Inactive).";
     }
 
     if (is_api_request()) {

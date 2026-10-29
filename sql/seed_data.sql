@@ -114,3 +114,40 @@ INSERT INTO `audit_logs` (`id`, `user_id`, `action`, `details`, `ip_address`, `u
 (13, NULL, 'UNAUTHORIZED_ACCESS', 'Guest user attempted to access restricted admin dashboard', '192.168.1.45', 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_5)', '2026-10-20 14:22:00'),
 (14, 2, 'LOGOUT', 'Student 25CS035 logged out securely', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)', '2026-10-26 18:00:00'),
 (15, 1, 'LOGIN', 'Admin authenticated with session ID regeneration', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)', '2026-10-27 09:30:00');
+
+-- ----------------------------------------------------------------------------
+-- 6. FACULTY (Sample Records)
+-- ----------------------------------------------------------------------------
+INSERT INTO `faculty` (`id`, `faculty_id`, `name`, `email`, `mobile`, `department`, `designation`, `qualification`, `status`) VALUES
+(1, 'FAC001', 'Dr. Rajesh Sharma', 'rajesh.sharma@college.edu', '9825112345', 'Computer Science & Engineering', 'Professor & HOD', 'Ph.D. in Computer Science', 'active'),
+(2, 'FAC002', 'Prof. Sunita Patel', 'sunita.patel@college.edu', '9825223456', 'Computer Science & Engineering', 'Associate Professor', 'M.Tech CSE, Ph.D. Pursuing', 'active'),
+(3, 'FAC003', 'Dr. Amit Trivedi', 'amit.trivedi@college.edu', '9825334567', 'Information Technology', 'Associate Professor & HOD', 'Ph.D. in Information Systems', 'active'),
+(4, 'FAC004', 'Prof. Neha Gupta', 'neha.gupta@college.edu', '9825445678', 'Information Technology', 'Assistant Professor', 'M.E. in IT', 'active'),
+(5, 'FAC005', 'Dr. Vikram Joshi', 'vikram.joshi@college.edu', '9825556789', 'Artificial Intelligence & Data Science', 'Professor & Dean', 'Ph.D. in AI & Robotics', 'active'),
+(6, 'FAC006', 'Prof. Anjali Desai', 'anjali.desai@college.edu', '9825667890', 'Artificial Intelligence & Data Science', 'Assistant Professor', 'M.Tech in Data Science', 'active'),
+(7, 'FAC007', 'Dr. Sanjay Mehta', 'sanjay.mehta@college.edu', '9825778901', 'Electronics & Communication', 'Professor & HOD', 'Ph.D. in VLSI Systems', 'active'),
+(8, 'FAC008', 'Prof. Pooja Shah', 'pooja.shah@college.edu', '9825889012', 'Computer Applications', 'Assistant Professor', 'MCA, M.Phil', 'active');
+
+-- ----------------------------------------------------------------------------
+-- 7. COURSES (Sample Records)
+-- ----------------------------------------------------------------------------
+INSERT INTO `courses` (`id`, `course_code`, `course_name`, `department`, `duration_years`, `semesters`, `credits`, `status`) VALUES
+(1, 'CS101', 'B.Tech Computer Science & Engineering', 'Computer Science & Engineering', 4, 8, 160, 'active'),
+(2, 'IT101', 'B.Tech Information Technology', 'Information Technology', 4, 8, 160, 'active'),
+(3, 'AI101', 'B.Tech Artificial Intelligence & Data Science', 'Artificial Intelligence & Data Science', 4, 8, 160, 'active'),
+(4, 'EC101', 'B.Tech Electronics & Communication', 'Electronics & Communication', 4, 8, 160, 'active'),
+(5, 'BCA101', 'Bachelor of Computer Applications (BCA)', 'Computer Applications', 3, 6, 120, 'active'),
+(6, 'MCA101', 'Master of Computer Applications (MCA)', 'Computer Applications', 2, 4, 80, 'active'),
+(7, 'MTCS101', 'M.Tech Computer Science & Engineering', 'Computer Science & Engineering', 2, 4, 76, 'active');
+
+-- ----------------------------------------------------------------------------
+-- 8. NOTICES (Sample Records)
+-- ----------------------------------------------------------------------------
+INSERT INTO `notices` (`id`, `title`, `content`, `category`, `publish_date`, `importance`, `status`, `created_by`) VALUES
+(1, 'Mid-Semester Examination Schedule Announced', 'The Mid-Semester theory examinations for Semesters 3, 5, and 7 commence on October 15, 2026. Detailed room seating and schedules have been posted to the notice board.', 'Examination', '2026-10-01', 'high', 'published', 1),
+(2, 'National Level Hackathon 2026 Registrations Open', 'InnovateIndia 2026 36-hour hackathon registrations are now open. Teams of up to 4 students from CSE, IT, and AI can register on or before October 20, 2026.', 'Event', '2026-10-02', 'normal', 'published', 1),
+(3, 'College Holiday on Account of Gandhi Jayanti', 'The College and campus academic offices will remain closed on October 2, 2026 in observance of Gandhi Jayanti.', 'Holiday', '2026-09-30', 'normal', 'published', 1),
+(4, 'Library Book Return and Clearance Notice', 'All semester 8 and outgoing students are requested to return all issued books to the Central Library and obtain digital No-Dues clearance before the deadline.', 'Academic', '2026-10-05', 'urgent', 'published', 1),
+(5, 'Workshop on Generative AI and Large Language Models', 'The Department of CSE is organizing a 2-day hands-on workshop on Generative AI, Prompt Engineering, and Agentic Systems on October 28-29, 2026 in Lab 3.', 'Workshop', '2026-10-10', 'normal', 'published', 1),
+(6, 'Annual Campus Sports Meet 2026 Schedule', 'Inter-departmental indoor and outdoor sports competitions will begin November 10, 2026. Register your departmental teams at the Sports Complex office.', 'Sports', '2026-10-12', 'normal', 'published', 1);
+
