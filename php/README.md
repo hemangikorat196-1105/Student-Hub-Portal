@@ -13,7 +13,7 @@ This directory contains the modular server-side architecture for the Student Hub
 | `includes/validation.php` | Server-side sanitization and validation matching frontend JavaScript regex rules. | 5, 7, 9, 11, 12, 15 |
 | `includes/response.php` | Standardized JSON API responses with HTTP status codes and persistent security audit logging (`audit_logs`). | 9, 11, 12, 13, 14, 15 |
 | `auth/register.php` | Secure registration handler with duplicate check, `password_hash()` (Bcrypt), user/student creation, and CSV persistence. | 7, 9, 14, 15 |
-| `auth/login.php` | Authentication handler using `password_verify()`, session ID regeneration, role-based routing (Admin vs Student), and remember-me token. | 10, 14, 15 |
+| `auth/login.php` | Student-only authentication using `password_verify()`; `auth/admin_login.php` fixes the required role to administrator. | 10, 14, 15 |
 | `auth/logout.php` | Secure session destruction, cookie clearance, and audit logging. | 10, 14, 15 |
 | `auth/check_session.php` | Session status and timeout monitoring endpoint. | 10, 14, 15 |
 | `auth/forgot_password.php` | Secure password reset request handler. | 5, 10, 15 |

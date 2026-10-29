@@ -29,6 +29,7 @@
 <main id="main-content">
     <form action="php/auth/login.php" method="POST" id="loginForm" novalidate>
         <h2><i class="fa-solid fa-right-to-bracket"></i> Student Login</h2>
+        <input type="hidden" name="csrf_token" value="">
 
         <!-- In-Page Success / Status Message Banner -->
         <div id="loginStatus" class="success-banner" role="status" aria-live="polite"></div>
@@ -53,23 +54,6 @@
             <span class="error-msg" id="loginPasswordError" role="alert" aria-live="polite"></span>
         </div>
 
-        <div class="form-group">
-            <label for="loginRole">Role <span class="required-star">*</span></label>
-            <select id="loginRole" name="role" required aria-describedby="loginRoleError" aria-invalid="false">
-                <option value="student">Student</option>
-                <option value="admin">Administrator</option>
-                <option value="faculty">Faculty</option>
-            </select>
-            <span class="error-msg" id="loginRoleError" role="alert" aria-live="polite"></span>
-        </div>
-
-        <div class="form-group checkbox-group" style="margin: 12px 0;">
-            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; cursor: pointer;">
-                <input type="checkbox" id="loginRemember" name="remember" value="1">
-                <span>Remember me on this browser (30 days token)</span>
-            </label>
-        </div>
-
         <div class="form-actions">
             <input type="submit" value="Login" id="loginSubmitBtn">
             <input type="reset" value="Clear Form" id="loginResetBtn">
@@ -79,6 +63,7 @@
             <a href="forgotpassword.html"><i class="fa-solid fa-key"></i> Forgot Password?</a>
             <a href="forgotusername.html"><i class="fa-solid fa-user-tag"></i> Forgot Username?</a>
             <a href="Register.html"><i class="fa-solid fa-user-plus"></i> Don't have an account? Register Now</a>
+            <a href="admin-login.html"><i class="fa-solid fa-user-shield"></i> Administrator login</a>
         </div>
     </form>
 </main>

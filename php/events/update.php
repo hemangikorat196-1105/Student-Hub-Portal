@@ -43,6 +43,11 @@ if (!$event) {
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+        http_response_code(403);
+        $errors['general'] = "The form expired or could not be verified. Reload and try again.";
+    }
+
     $title       = trim($_POST['title'] ?? '');
     $category    = trim($_POST['category'] ?? 'Technical');
     $eventDate   = trim($_POST['event_date'] ?? '');

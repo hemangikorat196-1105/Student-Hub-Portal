@@ -12,6 +12,9 @@ defined('SESSION_TIMEOUT_SECONDS') or define('SESSION_TIMEOUT_SECONDS', 900); //
  */
 function init_session() {
     if (session_status() === PHP_SESSION_NONE) {
+        ini_set('session.use_strict_mode', '1');
+        ini_set('session.use_only_cookies', '1');
+        ini_set('session.use_trans_sid', '0');
         // Secure cookie parameters
         $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
         session_set_cookie_params([
@@ -112,6 +115,7 @@ function login_user($user) {
     $_SESSION['email']         = $user['email'] ?? '';
     $_SESSION['role']          = $user['role'] ?? 'student';
     $_SESSION['student_id']    = $user['student_id'] ?? $user['username'];
+    $_SESSION['auth_role']     = $user['role'] ?? '';
     $_SESSION['last_activity'] = time();
     $_SESSION['login_time']    = time();
 }

@@ -6,6 +6,7 @@
 // ============================================================================
 
 require_once __DIR__ . '/php/config/db.php';
+require_once __DIR__ . '/php/includes/response.php';
 
 $title = "Database Connection Test";
 $status = "error";
@@ -41,6 +42,21 @@ try {
 } catch (Exception $e) {
     $status = "error";
     $message = "Connection Failed: " . $e->getMessage();
+}
+
+if (is_api_request() || (isset($_GET['format']) && $_GET['format'] === 'json')) {
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode([
+        'status' => $status,
+        'message' => $message,
+        'server_info' => [
+            'php_version' => PHP_VERSION,
+            'db_host' => DB_HOST,
+            'db_name' => DB_NAME
+        ],
+        'tables' => $counts ?? []
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    exit;
 }
 ?>
 <!DOCTYPE html>

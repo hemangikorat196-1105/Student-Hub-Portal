@@ -8,6 +8,7 @@ require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/response.php';
+require_once __DIR__ . '/../includes/csrf.php';
 
 init_session();
 require_admin();
@@ -16,6 +17,10 @@ $db = get_db_connection();
 
 // Status Toggle Action
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'toggle_status') {
+    if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+        http_response_code(403);
+        exit('The request could not be verified. Reload the page and try again.');
+    }
     $userId = (int)($_POST['user_id'] ?? 0);
     $newStatus = in_array($_POST['new_status'] ?? '', ['active', 'inactive']) ? $_POST['new_status'] : 'active';
 
@@ -118,6 +123,7 @@ $users = $db->query("
                         <td>
                             <?php if ($u['id'] !== 1): // Prevent disabling root admin ?>
                                 <form method="POST" action="users.php" style="display:inline;">
+                                    <?= csrf_field() ?>
                                     <input type="hidden" name="action" value="toggle_status">
                                     <input type="hidden" name="user_id" value="<?= (int)$u['id'] ?>">
                                     <input type="hidden" name="new_status" value="<?= ($u['status'] === 'active') ? 'inactive' : 'active' ?>">

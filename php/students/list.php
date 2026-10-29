@@ -8,9 +8,10 @@ require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/response.php';
+require_once __DIR__ . '/../includes/csrf.php';
 
 init_session();
-require_login('../../Login.html');
+require_admin();
 
 $db = get_db_connection();
 
@@ -227,13 +228,23 @@ while ($c = $courseListRes->fetch_assoc()) {
                                             <i class="fa-solid fa-pen-to-square"></i> Edit
                                         </a>
                                         <?php if ($s['status'] === 'active'): ?>
-                                            <a href="delete.php?id=<?= (int)$s['id'] ?>&action=soft" class="action-btn btn-delete" onclick="return confirm('Soft-delete student <?= htmlspecialchars(addslashes($s['name'])) ?>? Status will become inactive.');" title="Soft-delete">
-                                                <i class="fa-solid fa-user-slash"></i> Soft-Delete
-                                            </a>
+                                            <form method="post" action="delete.php" onsubmit="return confirm('Soft-delete this student?');">
+                                                <?= csrf_field() ?>
+                                                <input type="hidden" name="id" value="<?= (int)$s['id'] ?>">
+                                                <input type="hidden" name="action" value="soft">
+                                                <button type="submit" class="action-btn btn-delete" title="Soft-delete">
+                                                    <i class="fa-solid fa-user-slash"></i> Soft-Delete
+                                                </button>
+                                            </form>
                                         <?php else: ?>
-                                            <a href="delete.php?id=<?= (int)$s['id'] ?>&action=restore" class="action-btn btn-view" style="color: #166534;" title="Restore to active">
-                                                <i class="fa-solid fa-rotate-left"></i> Restore
-                                            </a>
+                                            <form method="post" action="delete.php">
+                                                <?= csrf_field() ?>
+                                                <input type="hidden" name="id" value="<?= (int)$s['id'] ?>">
+                                                <input type="hidden" name="action" value="restore">
+                                                <button type="submit" class="action-btn btn-view" style="color: #166534;" title="Restore to active">
+                                                    <i class="fa-solid fa-rotate-left"></i> Restore
+                                                </button>
+                                            </form>
                                         <?php endif; ?>
                                     </div>
                                 </td>

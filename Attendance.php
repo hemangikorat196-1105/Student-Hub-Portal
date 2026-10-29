@@ -1,0 +1,177 @@
+<?php
+require_once __DIR__ . '/php/includes/session.php';
+require_once __DIR__ . '/php/includes/auth_guard.php';
+init_session();
+require_student();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Hub Portal - Attendance</title>
+    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="main-header">
+    <div class="header-left">
+        <button class="menu-btn" onclick="openMenu()" aria-label="Open Menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <div class="portal-title">
+            <h1>STUDENT HUB PORTAL</h1>
+            <p>Digital Academic & Campus Management System</p>
+        </div>
+    </div>
+
+    <button id="themeToggle" class="theme-btn" aria-label="Change Theme">
+        <i class="fa-solid fa-moon"></i>
+        <span>Dark Mode</span>
+    </button>
+</header>
+
+<div id="overlay" class="overlay"></div>
+
+<aside id="sidebar" class="sidebar" aria-label="Sidebar Navigation" aria-hidden="true">
+    <div class="sidebar-header">
+        <h3>StudentHub Menu</h3>
+        <button class="close-btn" aria-label="Close sidebar menu">&times;</button>
+    </div>
+        <a href="home.php"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="aboutus.php"><i class="fa-solid fa-circle-info"></i> About Us</a>
+    <a href="courses.php"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
+    <a href="events.php"><i class="fa-solid fa-calendar-days"></i> Events</a>
+    <a href="Attendance.php" class="active"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
+    <a href="Assignment.php"><i class="fa-solid fa-book-open"></i> Assignment</a>
+    <a href="Timetable.php"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
+    <a href="faculty.php"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
+    <a href="notice.php"><i class="fa-solid fa-bullhorn"></i> Notice</a>
+    <a href="php/students/dashboard.php"><i class="fa-solid fa-user"></i> Profile</a>
+    <a href="contactus.php"><i class="fa-solid fa-envelope"></i> Contact</a>
+    <form class="sidebar-logout" action="php/auth/logout.php" method="post">
+        <input type="hidden" name="csrf_token" value="">
+        <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </form>
+</aside>
+
+<main id="main-content">
+    <div class="card">
+        <h2><i class="fa-solid fa-calendar-check"></i> Attendance Record</h2>
+
+        <table>
+            <tr>
+                <th>Subject Code</th>
+                <th>Subject</th>
+                <th>Total Classes</th>
+                <th>Present</th>
+                <th>Attendance</th>
+            </tr>
+
+            <tr>
+                <td rowspan="2">CEUE203</td>
+                <td>OOP Lecture</td>
+                <td>6</td>
+                <td>6</td>
+                <td>100%</td>
+            </tr>
+
+            <tr>
+                <td>OOP Lab</td>
+                <td>5</td>
+                <td>4</td>
+                <td>80%</td>
+            </tr>
+
+            <tr>
+                <td rowspan="2">CSUC201</td>
+                <td>FDSA Lecture</td>
+                <td>11</td>
+                <td>8</td>
+                <td>72%</td>
+            </tr>
+
+            <tr>
+                <td>FDSA Lab</td>
+                <td>3</td>
+                <td>3</td>
+                <td>100%</td>
+            </tr>
+
+            <tr>
+                <td>HSUV201</td>
+                <td>CPI Lecture</td>
+                <td>10</td>
+                <td>8</td>
+                <td>80%</td>
+            </tr>
+
+            <tr>
+                <td rowspan="2">ITUC201</td>
+                <td>FCN Lecture</td>
+                <td>17</td>
+                <td>14</td>
+                <td>82%</td>
+            </tr>
+
+            <tr>
+                <td>FCN Lab</td>
+                <td>5</td>
+                <td>5</td>
+                <td>100%</td>
+            </tr>
+
+            <tr>
+                <td rowspan="2">ITUE203</td>
+                <td>WDF Lecture</td>
+                <td>9</td>
+                <td>6</td>
+                <td>66%</td>
+            </tr>
+
+            <tr>
+                <td>WDF Lab</td>
+                <td>9</td>
+                <td>8</td>
+                <td>88%</td>
+            </tr>
+
+            <tr>
+                <td>MSUD203</td>
+                <td>Discrete Mathematics</td>
+                <td>10</td>
+                <td>8</td>
+                <td>80%</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2><i class="fa-solid fa-chart-pie"></i> Attendance Summary</h2>
+        <ul>
+            <li><strong>Total Subjects:</strong> 6</li>
+            <li><strong>Highest Attendance:</strong> 100% (OOP Lecture, FDSA Lab, FCN Lab)</li>
+            <li><strong>Lowest Attendance:</strong> 66% (WDF Lecture)</li>
+            <li><strong>Overall Attendance:</strong> 79%</li>
+            <li><strong>Status:</strong> Eligible for Examination</li>
+        </ul>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h2>StudentHub Portal</h2>
+            <p>Your digital campus companion for academics, courses, assignments, attendance, and student services.</p>
+        </div>
+    </div>
+    <p class="copyright">
+        © 2026 StudentHub Portal | Developed By Hemangi Korat | All Rights Reserved.
+    </p>
+</footer>
+</body>
+</html>

@@ -190,6 +190,48 @@ document.addEventListener("DOMContentLoaded", function () {
 
     initHomeEvents();
 
+    const csrfForms = Array.from(document.forms).filter(form => form.querySelector('input[name="csrf_token"]'));
+    csrfForms.forEach(form => {
+        let csrfReady = false;
+        const status = form.querySelector('[role="status"]') || document.createElement("p");
+        if (!status.isConnected) {
+            status.setAttribute("role", "status");
+            status.setAttribute("aria-live", "polite");
+            form.prepend(status);
+        }
+        form.addEventListener("submit", event => {
+            if (!csrfReady) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                status.textContent = "The secure form token is not ready. Check your connection and reload this page.";
+            }
+        }, true);
+
+        const scriptUrl = Array.from(document.scripts)
+            .find(script => /(?:^|\/)script\.js(?:[?#].*)?$/.test(script.src || ""))?.src;
+        const sessionUrl = scriptUrl
+            ? new URL("php/auth/check_session.php", scriptUrl).href
+            : new URL("php/auth/check_session.php", window.location.href).href;
+
+        fetch(sessionUrl, { credentials: "same-origin" })
+            .then(response => {
+                if (!response.ok) throw new Error(`Session token request failed (${response.status}).`);
+                return response.json();
+            })
+            .then(result => {
+                if (!result.data || !result.data.csrfToken) {
+                    throw new Error("The server did not provide a secure form token.");
+                }
+                form.querySelector('input[name="csrf_token"]').value = result.data.csrfToken;
+                csrfReady = true;
+                status.textContent = "";
+            })
+            .catch(error => {
+                status.textContent = "Unable to initialize the secure form. Please reload and try again.";
+                console.error("CSRF token initialization failed:", error);
+            });
+    });
+
     /* ----------------------------------------------------------------------
        1. LIGHT / DARK THEME SWITCHER
        ---------------------------------------------------------------------- */
@@ -805,9 +847,284 @@ document.addEventListener("DOMContentLoaded", function () {
                         loginForm.submit();
                     }, 800);
                 } else {
+                    if (loginStatus) {
+                        loginStatus.textContent = "Secure sign-in requires the PHP application running through XAMPP.";
+                    }
+                }
+            }
+        });
+    }
+
+    // --- Admin Login Form (Matches Student Login Validation & Image 3 UI) ---
+    const adminLoginForm = document.getElementById("adminLoginForm");
+    if (adminLoginForm) {
+        const adminUserInput = document.getElementById("adminUsername");
+        const adminPassInput = document.getElementById("adminPassword");
+        const adminUserError = document.getElementById("adminUsernameError");
+        const adminPassError = document.getElementById("adminPasswordError");
+        const adminLoginStatus = document.getElementById("adminLoginStatus");
+
+        // Parse URL parameters for status/errors
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("status") === "registered" && adminLoginStatus) {
+            adminLoginStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Administrator account registered successfully! You can now sign in.';
+            adminLoginStatus.style.display = "block";
+        } else if (urlParams.get("msg") === "logged_out" && adminLoginStatus) {
+            adminLoginStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> You have been logged out successfully.';
+            adminLoginStatus.style.display = "block";
+        }
+
+        if (adminUserInput) {
+            adminUserInput.addEventListener("input", () => {
+                if (adminUserInput.value.trim() !== "") {
+                    if (adminUserError) adminUserError.textContent = "";
+                    adminUserInput.classList.remove("input-error");
+                    adminUserInput.setAttribute("aria-invalid", "false");
+                }
+            });
+        }
+
+        if (adminPassInput) {
+            adminPassInput.addEventListener("input", () => {
+                if (adminPassInput.value !== "") {
+                    if (adminPassError) adminPassError.textContent = "";
+                    adminPassInput.classList.remove("input-error");
+                    adminPassInput.setAttribute("aria-invalid", "false");
+                }
+            });
+        }
+
+        adminLoginForm.addEventListener("reset", () => {
+            if (adminUserError) adminUserError.textContent = "";
+            if (adminPassError) adminPassError.textContent = "";
+            if (adminUserInput) {
+                adminUserInput.classList.remove("input-error");
+                adminUserInput.setAttribute("aria-invalid", "false");
+            }
+            if (adminPassInput) {
+                adminPassInput.classList.remove("input-error");
+                adminPassInput.setAttribute("aria-invalid", "false");
+            }
+            if (adminLoginStatus) {
+                adminLoginStatus.textContent = "";
+                adminLoginStatus.style.display = "none";
+            }
+        });
+
+        adminLoginForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            let valid = true;
+
+            if (!adminUserInput || adminUserInput.value.trim() === "") {
+                if (adminUserError) adminUserError.textContent = "Please enter your administrator username or email.";
+                if (adminUserInput) {
+                    adminUserInput.classList.add("input-error");
+                    adminUserInput.setAttribute("aria-invalid", "true");
+                }
+                valid = false;
+            } else {
+                if (adminUserError) adminUserError.textContent = "";
+                if (adminUserInput) {
+                    adminUserInput.classList.remove("input-error");
+                    adminUserInput.setAttribute("aria-invalid", "false");
+                }
+            }
+
+            if (!adminPassInput || adminPassInput.value === "") {
+                if (adminPassError) adminPassError.textContent = "Please enter your password.";
+                if (adminPassInput) {
+                    adminPassInput.classList.add("input-error");
+                    adminPassInput.setAttribute("aria-invalid", "true");
+                }
+                valid = false;
+            } else {
+                if (adminPassError) adminPassError.textContent = "";
+                if (adminPassInput) {
+                    adminPassInput.classList.remove("input-error");
+                    adminPassInput.setAttribute("aria-invalid", "false");
+                }
+            }
+
+            if (valid) {
+                if (adminLoginStatus) {
+                    adminLoginStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Administrator credentials verified! Authenticating with server...';
+                    adminLoginStatus.style.display = "block";
+                }
+                if (window.location.protocol.startsWith("http")) {
                     setTimeout(() => {
-                        window.location.href = "home.html";
-                    }, 1200);
+                        adminLoginForm.submit();
+                    }, 600);
+                } else {
+                    if (adminLoginStatus) {
+                        adminLoginStatus.textContent = "Secure sign-in requires the PHP application running through XAMPP.";
+                    }
+                }
+            }
+        });
+    }
+
+    // --- Admin Registration Form Validation ---
+    const adminRegForm = document.getElementById("adminRegistrationForm");
+    if (adminRegForm) {
+        const adminFullName = document.getElementById("adminRegFullName");
+        const adminEmail = document.getElementById("adminRegEmail");
+        const adminMobile = document.getElementById("adminRegMobile");
+        const adminDept = document.getElementById("adminRegDept");
+        const adminUsername = document.getElementById("adminRegUsername");
+        const adminPasscode = document.getElementById("adminRegPasscode");
+        const adminPassword = document.getElementById("adminRegPassword");
+        const adminConfirmPassword = document.getElementById("adminRegConfirmPassword");
+        const adminTerms = document.getElementById("adminRegTerms");
+
+        const adminNameError = document.getElementById("adminNameError");
+        const adminEmailError = document.getElementById("adminEmailError");
+        const adminMobileError = document.getElementById("adminMobileError");
+        const adminDeptError = document.getElementById("adminDeptError");
+        const adminUserError = document.getElementById("adminUserError");
+        const adminPasscodeError = document.getElementById("adminPasscodeError");
+        const adminPasswordError = document.getElementById("adminPasswordError");
+        const adminConfirmPasswordError = document.getElementById("adminConfirmPasswordError");
+        const adminTermsError = document.getElementById("adminTermsError");
+        const adminRegSuccess = document.getElementById("adminRegistrationSuccess");
+
+        const nameRegex = /^[A-Za-z .]{2,50}$/;
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const mobileRegex = /^[6-9]\d{9}$/;
+        const userRegex = /^[A-Za-z0-9_.-]{4,30}$/;
+        const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^_\-~])[A-Za-z\d@$!%*?&#^_\-~]{8,}$/;
+
+        function setAdminErr(input, errSpan, msg) {
+            if (errSpan) errSpan.textContent = msg;
+            if (input) {
+                input.classList.add("input-error");
+                input.setAttribute("aria-invalid", "true");
+            }
+        }
+        function clrAdminErr(input, errSpan) {
+            if (errSpan) errSpan.textContent = "";
+            if (input) {
+                input.classList.remove("input-error");
+                input.setAttribute("aria-invalid", "false");
+            }
+        }
+
+        // Live input listeners
+        if (adminFullName) adminFullName.addEventListener("input", () => {
+            if (nameRegex.test(adminFullName.value.trim())) clrAdminErr(adminFullName, adminNameError);
+        });
+        if (adminEmail) adminEmail.addEventListener("input", () => {
+            if (emailRegex.test(adminEmail.value.trim())) clrAdminErr(adminEmail, adminEmailError);
+        });
+        if (adminMobile) adminMobile.addEventListener("input", () => {
+            if (mobileRegex.test(adminMobile.value.trim())) clrAdminErr(adminMobile, adminMobileError);
+        });
+        if (adminDept) adminDept.addEventListener("change", () => {
+            if (adminDept.value !== "") clrAdminErr(adminDept, adminDeptError);
+        });
+        if (adminUsername) adminUsername.addEventListener("input", () => {
+            if (userRegex.test(adminUsername.value.trim())) clrAdminErr(adminUsername, adminUserError);
+        });
+        if (adminPasscode) adminPasscode.addEventListener("input", () => {
+            if (adminPasscode.value.trim() !== "") clrAdminErr(adminPasscode, adminPasscodeError);
+        });
+        if (adminPassword) adminPassword.addEventListener("input", () => {
+            if (passRegex.test(adminPassword.value)) clrAdminErr(adminPassword, adminPasswordError);
+        });
+        if (adminConfirmPassword) adminConfirmPassword.addEventListener("input", () => {
+            if (adminConfirmPassword.value === adminPassword.value) clrAdminErr(adminConfirmPassword, adminConfirmPasswordError);
+        });
+        if (adminTerms) adminTerms.addEventListener("change", () => {
+            if (adminTerms.checked) clrAdminErr(adminTerms, adminTermsError);
+        });
+
+        adminRegForm.addEventListener("reset", () => {
+            const allErrors = adminRegForm.querySelectorAll(".error-msg");
+            allErrors.forEach(s => s.textContent = "");
+            const allInputs = adminRegForm.querySelectorAll(".input-error");
+            allInputs.forEach(i => {
+                i.classList.remove("input-error");
+                i.setAttribute("aria-invalid", "false");
+            });
+            if (adminRegSuccess) {
+                adminRegSuccess.textContent = "";
+                adminRegSuccess.style.display = "none";
+            }
+        });
+
+        adminRegForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            let valid = true;
+
+            // Name
+            if (!adminFullName || !nameRegex.test(adminFullName.value.trim())) {
+                setAdminErr(adminFullName, adminNameError, "Full Name must be 2 to 50 characters (letters and spaces only).");
+                valid = false;
+            } else { clrAdminErr(adminFullName, adminNameError); }
+
+            // Email
+            if (!adminEmail || !emailRegex.test(adminEmail.value.trim())) {
+                setAdminErr(adminEmail, adminEmailError, "Please enter a valid official institutional email address.");
+                valid = false;
+            } else { clrAdminErr(adminEmail, adminEmailError); }
+
+            // Mobile
+            if (!adminMobile || !mobileRegex.test(adminMobile.value.trim())) {
+                setAdminErr(adminMobile, adminMobileError, "Mobile number must be a valid 10-digit number starting with 6-9.");
+                valid = false;
+            } else { clrAdminErr(adminMobile, adminMobileError); }
+
+            // Dept
+            if (!adminDept || adminDept.value === "") {
+                setAdminErr(adminDept, adminDeptError, "Please select your administrative department.");
+                valid = false;
+            } else { clrAdminErr(adminDept, adminDeptError); }
+
+            // Username
+            if (!adminUsername || !userRegex.test(adminUsername.value.trim())) {
+                setAdminErr(adminUsername, adminUserError, "Username must be 4 to 30 alphanumeric characters.");
+                valid = false;
+            } else { clrAdminErr(adminUsername, adminUserError); }
+
+            // Passcode
+            if (!adminPasscode || adminPasscode.value.trim() === "") {
+                setAdminErr(adminPasscode, adminPasscodeError, "Please enter the Administrator Security Passcode.");
+                valid = false;
+            } else if (adminPasscode.value.trim() !== "ADMIN2026") {
+                setAdminErr(adminPasscode, adminPasscodeError, "Incorrect Security Passcode. Default key is ADMIN2026.");
+                valid = false;
+            } else { clrAdminErr(adminPasscode, adminPasscodeError); }
+
+            // Password
+            if (!adminPassword || !passRegex.test(adminPassword.value)) {
+                setAdminErr(adminPassword, adminPasswordError, "Password must be at least 8 characters with upper, lower, number, and special character.");
+                valid = false;
+            } else { clrAdminErr(adminPassword, adminPasswordError); }
+
+            // Confirm Password
+            if (!adminConfirmPassword || adminConfirmPassword.value !== adminPassword.value) {
+                setAdminErr(adminConfirmPassword, adminConfirmPasswordError, "Passwords do not match.");
+                valid = false;
+            } else { clrAdminErr(adminConfirmPassword, adminConfirmPasswordError); }
+
+            // Terms
+            if (!adminTerms || !adminTerms.checked) {
+                setAdminErr(adminTerms, adminTermsError, "You must agree to the Administrator Security Protocols & Campus Data Protection Policy.");
+                valid = false;
+            } else { clrAdminErr(adminTerms, adminTermsError); }
+
+            if (valid) {
+                if (adminRegSuccess) {
+                    adminRegSuccess.innerHTML = '<i class="fa-solid fa-circle-check"></i> Administrator details verified! Submitting to server...';
+                    adminRegSuccess.style.display = "block";
+                }
+                if (window.location.protocol.startsWith("http")) {
+                    setTimeout(() => {
+                        adminRegForm.submit();
+                    }, 600);
+                } else {
+                    if (adminRegSuccess) {
+                        adminRegSuccess.textContent = "Administrator registration requires the PHP application running through XAMPP.";
+                    }
                 }
             }
         });
@@ -1799,5 +2116,3 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
-
-

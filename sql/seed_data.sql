@@ -1,7 +1,7 @@
 -- ============================================================================
 -- Student Hub Portal - Seed Data (Exactly 15 Records per Table)
--- Password for all accounts: Admin@123 (for admin) / Student@123 (for students)
--- Bcrypt Hash Admin@123:   $2y$10$eA7swyN6XZyunaFlQVFfEO8WvOePG7RO.LEQNNPHBovhTpeIk5o1O
+-- The administrator password must be configured locally with php/setup/create_admin.php.
+-- Student seed password for test accounts: Student@123.
 -- Bcrypt Hash Student@123: $2y$10$m0S8z7HNLb.vJseJdc4.n.Fk03qUg6j6Pu22FkLO/rR9pGsRH57Oq
 -- ============================================================================
 
@@ -19,7 +19,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- 1. USERS (Exactly 15 Records)
 -- ----------------------------------------------------------------------------
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `status`, `last_login`, `created_at`) VALUES
-(1, 'admin', 'admin@studenthub.edu', '$2y$10$eA7swyN6XZyunaFlQVFfEO8WvOePG7RO.LEQNNPHBovhTpeIk5o1O', 'admin', 'active', '2026-10-27 09:30:00', '2026-08-01 09:00:00'),
+(1, 'admin', 'admin@studenthub.edu', '!SET_ADMIN_PASSWORD_WITH_LOCAL_SETUP!', 'admin', 'active', NULL, '2026-08-01 09:00:00'),
 (2, '25CS035', 'hemangi.korat@studenthub.edu', '$2y$10$m0S8z7HNLb.vJseJdc4.n.Fk03qUg6j6Pu22FkLO/rR9pGsRH57Oq', 'student', 'active', '2026-10-27 08:45:00', '2026-08-05 10:15:00'),
 (3, '25CS001', 'aarav.sharma@studenthub.edu', '$2y$10$m0S8z7HNLb.vJseJdc4.n.Fk03qUg6j6Pu22FkLO/rR9pGsRH57Oq', 'student', 'active', '2026-10-26 14:10:00', '2026-08-05 10:30:00'),
 (4, '25IT012', 'diya.patel@studenthub.edu', '$2y$10$m0S8z7HNLb.vJseJdc4.n.Fk03qUg6j6Pu22FkLO/rR9pGsRH57Oq', 'student', 'active', '2026-10-25 11:20:00', '2026-08-06 11:00:00'),

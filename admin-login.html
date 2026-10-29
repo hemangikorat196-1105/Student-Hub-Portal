@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Administrator sign in for the Student Hub Portal.">
+    <title>Administrator Login - Student Hub Portal</title>
+    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="main-header">
+    <div class="header-left">
+        <div class="portal-title">
+            <h1>STUDENT HUB PORTAL</h1>
+            <p>Digital Academic & Campus Management System</p>
+        </div>
+    </div>
+    <button id="themeToggle" class="theme-btn" type="button" aria-label="Change Theme">
+        <i class="fa-solid fa-moon" aria-hidden="true"></i>
+        <span>Dark Mode</span>
+    </button>
+</header>
+
+<main id="main-content">
+    <form action="php/auth/admin_login.php" method="post" id="adminLoginForm" novalidate>
+        <h2><i class="fa-solid fa-user-shield" aria-hidden="true"></i> Administrator Login</h2>
+        <input type="hidden" name="csrf_token" value="">
+        <div id="adminLoginStatus" class="success-banner" role="status" aria-live="polite"></div>
+        <div class="form-group">
+            <label for="adminUsername">Administrator Username or Email <span class="required-star">*</span></label>
+            <input id="adminUsername" name="username" type="text" autocomplete="username"
+                   placeholder="Enter administrator username or email" required maxlength="100"
+                   aria-describedby="adminUsernameError" aria-invalid="false">
+            <span class="error-msg" id="adminUsernameError" role="alert" aria-live="polite"></span>
+        </div>
+        <div class="form-group">
+            <label for="adminPassword">Password <span class="required-star">*</span></label>
+            <input id="adminPassword" name="password" type="password" autocomplete="current-password"
+                   placeholder="Enter password" required
+                   aria-describedby="adminPasswordError" aria-invalid="false">
+            <span class="error-msg" id="adminPasswordError" role="alert" aria-live="polite"></span>
+        </div>
+        <div class="form-actions">
+            <button type="submit" id="adminLoginSubmitBtn">
+                <i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i> Log In
+            </button>
+            <button type="reset" id="adminLoginResetBtn" class="secondary-action">Clear Form</button>
+        </div>
+        <div class="form-links">
+            <a href="admin-register.html"><i class="fa-solid fa-user-plus" aria-hidden="true"></i> Register Administrator</a>
+            <a href="Login.html"><i class="fa-solid fa-user" aria-hidden="true"></i> Student login</a>
+        </div>
+    </form>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h2>StudentHub Portal</h2>
+            <p>Your digital campus companion for academics, courses, assignments, attendance, and student services.</p>
+        </div>
+    </div>
+    <p class="copyright">
+        © 2026 StudentHub Portal | Developed By Hemangi Korat | All Rights Reserved.
+    </p>
+</footer>
+</body>
+</html>

@@ -9,7 +9,7 @@ require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../includes/auth_guard.php';
 
 init_session();
-require_login('../../Login.html');
+require_admin();
 
 $course = trim($_GET['course'] ?? '');
 $status = trim($_GET['status'] ?? 'all');

@@ -7,29 +7,37 @@
 
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../includes/session.php';
+require_once __DIR__ . '/../includes/csrf.php';
 require_once __DIR__ . '/../includes/response.php';
 
 init_session();
+$requiredRole = defined('AUTH_REQUIRED_ROLE') ? AUTH_REQUIRED_ROLE : 'student';
+$loginPage = $requiredRole === 'admin' ? '../../admin-login.html' : '../../Login.html';
+$redirectUrl = $requiredRole === 'admin' ? '../admin/dashboard.php' : '../../home.html';
 
 // Only accept POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     if (is_api_request()) {
         json_response(405, false, "Method Not Allowed. Use POST.");
     }
-    header("Location: ../../Login.html");
+    header("Location: " . $loginPage);
     exit;
 }
 
 $identifier = trim($_POST['studentId'] ?? $_POST['username'] ?? $_POST['email'] ?? '');
 $password   = $_POST['password'] ?? '';
-$roleReq    = trim($_POST['role'] ?? '');
-$rememberMe = isset($_POST['remember']);
+$csrfToken  = $_POST['csrf_token'] ?? '';
+
+if (!verify_csrf_token($csrfToken)) {
+    http_response_code(403);
+    render_login_error("The form expired or could not be verified. Reload the page and try again.", $loginPage);
+}
 
 if (empty($identifier) || empty($password)) {
     if (is_api_request()) {
         json_response(400, false, "Please enter both Student ID/Username and Password.");
     }
-    render_login_error("Please enter both Student ID/Username and Password.");
+    render_login_error("Please enter both Student ID/Username and Password.", $loginPage);
     exit;
 }
 
@@ -56,7 +64,7 @@ try {
         if (is_api_request()) {
             json_response(401, false, "Invalid student ID or password.");
         }
-        render_login_error("Invalid student ID or password.");
+        render_login_error("Invalid student ID or password.", $loginPage);
         exit;
     }
 
@@ -66,22 +74,17 @@ try {
         if (is_api_request()) {
             json_response(403, false, "Your account is currently inactive. Please contact the administrator.");
         }
-        render_login_error("Your account is currently inactive. Please contact the administrator.");
+        render_login_error("Your account is currently inactive. Please contact the administrator.", $loginPage);
         exit;
     }
 
-    // Check Role if requested in login form
-    if (!empty($roleReq) && $roleReq !== 'any' && $user['role'] !== $roleReq) {
-        // Warning: User selected a different role than assigned in DB
-        // If user is admin trying student, or student trying admin
-        if ($roleReq === 'admin' && $user['role'] !== 'admin') {
-            log_audit_event("UNAUTHORIZED_ROLE_SELECT", "Student {$user['username']} selected Admin role on login");
-            if (is_api_request()) {
-                json_response(403, false, "Access Denied: You do not have Administrator permissions.");
-            }
-            render_login_error("Access Denied: You do not have Administrator permissions.");
-            exit;
+    if ($user['role'] !== $requiredRole || ($requiredRole === 'student' && empty($user['student_id']))) {
+        log_audit_event("UNAUTHORIZED_ROLE_LOGIN", "Account {$user['username']} attempted {$requiredRole} login", $user['id']);
+        http_response_code(403);
+        if (is_api_request()) {
+            json_response(403, false, "This account is not permitted to use this login portal.");
         }
+        render_login_error("This account is not permitted to use this login portal.", $loginPage);
     }
 
     // Login successful: Regenerate session ID and store user session data
@@ -102,27 +105,7 @@ try {
     // Log Audit Event
     log_audit_event("LOGIN", "User {$user['username']} ({$user['role']}) logged in successfully", $user['id']);
 
-    // Handle Remember-Me Cookie (Practical 10 requirement)
-    if ($rememberMe) {
-        $token = bin2hex(random_bytes(32));
-        $tokenHash = hash('sha256', $token);
-        $stmtToken = $db->prepare("UPDATE users SET remember_token = ? WHERE id = ?");
-        $stmtToken->bind_param("si", $tokenHash, $user['id']);
-        $stmtToken->execute();
-        $stmtToken->close();
-
-        // 30 day cookie
-        setcookie('studenthub_remember', $user['id'] . ':' . $token, [
-            'expires'  => time() + (30 * 86400),
-            'path'     => '/',
-            'httponly' => true,
-            'samesite' => 'Lax'
-        ]);
-    }
-
     // Determine Role-Based Destination
-    $redirectUrl = ($user['role'] === 'admin') ? '../admin/dashboard.php' : '../../profile.html';
-
     if (is_api_request()) {
         json_response(200, true, "Login successful", [
             'user'     => [
@@ -143,10 +126,10 @@ try {
     if (is_api_request()) {
         json_response(500, false, "Server error during authentication.");
     }
-    render_login_error("An error occurred during authentication. Please try again.");
+    render_login_error("An error occurred during authentication. Please try again.", $loginPage);
 }
 
-function render_login_error($message) {
+function render_login_error($message, $loginPage = '../../Login.html') {
     ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -169,7 +152,7 @@ function render_login_error($message) {
             <i class="fa-solid fa-triangle-exclamation"></i>
             <h2>Authentication Failed</h2>
             <p><?= htmlspecialchars($message) ?></p>
-            <a href="../../Login.html" class="btn"><i class="fa-solid fa-arrow-left"></i> Back to Login</a>
+            <a href="<?= htmlspecialchars($loginPage, ENT_QUOTES, 'UTF-8') ?>" class="btn"><i class="fa-solid fa-arrow-left"></i> Back to Login</a>
         </main>
     </body>
     </html>

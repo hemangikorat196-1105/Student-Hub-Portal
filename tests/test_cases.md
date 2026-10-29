@@ -15,7 +15,7 @@ This document outlines the test cases covering UI interactivity, form validation
   2. Set viewport to 768px (Tablet): observe responsive grid adjusting to 2 columns.
   3. Set viewport to 375px (Mobile): observe hamburger menu icon, click hamburger.
 - **Expected Result**: Drawer slides out smoothly; navbar links are accessible and clickable; no horizontal scrollbar appears.
-- **Status**: Passed.
+- **Status**: Not run in current environment.
 
 ### TC-UI-02: Dark/Light Mode Switcher with LocalStorage
 - **Objective**: Ensure the theme toggle persists the user's preference across pages and reloads.
@@ -26,7 +26,7 @@ This document outlines the test cases covering UI interactivity, form validation
   3. Refresh the page (`F5`).
   4. Navigate to `aboutus.html`.
 - **Expected Result**: Dark theme remains active on reload and across different pages.
-- **Status**: Passed.
+- **Status**: Not run in current environment.
 
 ### TC-VAL-01: Client-Side Registration Validation
 - **Objective**: Validate all constraints on `Register.html` prior to server submission.
@@ -38,21 +38,21 @@ This document outlines the test cases covering UI interactivity, form validation
   - **Password**: Enter `weak` -> Error: "Must be at least 8 chars with uppercase, lowercase, number, and special character".
   - **Confirm Password**: Enter mismatched password -> Error: "Passwords do not match".
 - **Expected Result**: Submit button blocked until all field constraints are satisfied.
-- **Status**: Passed.
+- **Status**: Not run in current environment.
 
 ### TC-AUTH-01: Secure Login & Role-Based Redirection
-- **Objective**: Verify user authentication and destination routing based on role.
+- **Objective**: Verify separate student and administrator login endpoints and fixed role checks.
 - **Test Data**:
-  - Admin: `admin` / `Admin@123`
   - Student: `25CS035` / `Student@123`
+  - Admin: configure a unique local password by following `docs/setup_guide.md`; do not store it in this repository.
 - **Steps**:
   1. Navigate to `Login.html`.
-  2. Enter admin credentials and submit.
-  3. Verify landing page is `php/admin/dashboard.php`.
-  4. Log out. Enter student credentials and submit.
-  5. Verify landing page is `profile.html`.
-- **Expected Result**: Correct routing based on role; session initialized with user ID, username, and role.
-- **Status**: Passed.
+  2. Enter student credentials and submit.
+  3. Verify landing page is `php/students/dashboard.php`.
+  4. Attempt the student credentials on `admin-login.html`; verify denial.
+  5. Sign out; use the local administrator credentials on `admin-login.html` and verify `php/admin/dashboard.php`.
+- **Expected Result**: Each login accepts only its database role; sessions are regenerated on success.
+- **Status**: Not run in current environment.
 
 ### TC-AUTH-02: Privilege Escalation Prevention (RBAC)
 - **Objective**: Ensure non-admin users cannot access administrative endpoints.
@@ -61,7 +61,7 @@ This document outlines the test cases covering UI interactivity, form validation
   1. Attempt direct navigation to `http://localhost/Student%20Hub%20Portal/php/admin/dashboard.php`.
   2. Attempt direct navigation to `http://localhost/Student%20Hub%20Portal/php/admin/users.php`.
 - **Expected Result**: Server responds with HTTP 403 Forbidden or redirects to `php/admin/access_denied.php`.
-- **Status**: Passed.
+- **Status**: Not run in current environment.
 
 ### TC-AUTH-03: Session Inactivity Timeout
 - **Objective**: Confirm that idle sessions expire after 15 minutes.
@@ -69,8 +69,8 @@ This document outlines the test cases covering UI interactivity, form validation
 - **Steps**:
   1. Let session idle for greater than 900 seconds (15 minutes).
   2. Attempt to navigate or refresh an authenticated page.
-- **Expected Result**: `php/includes/session.php` identifies `time() - $_SESSION['last_activity'] > 900`, destroys session, and redirects to `Login.html?error=session_expired`.
-- **Status**: Passed.
+- **Expected Result**: `php/includes/session.php` identifies `time() - $_SESSION['last_activity'] > 900`, destroys the session, and requires re-authentication.
+- **Status**: Not run in current environment.
 
 ### TC-CRUD-01: Student Soft-Delete
 - **Objective**: Verify soft deletion preserves record for audit while hiding from active lists.
@@ -80,7 +80,7 @@ This document outlines the test cases covering UI interactivity, form validation
   2. Click "Soft Delete" on student record.
   3. Inspect MySQL table `students` for that record.
 - **Expected Result**: `status` field updated to `'inactive'`; record excluded from active queries; related registration and audit records remain intact.
-- **Status**: Passed.
+- **Status**: Not run in current environment.
 
 ### TC-UPLOAD-01: Secure File Upload Constraints
 - **Objective**: Test event poster file upload validation for size, MIME type, and executable protection.
@@ -91,4 +91,4 @@ This document outlines the test cases covering UI interactivity, form validation
   - **Spoofed Extension**: Upload a text file named `test.png` -> MIME inspection via `finfo_file()` detects non-image payload -> Error: "File content does not match image type".
   - **Valid JPEG (800KB)**: Upload valid poster -> Stored as `poster_<unique_id>.jpg` in `assets/uploads/event_posters/`.
 - **Expected Result**: Only verified images under 2MB accepted; `.htaccess` prevents execution of uploaded scripts.
-- **Status**: Passed.
+- **Status**: Not run in current environment.

@@ -4,11 +4,15 @@
 // Practical 11, 13
 // ============================================================================
 
+require_once __DIR__ . '/../includes/api_bootstrap.php';
+$_SERVER['HTTP_ACCEPT'] = 'application/json';
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../includes/session.php';
+require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/response.php';
 
 init_session();
+require_admin();
 
 $q      = trim($_GET['q'] ?? $_GET['search'] ?? '');
 $course = trim($_GET['course'] ?? '');

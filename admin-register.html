@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Administrator registration portal for the Student Hub Portal.">
+    <title>Administrator Registration - Student Hub Portal</title>
+    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="main-header">
+    <div class="header-left">
+        <div class="portal-title">
+            <h1>STUDENT HUB PORTAL</h1>
+            <p>Digital Academic & Campus Management System</p>
+        </div>
+    </div>
+
+    <button id="themeToggle" class="theme-btn" type="button" aria-label="Switch to dark mode">
+        <i class="fa-solid fa-moon" aria-hidden="true"></i>
+        <span>Dark Mode</span>
+    </button>
+</header>
+
+<main id="main-content">
+    <section class="registration-intro" aria-labelledby="admin-reg-title">
+        <div>
+            <span class="exercise-badge">Administration Portal</span>
+            <h2 id="admin-reg-title">
+                <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+                Administrator Registration
+            </h2>
+            <p>Register an authorized administrator account for institutional portal management. All fields marked <span class="required-star">*</span> are required.</p>
+        </div>
+
+        <div class="validation-features" aria-label="Security features">
+            <span><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Master Key Verified</span>
+            <span><i class="fa-solid fa-lock" aria-hidden="true"></i> Bcrypt Hashed</span>
+            <span><i class="fa-solid fa-clipboard-list" aria-hidden="true"></i> Audit Logged</span>
+            <span><i class="fa-solid fa-universal-access" aria-hidden="true"></i> Accessible</span>
+        </div>
+    </section>
+
+    <form action="php/auth/admin_register.php" method="post" id="adminRegistrationForm" class="registration-form" novalidate>
+        <input type="hidden" name="csrf_token" value="">
+        <div id="adminRegistrationSuccess" class="success-banner" role="status" aria-live="polite"></div>
+
+        <fieldset class="form-section">
+            <legend><i class="fa-solid fa-id-card" aria-hidden="true"></i> Personal & Professional Information</legend>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="adminRegFullName">Administrator Full Name <span class="required-star">*</span></label>
+                    <input type="text" id="adminRegFullName" name="fullName"
+                           placeholder="e.g. Dr. Rajesh Sharma"
+                           required minlength="2" maxlength="50"
+                           autocomplete="name" inputmode="text"
+                           pattern="[A-Za-z .]{2,50}"
+                           aria-describedby="adminNameHint adminNameError" aria-invalid="false">
+                    <small id="adminNameHint" class="field-hint">2–50 letters, dots and spaces only.</small>
+                    <span class="error-msg" id="adminNameError" role="alert" aria-live="polite"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="adminRegEmail">Official Institutional Email <span class="required-star">*</span></label>
+                    <input type="email" id="adminRegEmail" name="email"
+                           placeholder="e.g. admin.rajesh@university.edu"
+                           required maxlength="100"
+                           autocomplete="email" inputmode="email"
+                           aria-describedby="adminEmailError" aria-invalid="false">
+                    <small class="field-hint">Use a valid institutional email address.</small>
+                    <span class="error-msg" id="adminEmailError" role="alert" aria-live="polite"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="adminRegMobile">Mobile Number <span class="required-star">*</span></label>
+                    <input type="tel" id="adminRegMobile" name="mobile"
+                           placeholder="e.g. 9876543210"
+                           required minlength="10" maxlength="10"
+                           autocomplete="tel" inputmode="numeric"
+                           pattern="[6-9][0-9]{9}"
+                           aria-describedby="adminMobileHint adminMobileError" aria-invalid="false">
+                    <small id="adminMobileHint" class="field-hint">10 digits, starting with 6, 7, 8 or 9.</small>
+                    <span class="error-msg" id="adminMobileError" role="alert" aria-live="polite"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="adminRegDept">Administrative Department <span class="required-star">*</span></label>
+                    <select id="adminRegDept" name="department" required aria-describedby="adminDeptError" aria-invalid="false">
+                        <option value="">-- Select Administrative Department --</option>
+                        <option value="IT & System Administration">IT & System Administration</option>
+                        <option value="Examination & Evaluation Cell">Examination & Evaluation Cell</option>
+                        <option value="Academic Dean Office">Academic Dean Office</option>
+                        <option value="Student Affairs & Welfare">Student Affairs & Welfare</option>
+                        <option value="Admissions & Registrar Office">Admissions & Registrar Office</option>
+                        <option value="Department Head / Faculty Chair">Department Head / Faculty Chair</option>
+                    </select>
+                    <span class="error-msg" id="adminDeptError" role="alert" aria-live="polite"></span>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+            <legend><i class="fa-solid fa-key" aria-hidden="true"></i> Administrative Credentials & Authorization</legend>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="adminRegUsername">Administrator Username <span class="required-star">*</span></label>
+                    <input type="text" id="adminRegUsername" name="username"
+                           placeholder="e.g. admin_rajesh or sysadmin01"
+                           required minlength="4" maxlength="30"
+                           autocomplete="username" inputmode="text"
+                           pattern="[A-Za-z0-9_.-]{4,30}"
+                           aria-describedby="adminUserHint adminUserError" aria-invalid="false">
+                    <small id="adminUserHint" class="field-hint">4–30 alphanumeric characters, underscores or hyphens.</small>
+                    <span class="error-msg" id="adminUserError" role="alert" aria-live="polite"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="adminRegPasscode">Administrator Security Passcode <span class="required-star">*</span></label>
+                    <input type="password" id="adminRegPasscode" name="passcode"
+                           placeholder="Enter Administrator Security Key"
+                           required maxlength="50" autocomplete="off"
+                           aria-describedby="adminPasscodeHint adminPasscodeError" aria-invalid="false">
+                    <small id="adminPasscodeHint" class="field-hint">Required institutional key (Default: <code>ADMIN2026</code>).</small>
+                    <span class="error-msg" id="adminPasscodeError" role="alert" aria-live="polite"></span>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+            <legend><i class="fa-solid fa-lock" aria-hidden="true"></i> Account Password</legend>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="adminRegPassword">Password <span class="required-star">*</span></label>
+                    <input type="password" id="adminRegPassword" name="password"
+                           placeholder="Minimum 8 characters"
+                           required minlength="8" maxlength="64"
+                           autocomplete="new-password"
+                           pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&#^_-~]).{8,64}"
+                           aria-describedby="adminPasswordHint adminPasswordError"
+                           aria-invalid="false">
+                    <small id="adminPasswordHint" class="field-hint">Use uppercase, lowercase, number and special character.</small>
+                    <span class="error-msg" id="adminPasswordError" role="alert" aria-live="polite"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="adminRegConfirmPassword">Confirm Password <span class="required-star">*</span></label>
+                    <input type="password" id="adminRegConfirmPassword" name="confirmPassword"
+                           placeholder="Re-enter your password"
+                           required minlength="8" maxlength="64"
+                           autocomplete="new-password"
+                           aria-describedby="adminConfirmPasswordError" aria-invalid="false">
+                    <small class="field-hint">Must exactly match your password.</small>
+                    <span class="error-msg" id="adminConfirmPasswordError" role="alert" aria-live="polite"></span>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="form-section verification-section">
+            <legend><i class="fa-solid fa-clipboard-check" aria-hidden="true"></i> Compliance & Terms</legend>
+
+            <div class="form-group checkbox-group">
+                <label class="checkbox-item terms-item">
+                    <input type="checkbox" id="adminRegTerms" name="terms" required
+                           aria-describedby="adminTermsError" aria-invalid="false">
+                    <span>I confirm that I am an authorized campus official and agree to adhere to the Administrator Security Protocols & Data Privacy Guidelines. <span class="required-star">*</span></span>
+                </label>
+                <span class="error-msg" id="adminTermsError" role="alert" aria-live="polite"></span>
+            </div>
+        </fieldset>
+
+        <div class="form-actions">
+            <button type="submit" id="adminRegSubmitBtn">
+                <i class="fa-solid fa-user-shield" aria-hidden="true"></i> Register Administrator
+            </button>
+            <button type="reset" id="adminRegResetBtn" class="secondary-action">
+                <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Clear Form
+            </button>
+        </div>
+
+        <div class="form-links">
+            <a href="admin-login.html"><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i> Already an Administrator? Login here</a>
+            <a href="Register.html"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Student Registration Portal</a>
+            <a href="Login.html"><i class="fa-solid fa-user" aria-hidden="true"></i> Student Login</a>
+        </div>
+    </form>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h2>StudentHub Portal</h2>
+            <p>Your digital campus companion for academics, courses, assignments, attendance, and student services.</p>
+        </div>
+    </div>
+    <p class="copyright">
+        © 2026 StudentHub Portal | Developed By Hemangi Korat | All Rights Reserved.
+    </p>
+</footer>
+</body>
+</html>

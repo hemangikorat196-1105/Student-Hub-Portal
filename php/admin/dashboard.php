@@ -7,6 +7,7 @@
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../includes/auth_guard.php';
+require_once __DIR__ . '/../includes/csrf.php';
 
 init_session();
 require_admin(); // Restrict to admin users only (Practical 10 & 14)
@@ -56,6 +57,7 @@ $courseDist = $db->query($courseDistSql)->fetch_all(MYSQLI_ASSOC);
     <title>Admin Dashboard - Student Hub Portal</title>
     <link rel="stylesheet" href="../../Style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="../../script.js" defer></script>
     <style>
         .dashboard-container { max-width: 1280px; margin: 30px auto; padding: 25px; font-family: 'Segoe UI', Tahoma, sans-serif; }
         .dashboard-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid #e2e8f0; }
@@ -98,7 +100,36 @@ $courseDist = $db->query($courseDistSql)->fetch_all(MYSQLI_ASSOC);
     </style>
 </head>
 <body>
-    <main class="dashboard-container">
+    <a href="#admin-main" class="skip-link">Skip to main content</a>
+    <header class="main-header">
+        <div class="header-left">
+            <button class="menu-btn" type="button" aria-label="Open Menu"><i class="fa-solid fa-bars"></i></button>
+            <div class="portal-title">
+                <h1>STUDENT HUB PORTAL</h1>
+                <p>Administrator workspace</p>
+            </div>
+        </div>
+        <button id="themeToggle" class="theme-btn" type="button" aria-label="Change Theme">
+            <i class="fa-solid fa-moon"></i><span>Dark Mode</span>
+        </button>
+    </header>
+    <div id="overlay" class="overlay"></div>
+    <aside id="sidebar" class="sidebar" aria-label="Administrator navigation" aria-hidden="true">
+        <div class="sidebar-header">
+            <h3>Administrator Menu</h3>
+            <button class="close-btn" type="button" aria-label="Close sidebar menu">&times;</button>
+        </div>
+        <a href="dashboard.php" class="active"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+        <a href="../students/list.php"><i class="fa-solid fa-user-graduate"></i> Students</a>
+        <a href="../events/list.php"><i class="fa-solid fa-calendar-days"></i> Events</a>
+        <a href="users.php"><i class="fa-solid fa-users-gear"></i> User Management</a>
+        <a href="audit_logs.php"><i class="fa-solid fa-clock-rotate-left"></i> Audit Logs</a>
+        <form class="sidebar-logout" method="post" action="../auth/admin_logout.php">
+            <?= csrf_field() ?>
+            <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Admin Logout</button>
+        </form>
+    </aside>
+    <main id="admin-main" class="dashboard-container">
         <div class="dashboard-header">
             <div>
                 <h1><i class="fa-solid fa-gauge-high" style="color: #2563eb;"></i> Administrator Dashboard</h1>
@@ -109,36 +140,42 @@ $courseDist = $db->query($courseDistSql)->fetch_all(MYSQLI_ASSOC);
                     <i class="fa-solid fa-user-shield" style="color: #2563eb;"></i>
                     <?= htmlspecialchars($currentUser['username']) ?> (Admin)
                 </div>
-                <a href="../auth/logout.php" class="quick-link" style="color: #dc2626; border-color: #fee2e2;">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
-                </a>
             </div>
         </div>
 
         <!-- Quick Navigation -->
-        <div class="quick-nav">
+        <div class="quick-nav admin-quick-nav" aria-label="Administrator actions">
             <a href="../students/list.php" class="quick-link">
-                <i class="fa-solid fa-user-graduate" style="color: #2563eb;"></i> Student Records (CRUD)
+                <i class="fa-solid fa-user-graduate" style="color: #2563eb;"></i>
+                <strong>Students</strong><span>List, search, add, edit and manage records</span>
             </a>
             <a href="../events/list.php" class="quick-link">
-                <i class="fa-solid fa-calendar-days" style="color: #16a34a;"></i> Event Management
+                <i class="fa-solid fa-calendar-days" style="color: #16a34a;"></i>
+                <strong>Events</strong><span>Create, update, delete and upload posters</span>
             </a>
-            <a href="users.php" class="quick-link">
-                <i class="fa-solid fa-users-gear" style="color: #9333ea;"></i> User Accounts & Status
+            <a href="#statistics" class="quick-link">
+                <i class="fa-solid fa-chart-column" style="color: #0284c7;"></i>
+                <strong>Statistics</strong><span>Live counts from the database</span>
             </a>
             <a href="audit_logs.php" class="quick-link">
-                <i class="fa-solid fa-clock-rotate-left" style="color: #d97706;"></i> Security Audit Logs
+                <i class="fa-solid fa-clock-rotate-left" style="color: #d97706;"></i>
+                <strong>Audit Logs</strong><span>Track administrative actions</span>
             </a>
-            <a href="../../events.html" class="quick-link">
-                <i class="fa-solid fa-bullhorn" style="color: #0284c7;"></i> Portal Events View
+            <a href="users.php" class="quick-link">
+                <i class="fa-solid fa-users-gear" style="color: #9333ea;"></i>
+                <strong>User Management</strong><span>Manage permitted account operations</span>
             </a>
-            <a href="../../json-data.html" class="quick-link">
-                <i class="fa-solid fa-database" style="color: #64748b;"></i> JSON Data Explorer
-            </a>
+            <form method="post" action="../auth/admin_logout.php">
+                <?= csrf_field() ?>
+                <button type="submit" class="quick-link">
+                    <i class="fa-solid fa-arrow-right-from-bracket" style="color: #dc2626;"></i>
+                    <strong>Admin Logout</strong><span>End the administrator session</span>
+                </button>
+            </form>
         </div>
 
         <!-- Metric Summary Cards -->
-        <div class="stats-grid">
+        <div class="stats-grid" id="statistics">
             <div class="stat-card">
                 <div>
                     <div class="stat-lbl">Registered Students</div>

@@ -1,0 +1,153 @@
+<?php
+require_once __DIR__ . '/php/includes/session.php';
+require_once __DIR__ . '/php/includes/auth_guard.php';
+init_session();
+require_student();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Hub Portal - Timetable</title>
+    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="main-header">
+    <div class="header-left">
+        <button class="menu-btn" onclick="openMenu()" aria-label="Open Menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <div class="portal-title">
+            <h1>STUDENT HUB PORTAL</h1>
+            <p>Digital Academic & Campus Management System</p>
+        </div>
+    </div>
+
+    <button id="themeToggle" class="theme-btn" aria-label="Change Theme">
+        <i class="fa-solid fa-moon"></i>
+        <span>Dark Mode</span>
+    </button>
+</header>
+
+<div id="overlay" class="overlay"></div>
+
+<aside id="sidebar" class="sidebar" aria-label="Sidebar Navigation" aria-hidden="true">
+    <div class="sidebar-header">
+        <h3>StudentHub Menu</h3>
+        <button class="close-btn" aria-label="Close sidebar menu">&times;</button>
+    </div>
+        <a href="home.php"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="aboutus.php"><i class="fa-solid fa-circle-info"></i> About Us</a>
+    <a href="courses.php"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
+    <a href="events.php"><i class="fa-solid fa-calendar-days"></i> Events</a>
+    <a href="Attendance.php"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
+    <a href="Assignment.php"><i class="fa-solid fa-book-open"></i> Assignment</a>
+    <a href="Timetable.php" class="active"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
+    <a href="faculty.php"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
+    <a href="notice.php"><i class="fa-solid fa-bullhorn"></i> Notice</a>
+    <a href="php/students/dashboard.php"><i class="fa-solid fa-user"></i> Profile</a>
+    <a href="contactus.php"><i class="fa-solid fa-envelope"></i> Contact</a>
+    <form class="sidebar-logout" action="php/auth/logout.php" method="post">
+        <input type="hidden" name="csrf_token" value="">
+        <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </form>
+</aside>
+
+<main id="main-content">
+    <div class="card">
+        <h2><i class="fa-solid fa-calendar-days"></i> Class Timetable</h2>
+        <table>
+            <tr>
+                <th>Day</th>
+                <th>9:00 - 10:00</th>
+                <th>10:00 - 11:00</th>
+                <th>11:15 - 12:15</th>
+                <th>12:15 - 1:15</th>
+                <th>2:00 - 3:00</th>
+                <th>3:00 - 4:00</th>
+            </tr>
+
+            <tr>
+                <td><strong>Monday</strong></td>
+                <td>Java</td>
+                <td>Data Structures</td>
+                <td>Web Technology</td>
+                <td>DBMS</td>
+                <td>Python Lab</td>
+                <td>Python Lab</td>
+            </tr>
+
+            <tr>
+                <td><strong>Tuesday</strong></td>
+                <td>DBMS</td>
+                <td>Java</td>
+                <td>Mathematics</td>
+                <td>Web Technology</td>
+                <td>DS Lab</td>
+                <td>DS Lab</td>
+            </tr>
+
+            <tr>
+                <td><strong>Wednesday</strong></td>
+                <td>Data Structures</td>
+                <td>DBMS</td>
+                <td>Java</td>
+                <td>Python</td>
+                <td>Web Lab</td>
+                <td>Web Lab</td>
+            </tr>
+
+            <tr>
+                <td><strong>Thursday</strong></td>
+                <td>Mathematics</td>
+                <td>Java</td>
+                <td>Web Technology</td>
+                <td>Data Structures</td>
+                <td>Mini Project</td>
+                <td>Mini Project</td>
+            </tr>
+
+            <tr>
+                <td><strong>Friday</strong></td>
+                <td>Python</td>
+                <td>DBMS</td>
+                <td>Java</td>
+                <td>Web Technology</td>
+                <td>Sports</td>
+                <td>Library</td>
+            </tr>
+
+            <tr>
+                <td><strong>Saturday</strong></td>
+                <td>Seminar</td>
+                <td>Aptitude</td>
+                <td>Project</td>
+                <td>Project</td>
+                <td>Workshop</td>
+                <td>Workshop</td>
+            </tr>
+        </table>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h2>StudentHub Portal</h2>
+            <p>Your digital campus companion for academics, courses, assignments, attendance, and student services.</p>
+        </div>
+    </div>
+    <p class="copyright">
+        © 2026 StudentHub Portal | Developed By Hemangi Korat | All Rights Reserved.
+    </p>
+</footer>
+
+</body>
+</html>

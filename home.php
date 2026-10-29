@@ -1,0 +1,366 @@
+<?php
+require_once __DIR__ . '/php/includes/session.php';
+require_once __DIR__ . '/php/includes/auth_guard.php';
+init_session();
+require_student();
+
+$db = get_db_connection();
+$user = current_user();
+$profileStmt = $db->prepare(
+    "SELECT student_id, name, department, year FROM students
+     WHERE user_id = ? AND status = 'active' LIMIT 1"
+);
+$profileStmt->bind_param('i', $user['id']);
+$profileStmt->execute();
+$studentProfile = $profileStmt->get_result()->fetch_assoc();
+$profileStmt->close();
+if (!$studentProfile) {
+    http_response_code(403);
+    exit('No active student profile is linked to this account.');
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Hub Portal - Home</title>
+    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="main-header">
+    <div class="header-left">
+        <button class="menu-btn" onclick="openMenu()" aria-label="Open Menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <div class="portal-title">
+            <h1>STUDENT HUB PORTAL</h1>
+            <p>Digital Academic & Campus Management System</p>
+        </div>
+    </div>
+
+    <button id="themeToggle" class="theme-btn" aria-label="Change Theme">
+        <i class="fa-solid fa-moon"></i>
+        <span>Dark Mode</span>
+    </button>
+</header>
+
+<div id="overlay" class="overlay"></div>
+
+<aside id="sidebar" class="sidebar" aria-label="Sidebar Navigation" aria-hidden="true">
+    <div class="sidebar-header">
+        <h3>StudentHub Menu</h3>
+        <button class="close-btn" aria-label="Close sidebar menu">&times;</button>
+    </div>
+        <a href="home.php" class="active"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="aboutus.html"><i class="fa-solid fa-circle-info"></i> About Us</a>
+    <a href="courses.html"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
+    <a href="events.html"><i class="fa-solid fa-calendar-days"></i> Events</a>
+    <a href="Attendance.php"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
+    <a href="Assignment.php"><i class="fa-solid fa-book-open"></i> Assignment</a>
+    <a href="Timetable.php"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
+    <a href="faculty.html"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
+    <a href="notice.html"><i class="fa-solid fa-bullhorn"></i> Notice</a>
+    <a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a>
+    <a href="contactus.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+    <form class="sidebar-logout" action="php/auth/logout.php" method="post">
+        <input type="hidden" name="csrf_token" value="">
+        <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </form>
+</aside>
+
+<!-- Notification Banner -->
+<div class="notification-banner" id="notificationBanner" role="alert">
+    <div class="banner-content">
+        <i class="fa-solid fa-bullhorn banner-icon"></i>
+        <span><strong>Important Notice:</strong> Semester registration is now open! Please complete your course selection before 25 July 2026.</span>
+    </div>
+    <button class="banner-close-btn" aria-label="Dismiss notification" title="Dismiss notification">&times;</button>
+</div>
+
+<main class="home-container" id="main-content">
+
+    <!-- Interactive Portal Slider -->
+    <section class="slider-container" aria-label="Featured Portal Highlights">
+        <div class="slider-wrapper">
+            <!-- Slide 1 -->
+            <div class="slide active">
+                <span class="slide-badge">Welcome</span>
+                <h3>Welcome to StudentHub Portal</h3>
+                <p>Manage all your academics, attendance records, course modules, and assignments in one centralized digital workspace.</p>
+                <a href="php/students/dashboard.php" class="slider-action-btn"><i class="fa-solid fa-user"></i> View Profile</a>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="slide">
+                <span class="slide-badge">Academics</span>
+                <h3>Check Attendance & Status</h3>
+                <p>Track your real-time lecture attendance percentage, verify lab sessions, and monitor exam eligibility status.</p>
+                <a href="Attendance.php" class="slider-action-btn"><i class="fa-solid fa-chart-line"></i> View Attendance</a>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="slide">
+                <span class="slide-badge">Schedule</span>
+                <h3>View Weekly Timetable</h3>
+                <p>Stay up to date with your class schedule, laboratory sessions, faculty hours, and project work timetables.</p>
+                <a href="Timetable.php" class="slider-action-btn"><i class="fa-solid fa-calendar-days"></i> Check Schedule</a>
+            </div>
+
+            <!-- Slide 4 -->
+            <div class="slide">
+                <span class="slide-badge">Updates</span>
+                <h3>Latest College Notices</h3>
+                <p>Never miss important campus announcements, exam schedules, registration deadlines, and holiday notices.</p>
+                <a href="notice.html" class="slider-action-btn"><i class="fa-solid fa-bullhorn"></i> Read Notices</a>
+            </div>
+        </div>
+
+        <button class="slider-btn prev" aria-label="Previous Slide"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="slider-btn next" aria-label="Next Slide"><i class="fa-solid fa-chevron-right"></i></button>
+
+        <div class="slider-dots" role="tablist" aria-label="Slider Pagination"></div>
+    </section>
+
+    <!-- Welcome Card -->
+    <section class="welcome-card">
+        <div>
+            <h2>Welcome Back, <?= htmlspecialchars($studentProfile['name'], ENT_QUOTES, 'UTF-8') ?>!</h2>
+            <p>Welcome to your Student Hub Portal. Manage your academics, attendance, assignments, and courses from one place.</p>
+        </div>
+        <div class="welcome-icon">
+            <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+    </section>
+
+    <!-- Student Info Grid -->
+    <section class="student-info">
+        <div>
+            <i class="fa-solid fa-id-card"></i>
+            <span>Student ID</span>
+            <strong><?= htmlspecialchars($studentProfile['student_id'], ENT_QUOTES, 'UTF-8') ?></strong>
+        </div>
+        <div>
+            <i class="fa-solid fa-building"></i>
+            <span>Department</span>
+            <strong><?= htmlspecialchars($studentProfile['department'], ENT_QUOTES, 'UTF-8') ?></strong>
+        </div>
+        <div>
+            <i class="fa-solid fa-layer-group"></i>
+            <span>Semester</span>
+            <strong>Year <?= (int)$studentProfile['year'] ?></strong>
+        </div>
+        <div>
+            <i class="fa-solid fa-calendar"></i>
+            <span>Academic Year</span>
+            <strong>2026-27</strong>
+        </div>
+    </section>
+
+    <h2 class="section-title">Academic Overview</h2>
+
+    <!-- Stats Grid -->
+    <section class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-calendar-check"></i></div>
+            <div>
+                <h3>85%</h3>
+                <p>Attendance</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-book"></i></div>
+            <div>
+                <h3>6</h3>
+                <p>Courses</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-file-lines"></i></div>
+            <div>
+                <h3>4</h3>
+                <p>Assignments</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-bullhorn"></i></div>
+            <div>
+                <h3>3</h3>
+                <p>New Notices</p>
+            </div>
+        </div>
+    </section>
+
+    <h2 class="section-title">Quick Access</h2>
+
+    <!-- Upcoming Events loaded from events.json -->
+    <section class="home-events-section" aria-labelledby="homeEventsTitle">
+        <div class="home-events-heading">
+            <div>
+                <h2 id="homeEventsTitle" class="section-title" style="margin-bottom: 6px;">Upcoming Campus Events</h2>
+                <p>Events are loaded dynamically from the portal's JSON data.</p>
+            </div>
+            <a href="events.php" class="small-btn">View All Events</a>
+        </div>
+        <div id="homeEventsLoading" class="home-events-message">
+            <i class="fa-solid fa-spinner fa-spin"></i> Loading events...
+        </div>
+        <div id="homeEventsError" class="home-events-message error" hidden>
+            Unable to load events. Please run the project using VS Code Live Server.
+        </div>
+        <div id="homeEventsGrid" class="home-events-grid"></div>
+    </section>
+
+    <!-- Quick Links Grid -->
+    <section class="quick-grid">
+        <a href="Attendance.php" class="quick-card">
+            <i class="fa-solid fa-calendar-check"></i>
+            <h3>Attendance</h3>
+            <p>Check your attendance record</p>
+        </a>
+
+        <a href="Assignment.php" class="quick-card">
+            <i class="fa-solid fa-book-open"></i>
+            <h3>Assignments</h3>
+            <p>View and submit assignments</p>
+        </a>
+
+        <a href="courses.html" class="quick-card">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <h3>Courses</h3>
+            <p>View your current courses</p>
+        </a>
+
+        <a href="Timetable.php" class="quick-card">
+            <i class="fa-solid fa-calendar-days"></i>
+            <h3>Timetable</h3>
+            <p>Check your class schedule</p>
+        </a>
+    </section>
+
+    <!-- Dashboard Grid -->
+    <section class="dashboard-grid">
+        <!-- Notices Card -->
+        <div class="dashboard-card">
+            <div class="card-heading">
+                <h2><i class="fa-solid fa-bullhorn"></i> Latest Notices</h2>
+                <a href="notice.php">View All</a>
+            </div>
+
+            <div class="notice-item">
+                <span class="notice-date">20 July</span>
+                <div>
+                    <h3>Semester Registration</h3>
+                    <p>Semester registration for 3rd semester has officially started.</p>
+                    <button class="notice-action-link view-notice-btn" type="button"
+                            data-title="Semester Registration"
+                            data-date="20 July 2026"
+                            data-content="Semester registration is now open for all enrolled students. Please submit your elective preferences and verify fee clearance before the deadline on July 30.">
+                        <i class="fa-solid fa-circle-info"></i> View Details
+                    </button>
+                </div>
+            </div>
+
+            <div class="notice-item">
+                <span class="notice-date">18 July</span>
+                <div>
+                    <h3>Internal Examination</h3>
+                    <p>Internal mid-semester examination timetable will be announced soon.</p>
+                    <button class="notice-action-link view-notice-btn" type="button"
+                            data-title="Internal Examination Schedule"
+                            data-date="18 July 2026"
+                            data-content="The mid-semester exercise and theoretical assessment schedule is being finalized by the academic council. Keep checking your portal for subject-wise syllabus updates.">
+                        <i class="fa-solid fa-circle-info"></i> View Details
+                    </button>
+                </div>
+            </div>
+
+            <div class="notice-item">
+                <span class="notice-date">15 July</span>
+                <div>
+                    <h3>Holiday Notice</h3>
+                    <p>College will remain closed on the upcoming public holiday.</p>
+                    <button class="notice-action-link view-notice-btn" type="button"
+                            data-title="Public Holiday Announcement"
+                            data-date="15 July 2026"
+                            data-content="The institution will observe a campus holiday next Monday. All regular lecture schedules will resume normally from Tuesday onwards.">
+                        <i class="fa-solid fa-circle-info"></i> View Details
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assignments Card -->
+        <div class="dashboard-card">
+            <div class="card-heading">
+                <h2><i class="fa-solid fa-book-open"></i> Upcoming Assignments</h2>
+                <a href="Assignment.php" class="button-link">View All Assignments</a>
+            </div>
+
+            <div class="assignment-item">
+                <div>
+                    <h3>Linked List Program</h3>
+                    <p>Data Structures</p>
+                </div>
+                <span>25 July</span>
+            </div>
+
+            <div class="assignment-item">
+                <div>
+                    <h3>Web Development Project</h3>
+                    <p>WDF</p>
+                </div>
+                <span>28 July</span>
+            </div>
+
+            <div class="assignment-item">
+                <div>
+                    <h3>Network Assignment</h3>
+                    <p>Computer Networks</p>
+                </div>
+                <span>30 July</span>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Notice Detail Modal Popup -->
+<div class="modal-overlay" id="noticeModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalNoticeTitle">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3 id="modalNoticeTitle"><i class="fa-solid fa-bullhorn"></i> Notice Details</h3>
+            <button class="modal-close-btn" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-meta" id="modalNoticeDate">Date: 20 July 2026</div>
+            <p id="modalNoticeBody">Semester registration begins from Monday. Students are requested to complete registration before the deadline.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-action-btn" type="button">Close</button>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h2>StudentHub Portal</h2>
+            <p>Your digital campus companion for academics, courses, assignments, attendance, and student services.</p>
+        </div>
+    </div>
+    <p class="copyright">
+        © 2026 StudentHub Portal | Developed By Hemangi Korat | All Rights Reserved.
+    </p>
+</footer>
+
+</body>
+</html>

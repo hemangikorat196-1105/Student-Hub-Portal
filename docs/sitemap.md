@@ -11,7 +11,8 @@ flowchart TD
     Contact["contactus.html<br/>(Contact & FAQs)"]
     JsonData["json-data.html<br/>(JSON Data Explorer)"]
     Register["Register.html<br/>(Student Registration)"]
-    Login["Login.html<br/>(Authentication)"]
+    Login["Login.html<br/>(Student Login)"]
+    AdminLogin["admin-login.html<br/>(Administrator Login)"]
     Profile["profile.html<br/>(Student Profile)"]
     Attendance["Attendance.html<br/>(Attendance Tracker)"]
     Assignment["Assignment.html<br/>(Assignment Tracker)"]
@@ -19,9 +20,9 @@ flowchart TD
     Faculty["faculty.html<br/>(Faculty Directory)"]
     ForgotPass["forgotpassword.html<br/>(Password Recovery)"]
     ForgotUser["forgotusername.html<br/>(Username Recovery)"]
-    AdminHTML["Admin.html<br/>(Admin Directory)"]
 
     AdminDash["php/admin/dashboard.php<br/>(Live Metrics Dashboard)"]
+    StudentDash["php/students/dashboard.php<br/>(Student Dashboard)"]
     AdminUsers["php/admin/users.php<br/>(Account Status Manager)"]
     AdminAudit["php/admin/audit_logs.php<br/>(Security Audit Trail)"]
     StudentCRUD["php/students/list.php<br/>(Student CRUD & Export)"]
@@ -33,8 +34,8 @@ flowchart TD
     Index --> Events
     Index --> About
 
-    Login --> Home
-    Login --> Profile
+    Login --> StudentDash
+    AdminLogin --> AdminDash
     Login --> AdminDash
     Login --> ForgotPass
     Login --> ForgotUser
@@ -50,7 +51,6 @@ flowchart TD
     Home --> JsonData
     Home --> Profile
     Home --> Contact
-    Home --> AdminHTML
 
     AdminDash --> StudentCRUD
     AdminDash --> EventCRUD
@@ -72,7 +72,8 @@ flowchart TD
 | **Notices & Circulars** | `notice.html` | Official departmental circulars, exam dates, and upcoming schedules. |
 | **Contact & FAQs** | `contactus.html` | College contact details, campus location map, collapsible FAQ accordion, and inquiry form. |
 | **Student Registration** | `Register.html` | Accessible registration form with HTML5 inputs, JS regex validation, password strength meter, and CAPTCHA. |
-| **Student Login** | `Login.html` | Secure credential entry with role selection and remember-me token option. |
+| **Student Login** | `Login.html` | Student-only credential entry; student role is checked by the server. |
+| **Administrator Login** | `admin-login.html` | Separate administrator-only credential entry; role is checked against the database. |
 | **Password Recovery** | `forgotpassword.html` | Form for password reset verification. |
 | **Username Recovery** | `forgotusername.html` | Form for student ID recovery. |
 
@@ -83,10 +84,10 @@ flowchart TD
 | Page | URL Path | Key Interactive Features |
 | :--- | :--- | :--- |
 | **Student Home** | `home.html` | Hero interactive carousel slider, upcoming events grid, quick links, and notification banner. |
-| **Profile** | `profile.html` | Displays student ID, full name, email, department, year, CGPA, and contact details. |
-| **Attendance Tracker** | `Attendance.html` | Real-time percentage tracking, lecture counts, lab sessions, and exam eligibility indicators. |
-| **Assignment Tracker** | `Assignment.html` | Upcoming assignment deadlines, submission portals, and grading statuses. |
-| **Timetable** | `Timetable.html` | Weekly schedule for theory classes, practical labs, and faculty office hours. |
+| **Student Dashboard & Profile** | `php/students/dashboard.php` | Protected database-backed student profile, event registrations, upcoming events, and academic navigation. |
+| **Attendance Tracker** | `Attendance.php` | Student-session-protected attendance page. `Attendance.html` is a compatibility redirect. |
+| **Assignment Tracker** | `Assignment.php` | Student-session-protected assignments page. `Assignment.html` is a compatibility redirect. |
+| **Timetable** | `Timetable.php` | Student-session-protected timetable. `Timetable.html` is a compatibility redirect. |
 | **Faculty Directory** | `faculty.html` | Departmental professors, office rooms, email contacts, and subject specializations. |
 | **JSON Data Explorer** | `json-data.html` | Demonstration of asynchronous Fetch API with search, category filtering, sorting, and pagination. |
 
@@ -96,7 +97,7 @@ flowchart TD
 
 | Dashboard / Tool | URL Path | Administrative Functionality |
 | :--- | :--- | :--- |
-| **Admin Overview** | `Admin.html` | Static administrative overview with client-side dependent dropdown filtering (Country &rarr; State &rarr; City). |
+| **Legacy Admin URL** | `Admin.html` | Compatibility redirect to the protected PHP administrator dashboard; no static admin data is exposed. |
 | **Live Admin Dashboard** | `php/admin/dashboard.php` | Real-time aggregated statistics (students, events, registrations, users), recent tables, and charts. |
 | **Student Management** | `php/students/list.php` | Paginated student table, keyword search, course filtering, soft delete, and CSV export. |
 | **Add Student** | `php/students/create.php` | Form to add student record with prepared statement insert and duplicate checks. |

@@ -8,12 +8,22 @@ require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/response.php';
+require_once __DIR__ . '/../includes/csrf.php';
 
 init_session();
-require_login('../../Login.html');
+require_admin();
 
-$id     = (int)($_GET['id'] ?? $_POST['id'] ?? 0);
-$action = trim($_GET['action'] ?? $_POST['action'] ?? 'soft'); // 'soft', 'restore', 'hard'
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    exit('Use POST to change student status.');
+}
+if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+    http_response_code(403);
+    exit('The request could not be verified. Reload the page and try again.');
+}
+
+$id     = (int)($_POST['id'] ?? 0);
+$action = trim($_POST['action'] ?? 'soft'); // 'soft', 'restore', 'hard'
 
 if ($id <= 0) {
     if (is_api_request()) {
@@ -53,7 +63,6 @@ try {
         $_SESSION['flash_success'] = "Student {$student['student_id']} restored to Active status.";
     } elseif ($action === 'hard') {
         // Permanent delete (admin only)
-        require_admin();
         $stmt = $db->prepare("DELETE FROM students WHERE id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();

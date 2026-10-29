@@ -1,0 +1,8 @@
+# Locally collected student submissions contain personal data.
+/Student.csv
+/data/students.csv
+
+# Local database overrides and runtime uploads.
+/php/config/db.local.php
+/assets/uploads/event_posters/*
+!/assets/uploads/event_posters/.htaccess

@@ -32,6 +32,27 @@ function json_response($statusCode, $success, $message, $data = null, $extra = [
     exit;
 }
 
+if (!function_exists('is_api_request')) {
+    /**
+     * Detects whether the incoming HTTP request expects or sent JSON / API payload.
+     *
+     * @return bool
+     */
+    function is_api_request() {
+        $accept = $_SERVER['HTTP_ACCEPT'] ?? '';
+        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+        $uri = $_SERVER['REQUEST_URI'] ?? '';
+        $requestedWith = $_SERVER['HTTP_X_REQUESTED_WITH'] ?? '';
+
+        return (
+            stripos($accept, 'application/json') !== false ||
+            stripos($contentType, 'application/json') !== false ||
+            stripos($uri, '/api/') !== false ||
+            strtolower($requestedWith) === 'xmlhttprequest'
+        );
+    }
+}
+
 /**
  * Inserts an event into the audit_logs table for traceability.
  *

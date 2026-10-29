@@ -5,13 +5,16 @@
 // ============================================================================
 
 require_once __DIR__ . '/../includes/session.php';
+require_once __DIR__ . '/../includes/csrf.php';
 require_once __DIR__ . '/../includes/response.php';
 
+header('Cache-Control: no-store, private');
 init_session();
 
 if (!is_logged_in()) {
     json_response(200, false, "Not logged in", [
-        'loggedIn' => false
+        'loggedIn' => false,
+        'csrfToken' => generate_csrf_token()
     ]);
 }
 
@@ -22,5 +25,5 @@ json_response(200, true, "Active session", [
     'loggedIn'         => true,
     'user'             => $user,
     'remainingSeconds' => $remainingSeconds,
-    'sessionId'        => session_id()
+    'csrfToken'        => generate_csrf_token()
 ]);

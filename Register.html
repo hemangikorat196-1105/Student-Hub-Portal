@@ -30,7 +30,7 @@
 <main id="main-content">
     <section class="registration-intro" aria-labelledby="registration-title">
         <div>
-            <span class="exercise-badge">HTML5 + JavaScript Form Validation</span>
+            <span class="exercise-badge">Form Validation</span>
             <h2 id="registration-title">
                 <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
                 Student Registration
@@ -46,7 +46,8 @@
         </div>
     </section>
 
-    <form action="Process.php" method="post" id="registrationForm" class="registration-form" novalidate>
+    <form action="php/auth/register.php" method="post" id="registrationForm" class="registration-form" novalidate>
+        <input type="hidden" name="csrf_token" value="">
         <div id="registrationSuccess" class="success-banner" role="status" aria-live="polite"></div>
 
         <fieldset class="form-section">
@@ -230,6 +231,7 @@
             <a href="Login.html"><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i> Already have an account? Login here</a>
         </div>
     </form>
+    
 </main>
 
 <footer>

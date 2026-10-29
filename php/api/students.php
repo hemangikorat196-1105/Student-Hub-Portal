@@ -6,9 +6,9 @@
 // Returns standard JSON response with proper HTTP Status Codes
 // ============================================================================
 
-header("Access-Control-Allow-Origin: *");
+require_once __DIR__ . '/../includes/api_bootstrap.php';
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+header("Access-Control-Allow-Headers: Content-Type, X-Requested-With, X-CSRF-Token");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -18,11 +18,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../includes/validation.php';
+require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/response.php';
 
 init_session();
+require_admin();
 $method = $_SERVER['REQUEST_METHOD'];
 $db = get_db_connection();
+
+if (in_array($method, ['POST', 'PUT', 'DELETE'], true)) {
+    require_once __DIR__ . '/../includes/csrf.php';
+    if (!verify_csrf_token($_SERVER['HTTP_X_CSRF_TOKEN'] ?? '')) {
+        json_response(403, false, "Invalid or missing CSRF token.");
+    }
+}
 
 // Helper to decode JSON request body for PUT/POST
 function get_json_payload() {

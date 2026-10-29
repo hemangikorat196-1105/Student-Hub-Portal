@@ -4,11 +4,16 @@
 // Practicals 12, 13, 15
 // ============================================================================
 
+require_once __DIR__ . '/../includes/api_bootstrap.php';
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../includes/response.php';
 
 init_session();
+
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+    json_response(405, false, 'Method not allowed.');
+}
 
 $id = (int)($_GET['id'] ?? 0);
 

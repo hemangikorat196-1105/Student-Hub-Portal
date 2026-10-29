@@ -6,11 +6,11 @@
 // ============================================================================
 
 // Database Credentials
-defined('DB_HOST') or define('DB_HOST', 'localhost');
-defined('DB_USER') or define('DB_USER', 'root');
-defined('DB_PASS') or define('DB_PASS', '');
-defined('DB_NAME') or define('DB_NAME', 'student_portal');
-defined('DB_PORT') or define('DB_PORT', 3306);
+defined('DB_HOST') or define('DB_HOST', getenv('STUDENTHUB_DB_HOST') ?: 'localhost');
+defined('DB_USER') or define('DB_USER', getenv('STUDENTHUB_DB_USER') ?: 'root');
+defined('DB_PASS') or define('DB_PASS', getenv('STUDENTHUB_DB_PASSWORD') ?: '');
+defined('DB_NAME') or define('DB_NAME', getenv('STUDENTHUB_DB_NAME') ?: 'student_portal');
+defined('DB_PORT') or define('DB_PORT', (int)(getenv('STUDENTHUB_DB_PORT') ?: 3306));
 defined('DB_CHARSET') or define('DB_CHARSET', 'utf8mb4');
 
 /**

@@ -40,12 +40,28 @@ function handle_poster_upload($file) {
     // 2. MIME Type Validation using finfo
     $finfo = new finfo(FILEINFO_MIME_TYPE);
     $mime  = $finfo->file($file['tmp_name']);
+    set_error_handler(function () {
+        return true;
+    });
+    try {
+        $imageInfo = getimagesize($file['tmp_name']);
+    } finally {
+        restore_error_handler();
+    }
 
-    if (!array_key_exists($mime, ALLOWED_POSTER_MIMES)) {
+    if (!array_key_exists($mime, ALLOWED_POSTER_MIMES) || $imageInfo === false || $imageInfo['mime'] !== $mime) {
         return [
             'success'  => false,
             'filename' => null,
-            'error'    => "Invalid file format '$mime'. Only JPG, PNG, and WEBP image files are permitted."
+            'error'    => "Invalid image content. Only valid JPG, PNG, and WEBP image files are permitted."
+        ];
+    }
+
+    if ($imageInfo[0] < 1 || $imageInfo[1] < 1 || $imageInfo[0] > 10000 || $imageInfo[1] > 10000 || $imageInfo[0] * $imageInfo[1] > 40000000) {
+        return [
+            'success'  => false,
+            'filename' => null,
+            'error'    => 'Image dimensions exceed the supported limit.'
         ];
     }
 

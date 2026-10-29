@@ -72,8 +72,10 @@ The **Student Hub Portal** is an integrated academic management, student adminis
 ### Practical 10: Authentication, Sessions, RBAC & Timeout
 - **Verification**: Authenticate credentials via `password_verify()`.
 - **Session Protection**: Call `session_regenerate_id(true)` to defeat session fixation; enforce 15-minute inactivity session timeout.
-- **RBAC**: Enforce server-side role check; route admin to `php/admin/dashboard.php` and student to profile. Block unauthorized dashboard access with HTTP 403.
-- **Tokens**: Support secure remember-me token stored as a SHA-256 hash in the database.
+- **Separate login**: Student login at `Login.html` accepts only database-verified student accounts; administrator login at `admin-login.html` accepts only database-verified administrators. Public registration creates student accounts only.
+- **RBAC**: Re-check active role against database records on protected requests; route admins to `php/admin/dashboard.php` and students to `php/students/dashboard.php`. Deny cross-role dashboard and API access.
+- **Session scope**: Use session-only authentication with strict cookie settings; no persistent remember-me login cookie is issued.
+- **Administrator setup**: Configure the seeded local administrator using the CLI-only `php/setup/create_admin.php`; no public/default admin password is provided.
 
 ### Practical 11: Student Management CRUD, Soft Delete & CSV Export
 - **Operations**: Create, Read (paginated), Update, and Delete students.

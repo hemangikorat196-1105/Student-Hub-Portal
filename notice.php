@@ -1,0 +1,225 @@
+<?php
+require_once __DIR__ . '/php/includes/session.php';
+require_once __DIR__ . '/php/includes/auth_guard.php';
+init_session();
+require_student();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Hub Portal - Notices & Events</title>
+    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="main-header">
+    <div class="header-left">
+        <button class="menu-btn" onclick="openMenu()" aria-label="Open Menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <div class="portal-title">
+            <h1>STUDENT HUB PORTAL</h1>
+            <p>Digital Academic & Campus Management System</p>
+        </div>
+    </div>
+
+    <button id="themeToggle" class="theme-btn" aria-label="Change Theme">
+        <i class="fa-solid fa-moon"></i>
+        <span>Dark Mode</span>
+    </button>
+</header>
+
+<div id="overlay" class="overlay"></div>
+
+<aside id="sidebar" class="sidebar" aria-label="Sidebar Navigation" aria-hidden="true">
+    <div class="sidebar-header">
+        <h3>StudentHub Menu</h3>
+        <button class="close-btn" aria-label="Close sidebar menu">&times;</button>
+    </div>
+        <a href="home.php"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="aboutus.php"><i class="fa-solid fa-circle-info"></i> About Us</a>
+    <a href="courses.php"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
+    <a href="events.php"><i class="fa-solid fa-calendar-days"></i> Events</a>
+    <a href="Attendance.php"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
+    <a href="Assignment.php"><i class="fa-solid fa-book-open"></i> Assignment</a>
+    <a href="Timetable.php"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
+    <a href="faculty.php"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
+    <a href="notice.php" class="active"><i class="fa-solid fa-bullhorn"></i> Notice</a>
+    <a href="php/students/dashboard.php"><i class="fa-solid fa-user"></i> Profile</a>
+    <a href="contactus.php"><i class="fa-solid fa-envelope"></i> Contact</a>
+    <form class="sidebar-logout" action="php/auth/logout.php" method="post">
+        <input type="hidden" name="csrf_token" value="">
+        <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </form>
+</aside>
+
+<main id="main-content">
+
+    <!-- Official Announcements -->
+    <div class="card">
+        <h2><i class="fa-solid fa-bullhorn"></i> Official Announcements & Circulars</h2>
+        <p>Stay updated with the latest administrative circulars, fee notifications, and examination notices.</p>
+
+        <!-- Notice 1 -->
+        <div class="notice-item" style="padding: 18px 0;">
+            <span class="notice-date">20 July 2026</span>
+            <div style="flex: 1;">
+                <h3>Notice 1: Semester Registration</h3>
+                <p>Semester registration begins from Monday. Students are requested to complete registration before the deadline.</p>
+                <button class="small-btn view-notice-btn" style="margin-top: 10px;" type="button"
+                        data-title="Semester Registration (3rd Semester)"
+                        data-date="20 July 2026"
+                        data-content="All students of Semester 3 are hereby instructed to log in to their student portal and confirm subject registrations. Ensure elective courses are selected after consulting academic advisors. Deadline: 30th July.">
+                    <i class="fa-solid fa-eye"></i> View Notice
+                </button>
+            </div>
+        </div>
+
+        <!-- Notice 2 -->
+        <div class="notice-item" style="padding: 18px 0;">
+            <span class="notice-date">18 July 2026</span>
+            <div style="flex: 1;">
+                <h3>Notice 2: Mid-Semester Internal Examination</h3>
+                <p>Internal examination schedule will be published on the department notice board next week.</p>
+                <button class="small-btn view-notice-btn" style="margin-top: 10px;" type="button"
+                        data-title="Mid-Semester Assessment Timeline"
+                        data-date="18 July 2026"
+                        data-content="The mid-semester theoretical assessments and laboratory assessments will commence from the 2nd week of August. Students must carry valid college identity cards in all examination halls.">
+                    <i class="fa-solid fa-eye"></i> View Notice
+                </button>
+            </div>
+        </div>
+
+        <!-- Notice 3 -->
+        <div class="notice-item" style="padding: 18px 0;">
+            <span class="notice-date">15 July 2026</span>
+            <div style="flex: 1;">
+                <h3>Notice 3: Upcoming Campus Holiday</h3>
+                <p>College will remain closed on the upcoming holiday. Classes will resume according to regular timetable.</p>
+                <button class="small-btn view-notice-btn" style="margin-top: 10px;" type="button"
+                        data-title="Official Campus Holiday Notice"
+                        data-date="15 July 2026"
+                        data-content="Campus facilities and instructional classes will remain closed for the upcoming official holiday. Regular classroom sessions and laboratories will resume the subsequent day.">
+                    <i class="fa-solid fa-eye"></i> View Notice
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Campus Events loaded from events.json -->
+    <div class="card data-manager-box" id="eventsSection">
+        <h2><i class="fa-solid fa-calendar-check"></i> Campus Events & Workshops Directory</h2>
+        <p>Explore upcoming summits, technical bootcamps, cultural fests, and guest lectures rendered dynamically via Fetch API.</p>
+
+        <!-- Controls Bar: Search, Filter, Sort -->
+        <div class="controls-bar">
+            <!-- Search -->
+            <div class="search-input-wrapper">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="eventSearchInput" placeholder="Search events by title, topic, or speaker..." aria-label="Search Events">
+            </div>
+
+            <!-- Filters & Sort Group -->
+            <div class="filter-group">
+                <!-- Category Filter -->
+                <select id="eventCategoryFilter" aria-label="Filter by Category">
+                    <option value="">All Categories</option>
+                    <option value="Technical">Technical</option>
+                    <option value="Workshop">Workshop</option>
+                    <option value="Cultural">Cultural</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Seminar">Seminar</option>
+                    <option value="Career">Career</option>
+                </select>
+
+                <!-- Sort -->
+                <select id="eventSortSelect" aria-label="Sort Events">
+                    <option value="date-asc">Date (Upcoming First)</option>
+                    <option value="date-desc">Date (Latest First)</option>
+                    <option value="title-asc">Title (A - Z)</option>
+                    <option value="title-desc">Title (Z - A)</option>
+                </select>
+
+                <button type="button" id="eventResetFilterBtn" class="btn-secondary" style="padding: 10px 14px; font-size: 13.5px;" title="Reset Search & Filters">
+                    <i class="fa-solid fa-rotate-left"></i> Reset
+                </button>
+            </div>
+        </div>
+
+        <!-- Meta status badge row -->
+        <div class="data-badge-row">
+            <span id="eventResultsCount">Loading events...</span>
+            <span id="eventCacheBadge" class="cache-badge"><i class="fa-solid fa-bolt"></i> Live Feed</span>
+        </div>
+
+        <!-- Loading State Spinner -->
+        <div id="eventsLoading" class="loading-state">
+            <div class="spinner"></div>
+            <p><strong>Loading campus events...</strong></p>
+        </div>
+
+        <!-- Error State Message -->
+        <div id="eventsError" class="error-state" style="display: none;">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <h3>Unable to load events data</h3>
+            <p id="eventsErrorMessage">Please verify your internet connection or check if events.json is available.</p>
+            <button type="button" id="eventsRetryBtn" class="retry-btn"><i class="fa-solid fa-arrow-rotate-right"></i> Retry Loading</button>
+        </div>
+
+        <!-- Empty State Message -->
+        <div id="eventsEmpty" class="empty-state" style="display: none;">
+            <i class="fa-solid fa-folder-open" style="font-size: 32px; color: var(--text-muted); margin-bottom: 8px;"></i>
+            <h3>No matching events found</h3>
+            <p>Try adjusting your search keyword or category filter.</p>
+        </div>
+
+        <!-- Dynamic Events Cards Grid Container -->
+        <div id="eventsGrid" class="events-grid"></div>
+
+        <!-- Pagination Controls -->
+        <div id="eventsPagination" class="pagination-container" style="display: none;">
+            <span class="pagination-summary" id="eventsPaginationSummary">Page 1 of 3</span>
+            <div class="pagination-controls" id="eventsPaginationControls"></div>
+        </div>
+    </div>
+
+</main>
+
+<!-- Modal Popup Component -->
+<div class="modal-overlay" id="noticeModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalNoticeTitle">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3 id="modalNoticeTitle"><i class="fa-solid fa-bullhorn"></i> Notice Details</h3>
+            <button class="modal-close-btn" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-meta" id="modalNoticeDate">Date: 20 July 2026</div>
+            <p id="modalNoticeBody">Detailed notice content goes here.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-action-btn" type="button">Close</button>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h2>StudentHub Portal</h2>
+            <p>Your digital campus companion for academics, courses, assignments, attendance, and student services.</p>
+        </div>
+    </div>
+    <p class="copyright">
+        © 2026 StudentHub Portal | Developed By Hemangi Korat | All Rights Reserved.
+    </p>
+</footer>
+
+</body>
+</html>

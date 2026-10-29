@@ -53,9 +53,10 @@ This document lists all screenshots required to assemble your formal laboratory 
 - [ ] **Screenshot 9.3**: phpMyAdmin browsing `students` table showing the corresponding synchronized student profile.
 
 ### Practical 10: Session-Based Authentication & Role-Based Access Control
-- [ ] **Screenshot 10.1**: `Login.html` login screen with credentials entered (`admin` / `Admin@123`).
-- [ ] **Screenshot 10.2**: Successful redirect to Admin Dashboard (`php/admin/dashboard.php`) showing admin badge and welcome banner.
-- [ ] **Screenshot 10.3**: Access Denied page (`php/admin/access_denied.php`) triggered when an unauthorized user attempts to access an admin URL.
+- [ ] **Screenshot 10.1**: `Login.html` student login screen (do not capture passwords).
+- [ ] **Screenshot 10.2**: Separate `admin-login.html` screen (do not capture passwords).
+- [ ] **Screenshot 10.3**: Admin dashboard after configuring a local admin account.
+- [ ] **Screenshot 10.4**: Access denied for a student account requesting an admin URL.
 
 ### Practical 11: Student Record CRUD Management
 - [ ] **Screenshot 11.1**: Paginated student list (`php/students/list.php`) showing first 10 students with search bar and filter controls.
@@ -83,4 +84,4 @@ This document lists all screenshots required to assemble your formal laboratory 
 - [ ] **Screenshot 15.1**: Main Landing Page (`index.html`) running on `http://localhost/Student%20Hub%20Portal/`.
 - [ ] **Screenshot 15.2**: XAMPP Control Panel showing Apache and MySQL running on ports 80 and 3306.
 - [ ] **Screenshot 15.3**: GitHub repository web page showing commit history and organized folder structure.
-- [ ] **Screenshot 15.4**: Terminal execution of test verification script showing all tests passing.
+- [ ] **Screenshot 15.4**: Terminal output from `tests/verify_all.py`, including actual passed, failed, and skipped checks.

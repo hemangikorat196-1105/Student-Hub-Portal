@@ -7,15 +7,18 @@
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../includes/auth_guard.php';
+require_once __DIR__ . '/../includes/csrf.php';
 
 init_session();
-require_login('../../Login.html');
+require_admin();
 
 $db = get_db_connection();
 
 $category = trim($_GET['category'] ?? '');
 $status   = trim($_GET['status'] ?? '');
 $search   = trim($_GET['search'] ?? '');
+$page     = max(1, (int)($_GET['page'] ?? 1));
+$perPage  = 8;
 
 $where = ["1=1"];
 $params = [];
@@ -41,22 +44,40 @@ if ($status !== '') {
 }
 
 $whereSql = implode(" AND ", $where);
+$countStmt = $db->prepare("SELECT COUNT(*) AS total FROM events e WHERE $whereSql");
+if ($types !== "") {
+    $countStmt->bind_param($types, ...$params);
+}
+$countStmt->execute();
+$totalRecords = (int)$countStmt->get_result()->fetch_assoc()['total'];
+$countStmt->close();
+
+$totalPages = max(1, (int)ceil($totalRecords / $perPage));
+$page = min($page, $totalPages);
+$offset = ($page - 1) * $perPage;
+
 $sql = "SELECT e.*, COUNT(r.id) AS registration_count
         FROM events e
         LEFT JOIN registrations r ON r.event_id = e.id
         WHERE $whereSql
         GROUP BY e.id
-        ORDER BY e.event_date ASC";
+        ORDER BY e.event_date ASC
+        LIMIT ? OFFSET ?";
 
 $stmt = $db->prepare($sql);
-if ($types !== "") {
-    $stmt->bind_param($types, ...$params);
-}
+$dataTypes = $types . 'ii';
+$dataParams = array_merge($params, [$perPage, $offset]);
+$stmt->bind_param($dataTypes, ...$dataParams);
 $stmt->execute();
 $events = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 
 $categories = ['Technical', 'Workshop', 'Seminar', 'Cultural', 'Sports', 'Career'];
+$paginationQuery = http_build_query([
+    'search' => $search,
+    'category' => $category,
+    'status' => $status
+]);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -89,6 +110,10 @@ $categories = ['Technical', 'Workshop', 'Seminar', 'Cultural', 'Sports', 'Career
         .btn-delete { background: #fee2e2; color: #b91c1c; }
         .btn-primary { background: #2563eb; color: #fff; padding: 9px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; border: none; }
         .btn-secondary { background: #64748b; color: #fff; padding: 9px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; }
+        .pagination { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 20px; color: #64748b; }
+        .page-links { display: flex; flex-wrap: wrap; gap: 6px; }
+        .page-link { padding: 7px 11px; border: 1px solid #cbd5e1; border-radius: 6px; color: #334155; text-decoration: none; }
+        .page-link.active { color: #fff; background: #2563eb; border-color: #2563eb; }
     </style>
 </head>
 <body>
@@ -98,9 +123,9 @@ $categories = ['Technical', 'Workshop', 'Seminar', 'Cultural', 'Sports', 'Career
                 <h2><i class="fa-solid fa-calendar-check"></i> Event Management System</h2>
                 <p>Create, update, manage event posters, and track student registrations.</p>
             </div>
-            <div style="display: flex; gap: 10px;">
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                 <a href="create.php" class="btn-primary"><i class="fa-solid fa-plus"></i> Create New Event</a>
-                <a href="../admin/dashboard.php" class="btn-secondary"><i class="fa-solid fa-shield-halved"></i> Dashboard</a>
+                <a href="../admin/dashboard.php" class="btn-secondary"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
             </div>
         </div>
 
@@ -196,9 +221,13 @@ $categories = ['Technical', 'Workshop', 'Seminar', 'Cultural', 'Sports', 'Career
                                         <a href="update.php?id=<?= (int)$e['id'] ?>" class="action-btn btn-edit" title="Edit Event">
                                             <i class="fa-solid fa-pen-to-square"></i> Edit
                                         </a>
-                                        <a href="delete.php?id=<?= (int)$e['id'] ?>" class="action-btn btn-delete" onclick="return confirm('Delete event <?= htmlspecialchars(addslashes($e['title'])) ?>?');" title="Delete Event">
-                                            <i class="fa-solid fa-trash"></i> Delete
-                                        </a>
+                                        <form method="post" action="delete.php" onsubmit="return confirm('Delete this event?');">
+                                            <?= csrf_field() ?>
+                                            <input type="hidden" name="id" value="<?= (int)$e['id'] ?>">
+                                            <button type="submit" class="action-btn btn-delete" title="Delete Event">
+                                                <i class="fa-solid fa-trash"></i> Delete
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
@@ -207,8 +236,23 @@ $categories = ['Technical', 'Workshop', 'Seminar', 'Cultural', 'Sports', 'Career
                 </tbody>
             </table>
         </div>
-        <div style="margin-top: 20px; color: #64748b; font-size: 0.9rem;">
-            Total events displayed: <strong><?= count($events) ?></strong>
+        <div class="pagination">
+            <span>Showing <?= min($totalRecords, $offset + 1) ?> to <?= min($totalRecords, $offset + count($events)) ?> of <strong><?= $totalRecords ?></strong> events</span>
+            <?php if ($totalPages > 1): ?>
+                <nav class="page-links" aria-label="Event list pages">
+                    <?php if ($page > 1): ?>
+                        <a class="page-link" href="?<?= htmlspecialchars($paginationQuery, ENT_QUOTES, 'UTF-8') ?>&amp;page=<?= $page - 1 ?>">Previous</a>
+                    <?php endif; ?>
+                    <?php for ($pageNumber = 1; $pageNumber <= $totalPages; $pageNumber++): ?>
+                        <a class="page-link <?= $pageNumber === $page ? 'active' : '' ?>"
+                           href="?<?= htmlspecialchars($paginationQuery, ENT_QUOTES, 'UTF-8') ?>&amp;page=<?= $pageNumber ?>"
+                           <?= $pageNumber === $page ? 'aria-current="page"' : '' ?>><?= $pageNumber ?></a>
+                    <?php endfor; ?>
+                    <?php if ($page < $totalPages): ?>
+                        <a class="page-link" href="?<?= htmlspecialchars($paginationQuery, ENT_QUOTES, 'UTF-8') ?>&amp;page=<?= $page + 1 ?>">Next</a>
+                    <?php endif; ?>
+                </nav>
+            <?php endif; ?>
         </div>
     </main>
 </body>

@@ -1,0 +1,293 @@
+<?php
+require_once __DIR__ . '/php/includes/session.php';
+require_once __DIR__ . '/php/includes/auth_guard.php';
+init_session();
+require_student();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Hub Portal - Contact & FAQ</title>
+    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="main-header">
+    <div class="header-left">
+        <button class="menu-btn" onclick="openMenu()" aria-label="Open Menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <div class="portal-title">
+            <h1>STUDENT HUB PORTAL</h1>
+            <p>Digital Academic & Campus Management System</p>
+        </div>
+    </div>
+
+    <button id="themeToggle" class="theme-btn" aria-label="Change Theme">
+        <i class="fa-solid fa-moon"></i>
+        <span>Dark Mode</span>
+    </button>
+</header>
+
+<div id="overlay" class="overlay"></div>
+
+<aside id="sidebar" class="sidebar" aria-label="Sidebar Navigation" aria-hidden="true">
+    <div class="sidebar-header">
+        <h3>StudentHub Menu</h3>
+        <button class="close-btn" aria-label="Close sidebar menu">&times;</button>
+    </div>
+        <a href="home.php"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="aboutus.php"><i class="fa-solid fa-circle-info"></i> About Us</a>
+    <a href="courses.php"><i class="fa-solid fa-graduation-cap"></i> Courses</a>
+    <a href="events.php"><i class="fa-solid fa-calendar-days"></i> Events</a>
+    <a href="Attendance.php"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
+    <a href="Assignment.php"><i class="fa-solid fa-book-open"></i> Assignment</a>
+    <a href="Timetable.php"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
+    <a href="faculty.php"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
+    <a href="notice.php"><i class="fa-solid fa-bullhorn"></i> Notice</a>
+    <a href="php/students/dashboard.php"><i class="fa-solid fa-user"></i> Profile</a>
+    <a href="contactus.php" class="active"><i class="fa-solid fa-envelope"></i> Contact</a>
+    <form class="sidebar-logout" action="php/auth/logout.php" method="post">
+        <input type="hidden" name="csrf_token" value="">
+        <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </form>
+</aside>
+
+<main id="main-content">
+
+    <!-- Contact Form -->
+    <form id="contactForm" novalidate>
+        <h2><i class="fa-solid fa-envelope"></i> Contact Us</h2>
+
+        <div id="contactStatus" class="success-banner" role="status" aria-live="polite"></div>
+
+        <div class="form-group">
+            <label for="contactFullName">Full Name <span class="required-star">*</span></label>
+            <input type="text" id="contactFullName" name="fullName" placeholder="Enter Your Name" required>
+            <span class="error-msg" id="contactNameError" role="alert" aria-live="polite"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="contactEmail">Email Address <span class="required-star">*</span></label>
+            <input type="email" id="contactEmail" name="email" placeholder="Enter Your Email" required>
+            <span class="error-msg" id="contactEmailError" role="alert" aria-live="polite"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="contactPhone">Phone Number</label>
+            <input type="tel" id="contactPhone" name="phone" placeholder="Enter 10-digit Phone Number">
+            <span class="error-msg" id="contactPhoneError" role="alert" aria-live="polite"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="contactSubject">Subject <span class="required-star">*</span></label>
+            <input type="text" id="contactSubject" name="subject" placeholder="Enter Subject / Problem Area" required>
+            <span class="error-msg" id="contactSubjectError" role="alert" aria-live="polite"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="contactMessage">Message <span class="required-star">*</span></label>
+            <textarea id="contactMessage" name="message" rows="5" placeholder="Enter your detailed query or message" required></textarea>
+            <span class="error-msg" id="contactMessageError" role="alert" aria-live="polite"></span>
+        </div>
+
+        <div class="form-actions">
+            <input type="submit" value="Send Message">
+            <input type="reset" value="Clear Form">
+        </div>
+    </form>
+
+    <!-- FAQ SECTION -->
+<section class="faq-container" id="faqSection" aria-label="Frequently Asked Questions">
+
+    <h2 class="faq-title">
+        <i class="fa-solid fa-circle-question"></i>
+        Frequently Asked Questions
+    </h2>
+
+    <p class="faq-description">
+        Search through common questions or filter by category.
+        Click a question to view its answer.
+    </p>
+
+
+    <!-- FAQ Controls -->
+    <div class="controls-bar">
+
+        <!-- Search -->
+        <div class="search-input-wrapper">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                type="text"
+                id="faqSearchInput"
+                placeholder="Search FAQs by question or answer..."
+                aria-label="Search FAQs"
+            >
+
+        </div>
+
+
+        <!-- Filters -->
+        <div class="filter-group">
+
+            <select id="faqCategoryFilter" aria-label="Filter FAQ Category">
+
+                <option value="">All Categories</option>
+
+                <option value="General">General</option>
+
+                <option value="Attendance">Attendance</option>
+
+                <option value="Assignments">Assignments</option>
+
+                <option value="Examination">Examination</option>
+
+                <option value="Portal">Portal</option>
+
+                <option value="Library">Library</option>
+
+            </select>
+
+
+            <select id="faqSortSelect" aria-label="Sort FAQs">
+
+                <option value="default">Default Order</option>
+
+                <option value="question-asc">
+                    Question (A - Z)
+                </option>
+
+                <option value="question-desc">
+                    Question (Z - A)
+                </option>
+
+            </select>
+
+
+            <button
+                type="button"
+                id="faqResetBtn"
+                class="btn-secondary faq-reset-btn"
+            >
+
+                <i class="fa-solid fa-rotate-left"></i>
+
+                Reset
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- FAQ Result Information -->
+    <div class="data-badge-row">
+
+        <span id="faqResultsCount">
+            Loading FAQs...
+        </span>
+
+        <span id="faqCacheBadge" class="cache-badge">
+
+            <i class="fa-solid fa-bolt"></i>
+
+            Live Feed
+
+        </span>
+
+    </div>
+
+
+    <!-- Loading -->
+    <div id="faqLoading" class="loading-state">
+
+        <div class="spinner"></div>
+
+        <p>
+            <strong>
+                Loading FAQs from knowledgebase...
+            </strong>
+        </p>
+
+    </div>
+
+
+    <!-- Error -->
+    <div id="faqError" class="error-state">
+
+        <i class="fa-solid fa-triangle-exclamation"></i>
+
+        <h3>
+            Unable to load FAQs
+        </h3>
+
+        <p id="faqErrorMessage">
+            Please check if faqs.json is accessible.
+        </p>
+
+        <button
+            type="button"
+            id="faqRetryBtn"
+            class="retry-btn"
+        >
+
+            <i class="fa-solid fa-arrow-rotate-right"></i>
+
+            Retry Loading
+
+        </button>
+
+    </div>
+
+
+    <!-- Empty -->
+    <div id="faqEmpty" class="empty-state">
+
+        <i class="fa-solid fa-circle-question"></i>
+
+        <h3>
+            No matching questions found
+        </h3>
+
+        <p>
+            Try searching for different keywords or clear the category filter.
+        </p>
+
+    </div>
+
+
+    <!-- Dynamic FAQ Accordion -->
+    <div id="dynamicFaqContainer" class="dynamic-faq-container">
+
+        <!-- FAQs will be inserted here using JavaScript -->
+
+    </div>
+
+</section>
+
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h2>StudentHub Portal</h2>
+            <p>Your digital campus companion for academics, courses, assignments, attendance, and student services.</p>
+        </div>
+    </div>
+    <p class="copyright">
+        © 2026 StudentHub Portal | Developed By Hemangi Korat | All Rights Reserved.
+    </p>
+</footer>
+
+</body>
+</html>

@@ -1,41 +1,36 @@
-# ITUE203 WDF — 15 Practicals Compliance Checklist
-## Student Hub Portal — Practical Implementation & Audit Matrix
+# ITUE203 WDF Practical Completion Report
 
-This document provides a comprehensive verification of all 15 practicals required under the ITUE203 Web Development Frameworks syllabus. Every requirement, exact record count, file dependency, test result, and completion status is documented below.
+This report distinguishes code inspection/static checks from tests that require a running XAMPP/MySQL installation. The local MySQL service was not running during this audit, so end-to-end authentication, CRUD, API, upload, dashboard query, and browser behavior are not reported as passed. See [testing_report.md](testing_report.md) and [setup_guide.md](setup_guide.md).
 
----
+| # | Practical and required files | Data count checked | Tests/results | Status and remaining manual work |
+|---|---|---|---|---|
+| 1 | Requirements, sitemap, wireframes, GitHub project: `docs/requirements.md`, `docs/sitemap.md`, `docs/wireframes.md`, repository | N/A | Documents and repository structure inspected. | Planning artifacts exist; capture repository evidence and confirm GitHub submission manually. |
+| 2 | Semantic HTML/accessibility: public `.html` pages, `admin-login.html`, `php/students/dashboard.php` | N/A | Existing HTML inspected; server output for PHP pages requires XAMPP. | Existing pages retained; run an accessibility/keyboard audit and validate rendered PHP pages. |
+| 3 | Responsive design: `Style.css`, `assets/css/Style.css`, page templates | N/A | CSS files and breakpoints are present; viewport simulation not run. | Capture/test mobile, tablet, and desktop sizes in a browser. |
+| 4 | DOM interactions: `script.js`, `assets/js/script.js`, interactive pages | N/A | JavaScript syntax checked; interactions and browser console not exercised. | Test theme, menu, forms, search/filter, and event modal in browser. |
+| 5 | Registration validation: `Register.html`, `script.js`, `php/auth/register.php`, `php/includes/validation.php` | N/A | Server validation and student-only role assignment inspected; CSRF token bootstrapping added. | Submit valid/invalid forms against MySQL and verify messages/CSV output. |
+| 6 | Fetch/search/filter/sort/pagination: `data/students.json`, `data/events.json`, `data/faqs.json`, `json-data.html`, `jsonData.js` | Students **15**; events **15**; FAQs **15** | JSON validity, exact counts, and root-copy consistency checked. | Exercise loading, retries, filtering, sorting, and pagination in browser. |
+| 7 | PHP form processing/CSV: `Process.php`, `php/forms/process.php`, `php/auth/register.php`, `Student.csv`, `data/students.csv` | No runtime CSV created during audit | Compatibility endpoints now use the single secure registration/login handlers; CSV output checked in source only. | Test successful/failed submissions and confirm both CSV files are created locally. |
+| 8 | Relational schema/ER: `sql/schema.sql`, `sql/seed_data.sql`, `php/config/db.php`, `docs/er_diagram.md` | Seed rows: users **15**, students **15**, events **15**, registrations **15**, audit logs **15** | SQL seed row counts and PHP syntax checked; schema import not run because MySQL was stopped. | Import in disposable local DB and verify constraints/foreign keys in phpMyAdmin. |
+| 9 | Secure student registration: `php/auth/register.php`, `php/includes/csrf.php`, `php/includes/validation.php` | No live account created | Confirmed hard-coded role `student`, prepared statements, bcrypt cost 12, duplicate check, CSRF check in source. | Run duplicate/invalid/valid registration tests against MySQL. |
+| 10 | Separate authentication/RBAC: `Login.html`, `admin-login.html`, `home.php`, `php/auth/login.php`, `php/auth/admin_login.php`, logout handlers, guards/session | N/A | Static checks confirm role-fixed login endpoints, server-side role/status verification, session regeneration and 900-second timeout. | Test wrong-role credentials, fixation, timeout, logout, direct URL and session demotion with real sessions. |
+| 11 | Student CRUD/search/export: `php/students/*.php`, `php/api/students.php` | Seed students **15** | Student-management routes and API now require admin; individual student lookup is self-scoped. PHP syntax checked. | Test CRUD, validation, search, pagination, CSV export and audit entries in MySQL. |
+| 12 | Event CRUD/poster upload: `php/events/*.php`, `assets/uploads/event_posters/.htaccess` | Seed events **15** | Admin guards, CSRF checks, file MIME/size/dimension validation and upload directory policy inspected. | Test event CRUD, valid image, spoofed file, executable, oversized file and cleanup. |
+| 13 | JSON APIs: `php/api/*.php`, `php/includes/api_bootstrap.php` | Backed by the seed counts above | API authorization/CSRF paths and JSON error handling inspected; live HTTP methods/status codes not exercised. | Use `tests/api_test_cases.md` with Apache/MySQL running; verify JSON and all status codes. |
+| 14 | Admin dashboard/users/audit: `php/admin/*.php`, `sql/schema.sql` | Live counts not available | Dashboard uses SQL counts; admin role is revalidated against active database user. | Configure admin; verify metrics match SQL and actions write audit rows. |
+| 15 | Integration/docs/XAMPP: `README.md`, `docs/setup_guide.md`, `tests/`, `docs/screenshot_checklist.md` | JSON and SQL seed counts above | PHP syntax and static data checks run; integration verifier could not connect because Apache and MySQL were stopped. | Run integration tests in XAMPP, resolve machine-specific issues, capture required screenshots, submit/push to GitHub. |
 
-## Practicals Audit & Verification Matrix
+## Verified dataset counts
 
-| Prac # | Practical Title / Core Objective | Exact Required Output & Record Count | Responsible Files | Test Result | Status |
-|:---:|---|---|---|:---:|:---:|
-| **1** | **Project Planning, Requirements & Wireframing** | Project vision, functional requirements, detailed sitemap, low-fidelity & responsive wireframes. | `docs/requirements.md`<br>`docs/sitemap.md`<br>`docs/wireframes.md` | All 3 comprehensive planning documents generated with responsive UI mockups and route trees. | **100% COMPLETE** |
-| **2** | **Semantic HTML5 & Accessibility (a11y)** | Accessible navigation, semantic layout (`<header>`, `<main>`, `<nav>`, `<aside>`, `<footer>`), ARIA attributes, color contrast, `<form>` controls. | `index.html`<br>`home.html`<br>`aboutus.html`<br>`contactus.html`<br>`profile.html` | Passed WCAG 2.1 AA standards; proper labels, alt text, role tags, and keyboard focus states. | **100% COMPLETE** |
-| **3** | **Responsive Design & Modern CSS Architecture** | Mobile-first CSS, Flexbox/Grid layouts, CSS variables, media queries (desktop, tablet, mobile), glassmorphism UI, accessible components. | `Style.css`<br>`assets/css/`<br>`json-data.css`<br>All `.html` pages | Verified responsive viewports across 375px (mobile), 768px (tablet), and 1200px+ (desktop). Smooth transitions. | **100% COMPLETE** |
-| **4** | **Client-Side Interactivity with JavaScript** | Dynamic greeting, live clock/date, dark/light theme toggle with `localStorage` persistence, interactive tabs, accordion FAQs, mobile hamburger drawer. | `script.js`<br>`home.html`<br>`notice.html`<br>`courses.html` | All interactive DOM handlers tested and working seamlessly across all pages without console errors. | **100% COMPLETE** |
-| **5** | **Form Validation & User Registration (JS DOM)** | Real-time field validation (Regex for Name, Email, 10-digit Mobile, strong Password, Confirm Password match, Course dropdown), inline error alerts. | `Register.html`<br>`script.js`<br>`Login.html` | Comprehensive client validation blocks invalid formats, displays accessible feedback, confirms passwords. | **100% COMPLETE** |
-| **6** | **Asynchronous Data Handling with Fetch API & JSON** | Exactly **15 students** (`students.json`), exactly **15 events** (`events.json`), category filters, search input, sort, dynamic rendering, error boundaries. | `data/students.json` (15)<br>`data/events.json` (15)<br>`data/faqs.json`<br>`json-data.html`<br>`jsonData.js` | Verified exactly 15 records in JSON files; interactive search, pagination, and multi-filter live rendering. | **100% COMPLETE** |
-| **7** | **Server-Side Form Processing with PHP** | Secure HTTP POST processing, backend data sanitization (`htmlspecialchars`, `strip_tags`), server regex validation, appending to CSV (`Student.csv`). | `php/forms/process.php`<br>`Process.php`<br>`Register.html` | Successfully receives POST, validates fields, writes structured rows to `data/Student.csv`, and returns success confirmation. | **100% COMPLETE** |
-| **8** | **Relational Database Design & MySQL Connectivity** | 3NF compliant schema, foreign keys, UTF8MB4 collation, secure PDO + MySQLi database connection singleton, error handling without leak. | `sql/schema.sql`<br>`php/config/db.php`<br>`test_connection.php` | 5 relational tables (`users`, `students`, `events`, `registrations`, `audit_logs`). Connection verified (HTTP 200 OK). | **100% COMPLETE** |
-| **9** | **User Registration with MySQL & Password Hashing** | Secure registration pipeline, duplicate username/email detection, Bcrypt password hashing (`PASSWORD_BCRYPT`), prepared statement inserts, audit log. | `php/auth/register.php`<br>`Register.html`<br>`sql/users.sql` | Tests confirm duplicate prevention, cost=12 Bcrypt hashes stored, synchronized dual insert to `users` and `students`. | **100% COMPLETE** |
-| **10** | **Session-Based Authentication & Role-Based Access Control** | Secure session management (`session_regenerate_id()`, `HttpOnly`, `SameSite`), 15-min inactivity timeout, RBAC routing (admin vs student), 403 access denial. | `php/auth/login.php`<br>`php/auth/logout.php`<br>`php/includes/session.php`<br>`php/includes/auth_guard.php`<br>`php/admin/access_denied.php` | Tested: Admin logins redirect to dashboard; student logins redirect to profile; expired sessions force re-login; unprivileged requests receive 403. | **100% COMPLETE** |
-| **11** | **Student Record Management (Full PHP CRUD)** | Paginated student records (10/page), keyword search, course filter, student modal, create, edit, soft-delete (`status='inactive'`), CSV export. | `php/students/list.php`<br>`php/students/create.php`<br>`php/students/update.php`<br>`php/students/delete.php`<br>`php/students/export.php` | Verified pagination across 15 records (Page 1: 10, Page 2: 5). Search, update, soft-delete, and UTF-8 CSV export fully functional. | **100% COMPLETE** |
-| **12** | **Event Management & Secure File Uploads** | Event catalog CRUD, poster upload engine with security constraints (max 2MB, MIME whitelist: JPEG/PNG/WEBP, unique filename hash, `.htaccess` upload lock). | `php/events/list.php`<br>`php/events/create.php`<br>`php/events/update.php`<br>`php/events/delete.php`<br>`php/events/upload_poster.php` | Validated poster upload with MIME type enforcement; script blocks PHP upload execution via `.htaccess`; displays previews. | **100% COMPLETE** |
-| **13** | **RESTful JSON API Development** | RESTful HTTP endpoints for Students and Events supporting GET, POST, PUT, DELETE with standard status codes (200, 201, 400, 404, 405, 500), CORS headers. | `php/api/students.php`<br>`php/api/events.php`<br>`php/api/faqs.php`<br>`php/includes/response.php` | Verified standard JSON contract `{status, success, message, data, timestamp}` for all REST verbs. | **100% COMPLETE** |
-| **14** | **Administrative Dashboard & Security Auditing** | KPI cards (total students, total events, total registrations, active users), enrollment distribution breakdown, recent bookings, searchable audit log. | `php/admin/dashboard.php`<br>`php/admin/users.php`<br>`php/admin/audit_logs.php`<br>`sql/audit_logs.sql` | Real-time SQL aggregation metrics verified; audit log accurately captures action, user, table, IP, and timestamp. | **100% COMPLETE** |
-| **15** | **Comprehensive Integration, Testing & Deployment** | End-to-end user journeys, unified responsive navbar/sidebar across all 12 portal pages, automated test suite, GitHub documentation, XAMPP readiness. | `README.md`<br>`tests/test_cases.md`<br>`tests/api_test_cases.md`<br>`docs/setup_guide.md`<br>`docs/testing_report.md` | Entire application verified on `http://localhost/Student%20Hub%20Portal/` and `file://`; all tests passing cleanly. | **100% COMPLETE** |
+| Dataset/table | Actual count | Source |
+|---|---:|---|
+| `data/students.json` | 15 | JSON parsing |
+| `data/events.json` | 15 | JSON parsing |
+| `data/faqs.json` | 15 | JSON parsing |
+| `users` | 15 | `INSERT` seed rows |
+| `students` | 15 | `INSERT` seed rows |
+| `events` | 15 | `INSERT` seed rows |
+| `registrations` | 15 | `INSERT` seed rows |
+| `audit_logs` | 15 | `INSERT` seed rows |
 
----
-
-## Dataset Record Count Verification Summary
-
-| Entity / Table | Required Minimum / Standard | Actual Implemented Records | Verification Command / Source | Compliance Status |
-|---|:---:|:---:|---|:---:|
-| `data/students.json` | Exactly 15 | **15** | `students.json` item count | **VERIFIED** |
-| `data/events.json` | Exactly 15 | **15** | `events.json` item count | **VERIFIED** |
-| `data/faqs.json` | 10+ | **12** | `faqs.json` item count | **VERIFIED** |
-| MySQL `users` | Exactly 15 | **15** | `SELECT COUNT(*) FROM users;` | **VERIFIED** |
-| MySQL `students` | Exactly 15 | **15** | `SELECT COUNT(*) FROM students;` | **VERIFIED** |
-| MySQL `events` | Exactly 15 | **15** | `SELECT COUNT(*) FROM events;` | **VERIFIED** |
-| MySQL `registrations` | Exactly 15 | **15** | `SELECT COUNT(*) FROM registrations;` | **VERIFIED** |
-| MySQL `audit_logs` | Exactly 15 | **15** | `SELECT COUNT(*) FROM audit_logs;` | **VERIFIED** |
+The root JSON copies are retained for existing root-relative pages. `data/` is the canonical dataset location.

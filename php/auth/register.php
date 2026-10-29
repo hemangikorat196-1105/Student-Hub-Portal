@@ -18,6 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     if (is_api_request()) {
         json_response(405, false, "Method Not Allowed. Use POST.");
     }
+
+    if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+        http_response_code(403);
+        render_registration_result(false, "The form expired or could not be verified. Reload the page and try again.");
+    }
     header("Location: ../../Register.html");
     exit;
 }
@@ -105,11 +110,18 @@ try {
     // Generate unique student ID (e.g., 25CS036 or based on count)
     $stmtCount = $db->query("SELECT MAX(id) AS max_id FROM students");
     $rowCount = $stmtCount->fetch_assoc();
-    $nextIdNum = ($rowCount['max_id'] ?? 15) + 1;
-    $generatedStudentId = sprintf("25CS%03d", $nextIdNum);
+    $nextIdNum = (int)($rowCount['max_id'] ?? 0) + 1;
+    do {
+        $generatedStudentId = sprintf("25CS%03d", $nextIdNum++);
+        $stmtIdCheck = $db->prepare("SELECT id FROM users WHERE username = ? UNION SELECT id FROM students WHERE student_id = ? LIMIT 1");
+        $stmtIdCheck->bind_param("ss", $generatedStudentId, $generatedStudentId);
+        $stmtIdCheck->execute();
+        $idInUse = $stmtIdCheck->get_result()->num_rows > 0;
+        $stmtIdCheck->close();
+    } while ($idInUse);
 
     // 4. Secure Password Hashing using BCRYPT
-    $hashedPassword = password_hash($password, PASSWORD_BCRYPT, ['cost' => 10]);
+    $hashedPassword = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
 
     // 5. Begin Transaction to Insert User & Student Profile
     $db->begin_transaction();
@@ -140,8 +152,6 @@ try {
     $newStudentId = $stmtStudent->insert_id;
     $stmtStudent->close();
 
-    $db->commit();
-
     // 6. Practical 7 CSV Storage
     save_to_csv([
         $newStudentId,
@@ -154,6 +164,8 @@ try {
         $gender,
         date('Y-m-d H:i:s')
     ]);
+
+    $db->commit();
 
     // 7. Audit Log
     log_audit_event("REGISTER", "New student registered: $generatedStudentId ($fullName)", $newUserId);
@@ -191,16 +203,35 @@ try {
  * Appends record to CSV file for Practical 7 requirement.
  */
 function save_to_csv($fields) {
-    $csvPath = __DIR__ . '/../../data/students.csv';
-    $isNew = !file_exists($csvPath) || filesize($csvPath) === 0;
+    $paths = [
+        __DIR__ . '/../../Student.csv',
+        __DIR__ . '/../../data/students.csv'
+    ];
 
-    $fp = fopen($csvPath, 'a');
-    if ($fp) {
-        if ($isNew) {
-            fputcsv($fp, ['ID', 'StudentID', 'Name', 'Email', 'Mobile', 'Course', 'Year', 'Gender', 'RegisteredAt']);
+    foreach ($paths as $csvPath) {
+        $fp = fopen($csvPath, 'a+');
+        if ($fp === false) {
+            throw new RuntimeException('Unable to open the registration CSV storage file.');
         }
-        fputcsv($fp, $fields);
-        fclose($fp);
+        $locked = false;
+        try {
+            if (!flock($fp, LOCK_EX)) {
+                throw new RuntimeException('Unable to lock the registration CSV storage file.');
+            }
+            $locked = true;
+            fseek($fp, 0, SEEK_END);
+            if (ftell($fp) === 0 && fputcsv($fp, ['ID', 'StudentID', 'Name', 'Email', 'Mobile', 'Course', 'Year', 'Gender', 'RegisteredAt']) === false) {
+                throw new RuntimeException('Unable to write the registration CSV header.');
+            }
+            if (fputcsv($fp, $fields) === false || !fflush($fp)) {
+                throw new RuntimeException('Unable to write the registration CSV record.');
+            }
+        } finally {
+            if ($locked) {
+                flock($fp, LOCK_UN);
+            }
+            fclose($fp);
+        }
     }
 }
 
