@@ -30,6 +30,22 @@
         <h2><i class="fa-solid fa-user-shield" aria-hidden="true"></i> Administrator Login</h2>
         <input type="hidden" name="csrf_token" value="">
         <div id="adminLoginStatus" class="success-banner" role="status" aria-live="polite"></div>
+
+        <!-- Evaluator Quick Demo Administrator Login Card -->
+        <div class="demo-account-card admin-theme">
+            <div class="demo-badge admin-badge">
+                <i class="fa-solid fa-shield-halved"></i> Evaluator / Demo Administrator Account
+            </div>
+            <div class="demo-details">
+                <p><strong>Username:</strong> <code>admin</code></p>
+                <p><strong>Password:</strong> <code>Admin@123</code></p>
+                <p class="demo-note"><i class="fa-solid fa-circle-info"></i> Full administrative privileges (Student Management, KPIs, Modules)</p>
+            </div>
+            <button type="button" id="fillAdminDemoBtn" class="demo-login-btn demo-login-btn-admin">
+                <i class="fa-solid fa-bolt"></i> Fill Up &amp; Log In
+            </button>
+        </div>
+
         <div class="form-group">
             <label for="adminUsername">Administrator Username or Email <span class="required-star">*</span></label>
             <input id="adminUsername" name="username" type="text" autocomplete="username"

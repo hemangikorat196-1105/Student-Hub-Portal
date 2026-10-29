@@ -853,6 +853,36 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
         });
+
+        // --- Evaluator Quick Demo Login Button Handler ---
+        const fillStudentBtn = document.getElementById("fillStudentDemoBtn");
+        if (fillStudentBtn) {
+            fillStudentBtn.addEventListener("click", function (e) {
+                e.preventDefault();
+                if (idInput) {
+                    idInput.value = "25CS035";
+                    idInput.classList.remove("input-error");
+                    idInput.setAttribute("aria-invalid", "false");
+                    if (idError) idError.textContent = "";
+                }
+                if (passInput) {
+                    passInput.value = "Student@123";
+                    passInput.classList.remove("input-error");
+                    passInput.setAttribute("aria-invalid", "false");
+                    if (passError) passError.textContent = "";
+                }
+                if (loginStatus) {
+                    loginStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Demo student credentials filled! Authenticating with server...';
+                    loginStatus.style.display = "block";
+                }
+                const submitBtn = document.getElementById("loginSubmitBtn");
+                if (submitBtn) {
+                    submitBtn.click();
+                } else {
+                    loginForm.submit();
+                }
+            });
+        }
     }
 
     // --- Admin Login Form (Matches Student Login Validation & Image 3 UI) ---
@@ -961,6 +991,36 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
         });
+
+        // --- Evaluator Quick Demo Administrator Login Button Handler ---
+        const fillAdminBtn = document.getElementById("fillAdminDemoBtn");
+        if (fillAdminBtn) {
+            fillAdminBtn.addEventListener("click", function (e) {
+                e.preventDefault();
+                if (adminUserInput) {
+                    adminUserInput.value = "admin";
+                    adminUserInput.classList.remove("input-error");
+                    adminUserInput.setAttribute("aria-invalid", "false");
+                    if (adminUserError) adminUserError.textContent = "";
+                }
+                if (adminPassInput) {
+                    adminPassInput.value = "Admin@123";
+                    adminPassInput.classList.remove("input-error");
+                    adminPassInput.setAttribute("aria-invalid", "false");
+                    if (adminPassError) adminPassError.textContent = "";
+                }
+                if (adminLoginStatus) {
+                    adminLoginStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Administrator credentials filled! Authenticating with server...';
+                    adminLoginStatus.style.display = "block";
+                }
+                const submitBtn = document.getElementById("adminLoginSubmitBtn");
+                if (submitBtn) {
+                    submitBtn.click();
+                } else {
+                    adminLoginForm.submit();
+                }
+            });
+        }
     }
 
     // --- Admin Registration Form Validation ---
